@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Niondir/iot-dashboard.git"
+    "url": "https://gitlab.com/lobaro/iot-dashboard.git"
   },
   "author": "Tobias Kaupat",
   "license": "MPL-2.0",
