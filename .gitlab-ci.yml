@@ -52,13 +52,12 @@ job_deploy_testreport:
   script:
   - bash <(curl -s https://codecov.io/bash)
 
-# not working yet
+# For now we just build all pushed tags and release locally
 job_release:
   stage: release
   only:
   - tags
-  #only: # regexp for semver without leading v
-  #- /\^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i
+  # regexp for semver with leading v
+  - /\^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i
   script:
-  - npm version ${CI_BUILD_TAG}
-  - npm run release
+  - npm run build
