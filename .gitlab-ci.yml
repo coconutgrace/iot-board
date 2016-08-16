@@ -56,8 +56,10 @@ job_deploy_testreport:
 job_release:
   stage: release
   only:
-  - tags
+    - never
+  #only:
+  #- tags
   # regexp for semver with leading v
-  - /\^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i
+  #- /\^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i
   script:
   - npm run build
