@@ -117,7 +117,7 @@ export default connect(
     state => {
         return {
             isReadOnly: state.global.isReadOnly,
-            devMode: state.global.devMode,
+            devMode: state.config.devMode,
             config: state.config
         };
     },

@@ -31,7 +31,6 @@ export interface State {
 // TODO: move to dashboard/global when converted to ts
 export interface IGlobalState {
     isReadOnly: boolean
-    devMode: boolean
 }
 
 export interface ITypeInfo {

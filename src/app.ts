@@ -25,6 +25,7 @@ import * as AppState from './appState'
 const loadPredefinedState = $.get('./dashboard.json');
 
 loadPredefinedState.then((data) => {
+    console.log("Starting dashboard with predefined state");
     runWithState(data);
 }).fail((error) => {
     if (error.status === 404) {
@@ -48,12 +49,18 @@ function runWithState(configuredState?: AppState.State) {
     if (!initialState) {
         initialState = <AppState.State>Persist.loadFromLocalStorage();
     } else {
-        console.log("Starting with predefined state - no modifications possible.");
-        console.log("To configure the dashboard, you have to remove the ./dashboard.json again.");
-        storeOptions.persist = false;
+        let devMode = false;
+        if (configuredState.config) {
+            devMode = configuredState.config.devMode;
+        }
+
+        if (devMode) {
+            console.log("Dashboard running in devMode. Set config.devMode = false to deliver dashboard as 'view only'");
+        }
+
+        storeOptions.persist = devMode;
         initialState.global = {
-            isReadOnly: true,
-            devMode: false
+            isReadOnly: !devMode
         };
     }
 
