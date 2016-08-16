@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
 import {connect} from 'react-redux'
@@ -12,14 +12,24 @@ import {PropTypes as Prop}  from "react";
 class ModalDialog extends React.Component {
 
     componentDidMount() {
-        $('.ui.modal.' + this.props.id)
-            .modal({
-                detachable: false,
-                closable: false,
-                observeChanges: true,
-                onApprove: ($element) => false,
-                onDeny: ($element) => false
-            })
+        const $modal = $('.ui.modal.' + this.props.id);
+        $modal.modal({
+            detachable: false,
+            closable: false,
+            observeChanges: true,
+            onApprove: ($element) => false,
+            onDeny: ($element) => false,
+            onVisible: () => {
+                // This is to update the Browser Scrollbar, at least needed in WebKit
+                if (typeof document !== 'undefined') {
+                    const n = document.createTextNode(' ');
+                    $modal.append(n);
+                    setTimeout(function () {
+                        n.parentNode.removeChild(n)
+                    }, 0);
+                }
+            }
+        })
     }
 
     onClick(e, action) {
