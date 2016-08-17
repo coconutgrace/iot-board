@@ -1,6 +1,6 @@
 var webpack = require("webpack");
 
-var webpackConfig = require('./webpack.config.js');
+var webpackConfig = require('./webpack.config.js')();
 var PROD = (process.env.NODE_ENV === 'production');
 
 webpackConfig.entry = {

@@ -34,10 +34,8 @@ gulp.task('watch', ["inject:tests", "compile:plugins"], function () {
 
 /**
  * Build everything required for a successful CI build
- * TODO: Due to webpack foo we need to build tests first and than compile the client! (try webpack-stream?)
- * see: https://github.com/webpack/webpack/issues/2787
  * */
-gulp.task("build", sequence('test', ['compile', 'lint']));
+gulp.task("build", ['test', 'compile', 'lint']);
 
 
 /**
@@ -174,7 +172,7 @@ const webpackErrorHandler = function (callback, error, stats) {
     callback();
 };
 
-gulp.task('webpack', sequence('webpack:tests', 'webpack:client'));
+gulp.task('webpack', ['webpack:tests', 'webpack:client']);
 
 gulp.task('webpack:client', ['compile:config'], function (callback) {
     var webpackConfig = require('./webpack.client.js');
