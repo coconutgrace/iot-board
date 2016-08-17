@@ -59,8 +59,8 @@ job_release:
   # regexp for semver with leading v
     - /\^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i
   dependencies:
-    - npm prune
-    - npm install
     - job_build
   script:
+    - npm prune
+    - npm install
     - npm run ci-publish
