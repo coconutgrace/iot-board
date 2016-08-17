@@ -21,8 +21,6 @@ stages:
 
 job_build:
   stage: build
-  except:
-  - tags
   script:
   - npm prune
   - npm install
