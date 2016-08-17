@@ -11,6 +11,7 @@ services:
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
+  key: "always"
   paths:
     - node_modules/
 
@@ -60,6 +61,4 @@ job_release:
   dependencies:
     - job_build
   script:
-    - npm prune
-    - npm install
     - npm run ci-publish
