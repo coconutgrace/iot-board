@@ -52,14 +52,16 @@ job_deploy_testreport:
   script:
   - bash <(curl -s https://codecov.io/bash)
 
-# For now we just build all pushed tags and release locally
+# To release just execute "npm version 1.2.3" and push the generated tag
 job_release:
   stage: release
   only:
-    - never
-  #only:
-  #- tags
+    - tags
   # regexp for semver with leading v
-  #- /\^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i
+    - /\^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?$/i
+  dependencies:
+    - job_build
   script:
-  - npm run build
+    - npm prune
+    - npm install
+    - npm run ci-publish
