@@ -100,7 +100,9 @@ export class DatasourcePluginInstance {
     }
 
     initialize() {
-        this.dsInstance.initialize(this.props);
+        if (_.isFunction(this.dsInstance.initialize)) {
+            this.dsInstance.initialize(this.props);
+        }
         this.scheduler.start();
     }
 
