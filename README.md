@@ -1,4 +1,4 @@
-[![build status](https://gitlab.com/lobaro/iot-dashboard/badges/master/build.svg)](https://gitlab.com/lobaro/iot-dashboard/commits/master) [![codecov](https://codecov.io/gh/Niondir/iot-dashboard/branch/master/graph/badge.svg)](https://codecov.io/gh/Niondir/iot-dashboard) [![Dependencies](https://david-dm.org/niondir/iot-dashboard.svg)](https://david-dm.org/niondir/iot-dashboard)  [![Dev-Dependencies](https://david-dm.org/niondir/iot-dashboard/dev-status.svg)](https://david-dm.org/niondir/iot-dashboard#info=devDependencies)
+[![build status](https://gitlab.com/lobaro/iot-dashboard/badges/master/build.svg)](https://gitlab.com/lobaro/iot-dashboard/commits/master) [![Dependencies](https://david-dm.org/niondir/iot-dashboard.svg)](https://david-dm.org/niondir/iot-dashboard) [![Dev-Dependencies](https://david-dm.org/niondir/iot-dashboard/dev-status.svg)](https://david-dm.org/niondir/iot-dashboard#info=devDependencies)
 
 
 **Help, Questions, Feedback:**  [![Gitter](https://badges.gitter.im/Niondir/iot-dashboard.svg)](https://gitter.im/Niondir/iot-dashboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
