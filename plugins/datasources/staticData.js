@@ -21,7 +21,7 @@
     class Datasource {
 
         initialize(props) {
-            props.setFetchInterval(10 * 1000)
+            props.setFetchInterval(Infinity);
             props.setFetchReplaceData(true)
         }
 

@@ -78,6 +78,9 @@ export class DatasourcePluginInstance {
         if (oldProps !== newProps) {
             this.datasourceWillReceiveProps(newProps);
             this.dsInstance.props = newProps;
+            if (newProps.state.settings !== oldProps.state.settings) {
+                this.scheduler.forceUpdate();
+            }
         }
     }
 
@@ -103,7 +106,6 @@ export class DatasourcePluginInstance {
 
     datasourceWillReceiveProps(newProps: IDatasourceProps) {
         if (newProps.state.settings !== this.props.state.settings) {
-            this.scheduler.forceUpdate();
             if (_.isFunction(this.dsInstance.datasourceWillReceiveSettings)) {
                 this.dsInstance.datasourceWillReceiveSettings(this.props.state.settings);
             }

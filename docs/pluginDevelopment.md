@@ -94,7 +94,7 @@ The datasource has a props object which contains Settings and other information.
 
     export interface DatasourceProps {
         state: IDatasourceState
-        setFetchInterval: (intervalInMs: number) => void // Set how often fetchData() will be called
+        setFetchInterval: (intervalInMs: number) => void // Set how often fetchData() will be called, 'Infinite' to disable regular updates
         setFetchReplaceData: (replace: boolean) => void // Default: false - when true, data is replaced insted on appended when "resolve" in "fetchData(resolve, reject)" is called
     }
 
@@ -106,7 +106,6 @@ The datasource has a props object which contains Settings and other information.
     }
 
 `UserSettings` is an object with one key per `Setting` in the `TypeInfo` containing the value set by the user when the Widget is created.
-
 
 ## Datasource implementation
 
@@ -133,6 +132,8 @@ You can define some functions to handle certain events.
          // Data must be an array containing JavaScript objects.
          // resolve and reject are callbacks, so you can return data that is loaded async
          // Per default, resolved data is appended to the datasource data
+         // fetchData() is called when the datasource is created, when settings changed and regularly depending on the value of setFetchInterval(intervalInMs: number)
+         
          resolve([{value: "foo"}, {value: "bar"}]);
      }.bind(Datasource);
 
