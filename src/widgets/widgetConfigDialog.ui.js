@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
 import ModalDialog from "../modal/modalDialog.ui.js";
@@ -76,7 +76,7 @@ class WidgetConfigModal extends React.Component {
             // TODO: The widgetConfig in the state is a bad idea. Solve this via state.modalDialog.data
             // This is needed for the very first time the page is rendered and the selected widget type is undefined
             return <ModalDialog id={DIALOG_ID}
-                                title={"Configure "+ props.widgetType +" Widget"}
+                                title={"Configure Widget: " + props.widgetType}
                                 actions={actions}
             >
                 <div>Unknown WidgetType: {props.widgetType}</div>
@@ -91,7 +91,7 @@ class WidgetConfigModal extends React.Component {
             id: 'name',
             name: 'Name',
             type: 'string',
-            defaultValue: ""
+            defaultValue: selectedWidgetPlugin.typeInfo.name
         });
 
         const fields = settings.map(setting => setting.id);
@@ -105,7 +105,7 @@ class WidgetConfigModal extends React.Component {
         initialValues = Object.assign({}, initialValues, props.widgetSettings);
 
         return <ModalDialog id={DIALOG_ID}
-                            title={"Configure "+ props.widgetType +" Widget"}
+                            title={"Configure Widget: " + selectedWidgetPlugin.typeInfo.name}
                             actions={actions}
         >
             <div className="ui one column grid">
