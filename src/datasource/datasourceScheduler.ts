@@ -21,13 +21,19 @@ export class DatasourceScheduler {
     set fetchInterval(ms: number) {
         this._fetchInterval = ms;
         this.clearFetchTimeout();
-        this.scheduleFetch();
+        this.scheduleFetch(this._fetchInterval);
     }
 
 
     start() {
         this.running = true;
-        this.scheduleFetch();
+        // Fetch once as soon as possible
+        this.scheduleFetch(0);
+    }
+
+    forceUpdate() {
+        console.log("Force Update!");
+        this.scheduleFetch(0);
     }
 
     dispose() {
@@ -36,13 +42,13 @@ export class DatasourceScheduler {
         this.running = false;
     }
 
-    private scheduleFetch() {
+    private scheduleFetch(ms: number) {
         if (!this.running) {
             return;
         }
         this.fetchTimeoutRef = setTimeout(() => {
             this.doFetchData();
-        }, this._fetchInterval)
+        }, ms)
     }
 
     private clearFetchTimeout() {
@@ -55,8 +61,15 @@ export class DatasourceScheduler {
     private doFetchData() {
         const dsState = this.store.getState().datasources[this.dsInstance.id];
 
+        if (!dsState) {
+            console.log("Skipping fetchData because plugin does not exists - it's time to dispose?");
+            this.scheduleFetch(this._fetchInterval);
+        }
+
         if (dsState.isLoading) {
             console.log("Skipping fetchData because plugin is still loading");
+            this.scheduleFetch(this._fetchInterval);
+            return;
         }
 
         if (this.fetchPromise) {
@@ -84,7 +97,7 @@ export class DatasourceScheduler {
                     this.store.dispatch(Datasource.fetchedDatasourceData(dsState.id, result));
                 }
 
-                this.scheduleFetch();
+                this.scheduleFetch(this._fetchInterval);
             } else {
                 console.error("fetchData of disposed plugin finished - result discarded", dsState, result);
             }
@@ -92,6 +105,7 @@ export class DatasourceScheduler {
             console.warn("Failed to fetch data for Datasource " + dsState.type, dsState);
             console.error(error);
             this.fetchPromise = null;
+            this.scheduleFetch(this._fetchInterval);
         })
     }
 }

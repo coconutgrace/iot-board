@@ -31,7 +31,7 @@
     class Datasource {
 
 
-        constructor(props) {
+        initialize(props) {
             props.setFetchInterval(1200);
             const history = props.state.data;
             // Initialize with non random values to demonstrate loading of historic values

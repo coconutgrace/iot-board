@@ -95,6 +95,7 @@ The datasource has a props object which contains Settings and other information.
     export interface DatasourceProps {
         state: IDatasourceState
         setFetchInterval: (intervalInMs: number) => void // Set how often fetchData() will be called
+        setFetchReplaceData: (replace: boolean) => void // Default: false - when true, data is replaced insted on appended when "resolve" in "fetchData(resolve, reject)" is called
     }
 
     interface IDatasourceState {
@@ -121,6 +122,10 @@ You can define some functions to handle certain events.
 
     Datasource.prototype.datasourceWillReceiveProps = function (nextProps) {
           // Handle updated props
+     };
+     
+    Datasource.prototype.datasourceWillReceiveSettings = function (nextSettings) {
+          // Handle updated settings
      };
 
      Datasource.prototype.fetchData = function (resolve, reject) {

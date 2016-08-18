@@ -11,10 +11,6 @@
 
     class Datasource {
 
-        constructor() {
-
-        }
-
         renderTime() {
             const currentTime = new Date();
             let diem = 'AM';
@@ -43,9 +39,9 @@
             };
         }
 
-        getValues() {
+        fetchData(resolve, reject) {
             const now = new Date();
-            return [{date: now}]
+            resolve([{date: now}])
         }
 
     }

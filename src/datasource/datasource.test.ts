@@ -23,6 +23,45 @@ describe("Datasource > Datasource", function () {
         dashboard.dispose();
     });
 
+    describe("actions", function () {
+        it("UPDATED_FETCH_REPLACE_DATA", function () {
+            store = Store.createEmpty(Store.testStoreOptions());
+
+            store.dispatch(Datasource.addDatasource("my-ds-type", {}, false, "my-ds-id"));
+
+            assert.equal(store.getState().datasources["my-ds-id"].replaceData, false, "replaceData is initially false");
+
+            store.dispatch(Datasource.updatedFetchReplaceData("my-ds-id", true));
+
+            assert.equal(store.getState().datasources["my-ds-id"].replaceData, true, "replaceData is true after we changed it");
+        });
+
+        it("FETCHED_DATASOURCE_DATA when replace", function () {
+            store = Store.createEmpty(Store.testStoreOptions());
+
+            store.dispatch(Datasource.addDatasource("my-ds-type", {}, false, "my-ds-id"));
+            store.dispatch(Datasource.updatedFetchReplaceData("my-ds-id", true));
+            store.dispatch(Datasource.fetchedDatasourceData("my-ds-id", [{tim: "struppy"}]));
+            store.dispatch(Datasource.fetchedDatasourceData("my-ds-id", [{ernie: "bert"}]));
+
+
+            assert.deepEqual(store.getState().datasources["my-ds-id"].data, [{ernie: "bert"}], "Only the last value is present");
+        });
+
+        it("FETCHED_DATASOURCE_DATA when append", function () {
+            store = Store.createEmpty(Store.testStoreOptions());
+
+            store.dispatch(Datasource.addDatasource("my-ds-type", {}, false, "my-ds-id"));
+            store.dispatch(Datasource.updatedFetchReplaceData("my-ds-id", false));
+            store.dispatch(Datasource.fetchedDatasourceData("my-ds-id", [{tim: "struppy"}]));
+            store.dispatch(Datasource.fetchedDatasourceData("my-ds-id", [{ernie: "bert"}]));
+
+
+            assert.deepEqual(store.getState().datasources["my-ds-id"].data, [{tim: "struppy"}, {ernie: "bert"}], "All values are present");
+        });
+
+    });
+
     describe("api", function () {
         /**
          * For the Datasource API we have to consider different use cases how a Datasource wants to provide data:

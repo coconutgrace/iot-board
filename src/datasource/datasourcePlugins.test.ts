@@ -136,13 +136,15 @@ describe('Datasource > DatasourcePlugins', function () {
                 url: "some/url"
             }
         };
+        // TODO: use action to create datasource
         initialState.datasources = {
             "ds-instance-in-state-id": {
                 id: "ds-instance-in-state-id",
                 type: "ds-with-instance-in-state",
                 settings: {},
                 data: [{ernie: "bert"}],
-                isLoading: false
+                isLoading: false,
+                replaceData: false
             }
         };
 

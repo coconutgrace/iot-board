@@ -6,24 +6,27 @@ import * as _ from "lodash";
 import {DashboardStore} from "../store";
 import {IPluginFactory, IPlugin} from "../pluginApi/pluginRegistry";
 import * as Datasource from "./datasource";
-import {IDatasourceState} from "./datasource";
+import {IDatasourceState, IDatasourcesState} from "./datasource";
 import {DatasourcePluginInstance} from "./datasourcePluginInstance";
 import Unsubscribe = Redux.Unsubscribe;
 
 
 export interface IDatasourceConstructor extends IDatasourcePlugin {
-    new(props: any): IDatasourcePlugin
+    new(): IDatasourcePlugin
 }
 
-export interface DatasourceProps {
+export interface IDatasourceProps {
     state: IDatasourceState
     setFetchInterval: (intervalInMs: number) => void
+    setFetchReplaceData: (replace: boolean) => void
 }
 
 export interface IDatasourcePlugin extends IPlugin {
-    props?: DatasourceProps
-    datasourceWillReceiveProps?: (newProps: any) => void
+    props?: IDatasourceProps
+    datasourceWillReceiveProps?: (newProps: IDatasourceProps) => void
+    datasourceWillReceiveSettings?: (nextSettings: any) => void
     dispose?: () => void
+    initialize?(props: IDatasourceProps): () => void
     fetchData?<T>(resolve: (value?: T | Thenable<T>) => void, reject: (reason?: any) => void): void
 }
 
@@ -36,6 +39,7 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
     private _pluginInstances: {[id: string]: DatasourcePluginInstance} = {};
     private _unsubscribe: Unsubscribe;
     private _disposed: boolean = false;
+    private oldDatasourcesState: IDatasourcesState;
 
     constructor(private _type: string, private _datasource: IDatasourcePlugin, private _store: DashboardStore) {
         this._unsubscribe = _store.subscribe(() => this.handleStateChange());
@@ -78,18 +82,25 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
     handleStateChange() {
         const state = this._store.getState();
 
+        if (this.oldDatasourcesState === state.datasources) {
+            return;
+        }
+
         // Create Datasource instances for missing data sources in store
         _.valuesIn<IDatasourceState>(state.datasources)
             .filter((dsState) => dsState.type === this.type)
             .forEach((dsState) => {
                 if (this._pluginInstances[dsState.id] === undefined) {
                     this._pluginInstances[dsState.id] = this.createInstance(dsState.id);
+                    this._pluginInstances[dsState.id].initialize();
                     this._store.dispatch(Datasource.finishedLoading(dsState.id))
                 }
             });
 
         // For all running datasources we notify them about setting changes
+        // TODO: make it more explicit for settings and state, only update on real changes
         _.valuesIn<IDatasourceState>(state.datasources).forEach(dsState => this.updateDatasource(dsState))
+        this.oldDatasourcesState = state.datasources;
     }
 
     private updateDatasource(dsState: IDatasourceState) {

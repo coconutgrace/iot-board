@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-import {IDatasourcePlugin, IDatasourceConstructor} from "./datasourcePluginFactory";
+import {IDatasourcePlugin, IDatasourceConstructor, IDatasourceProps} from "./datasourcePluginFactory";
 import {DashboardStore} from "../store";
 import {DatasourceScheduler} from "./datasourceScheduler";
-import {updatedMaxValues} from "./datasource";
+import * as Datasource from "./datasource";
 
 /**
  * Represents a plugin instance, state should be saved in store!
@@ -15,17 +15,22 @@ export class DatasourcePluginInstance {
     private scheduler: DatasourceScheduler;
     private dsInstance: IDatasourcePlugin;
 
+
     constructor(public id: string, private dsConstructor: IDatasourceConstructor, private store: DashboardStore) {
         this.scheduler = new DatasourceScheduler(this, this.store);
+        this.initializePluginInstance()
+    }
 
+    initializePluginInstance() {
         const dsState = this.state;
         const props = {
             state: dsState,
-            setFetchInterval: (ms: number) => this.setFetchInterval(ms)
+            setFetchInterval: (ms: number) => this.setFetchInterval(ms),
+            setFetchReplaceData: (replace: boolean) => this.setFetchReplaceData(replace)
         };
 
-        console.log("dsConstructor", dsConstructor)
-        const pluginInstance = new dsConstructor(props);
+        console.log("dsConstructor", this.dsConstructor);
+        const pluginInstance = new this.dsConstructor();
         this.dsInstance = pluginInstance;
 
         pluginInstance.props = props;
@@ -34,14 +39,18 @@ export class DatasourcePluginInstance {
         if (_.isFunction(pluginInstance.datasourceWillReceiveProps)) {
             pluginInstance.datasourceWillReceiveProps = pluginInstance.datasourceWillReceiveProps.bind(pluginInstance);
         }
+        if (_.isFunction(pluginInstance.datasourceWillReceiveSettings)) {
+            pluginInstance.datasourceWillReceiveSettings = pluginInstance.datasourceWillReceiveSettings.bind(pluginInstance);
+        }
         if (_.isFunction(pluginInstance.dispose)) {
             pluginInstance.dispose = pluginInstance.dispose.bind(pluginInstance);
         }
         if (_.isFunction(pluginInstance.fetchData)) {
             pluginInstance.fetchData = pluginInstance.fetchData.bind(pluginInstance);
         }
-
-        this.scheduler.start();
+        if (_.isFunction(pluginInstance.initialize)) {
+            pluginInstance.initialize = pluginInstance.initialize.bind(pluginInstance);
+        }
     }
 
     get props() {
@@ -52,12 +61,16 @@ export class DatasourcePluginInstance {
         this.scheduler.fetchInterval = intervalMs;
     }
 
+    setFetchReplaceData(replace: boolean) {
+        this.store.dispatch(Datasource.updatedFetchReplaceData(this.id, replace));
+    }
+
     /**
      * The the number of values stored in the datasource
      * @param maxValues
      */
     setMaxValues(maxValues: number) {
-        this.store.dispatch(updatedMaxValues(this.id, maxValues));
+        this.store.dispatch(Datasource.updatedMaxValues(this.id, maxValues));
     }
 
     set props(newProps: any) {
@@ -83,7 +96,19 @@ export class DatasourcePluginInstance {
         return this.store.getState().datasourcePlugins[this.state.type];
     }
 
-    datasourceWillReceiveProps(newProps: any) {
+    initialize() {
+        this.dsInstance.initialize(this.props);
+        this.scheduler.start();
+    }
+
+    datasourceWillReceiveProps(newProps: IDatasourceProps) {
+        if (newProps.state.settings !== this.props.state.settings) {
+            this.scheduler.forceUpdate();
+            if (_.isFunction(this.dsInstance.datasourceWillReceiveSettings)) {
+                this.dsInstance.datasourceWillReceiveSettings(this.props.state.settings);
+            }
+        }
+
         if (_.isFunction(this.dsInstance.datasourceWillReceiveProps)) {
             this.dsInstance.datasourceWillReceiveProps(newProps);
         }

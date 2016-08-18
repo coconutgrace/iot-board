@@ -140,7 +140,6 @@
         });
 
 
-
         /*
          const maxValues = Number(this.props.maxValues) || 1000;
          while (history.length > maxValues) {
@@ -149,12 +148,15 @@
     }
 
     function Datasource(props) {
-        const history = props.state.data;
-        this.props = props;
 
-        this.interval = setInterval(fetchData.bind(this), 2000);
-        this.history = history || [];
 
+        this.initialize = function (props) {
+            const history = props.state.data;
+            this.props = props;
+
+            this.interval = setInterval(fetchData.bind(this), 2000);
+            this.history = history || [];
+        };
 
         this.updateProps = function (props) {
             this.props = props;
