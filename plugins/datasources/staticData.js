@@ -5,7 +5,7 @@
 (function (window) {
     const TYPE_INFO = {
         type: "static-data",
-        name: "StaticData",
+        name: "Static Data",
         description: "Datasource that provides static data",
         settings: [
             {

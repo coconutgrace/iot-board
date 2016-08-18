@@ -24,6 +24,13 @@ const initialState: IDatasourcePluginsState = {
             type: "will-be-loaded"
         }
     },
+    "static-data": {
+        id: "static-data",
+        url: "./plugins/datasources/staticData.js",
+        typeInfo: {
+            type: "will-be-loaded"
+        }
+    },
     "digimondo-gps-datasource": {
         id: "digimondo-gps-datasource",
         url: "./plugins/datasources/DigimondoGpsDatasource.js",

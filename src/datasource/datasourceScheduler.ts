@@ -20,6 +20,12 @@ export class DatasourceScheduler {
 
     set fetchInterval(ms: number) {
         this._fetchInterval = ms;
+        if (this._fetchInterval < 1000) {
+            this.fetchInterval = 1000;
+            console.warn("Datasource has fetch interval below 1000ms, it was forced to 1000ms\n" +
+                "Please do not set intervals shorter than 1000ms. If you really need this, file a ticket with explanation!")
+        }
+
         this.clearFetchTimeout();
         this.scheduleFetch(this._fetchInterval);
     }
@@ -43,6 +49,10 @@ export class DatasourceScheduler {
     }
 
     private scheduleFetch(ms: number) {
+        if (ms === Infinity) {
+            return;
+        }
+
         if (!this.running) {
             return;
         }
