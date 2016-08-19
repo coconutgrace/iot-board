@@ -1,5 +1,5 @@
 import {DashboardStore} from "./store";
-import {WidgetPluginRegistry, IWidgetPluginState} from "./widgets/widgetPlugins";
+import {IWidgetPluginState} from "./widgets/widgetPlugins";
 import DatasourcePluginRegistry, {IDatasourcePluginModule} from "./datasource/datasourcePluginRegistry";
 import * as _ from "lodash";
 import * as Plugins from "./pluginApi/plugins";
@@ -8,6 +8,7 @@ import scriptloader from "./util/scriptLoader";
 import * as URI from "urijs";
 import {IDatasourcePluginState} from "./datasource/datasourcePlugins";
 import {IPluginModule} from "./pluginApi/pluginRegistry";
+import WidgetPluginRegistry from "./widgets/WidgetPluginRegistry";
 
 /**
  * The root of the Dashboard business Logic
@@ -71,7 +72,8 @@ export default class Dashboard {
             throw new Error("Dashboard was already initialized. Can not call init() twice.");
         }
         this._initialized = true;
-        Dashboard.setInstance(this); // TODO: still needed?
+        // TODO: Should not be needed but is still needed for unloading plugins and in some widget code
+        Dashboard.setInstance(this);
 
         const state = this._store.getState();
         const plugins = _.valuesIn<IDatasourcePluginState>(state.datasourcePlugins)

@@ -58,7 +58,7 @@ const WidgetFrame = (props) => {
             <div className="ui segment"
                  style={{height: widgetState.availableHeightPx, padding: 0, border: "red dashed 0px"}}>
                 {
-                    pluginLoaded ? widgetFactory.getOrCreateInstance(widgetState.id)
+                    pluginLoaded ? widgetFactory.getInstance(widgetState.id)
                         : <LoadingWidget widget={widgetState}/>
                 }
             </div>

@@ -32,9 +32,7 @@
         }
 
         render() {
-            const props = this.props;
-
-            var value = this.state.value;
+            const value = this.state.value;
             return <div style={{width: '100%', height: '100%'}}>
                 <p>Value: {value}</p>
                 <button onClick={() => {

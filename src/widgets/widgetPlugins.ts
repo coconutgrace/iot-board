@@ -2,15 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import WidgetPlugin from './widgetPlugin.js'
-import PluginRegistry from '../pluginApi/pluginRegistry'
 import * as Action from "../actionNames";
 import {genCrudReducer} from "../util/reducer.js";
-import {PropTypes as Prop}  from "react";
-import Dashboard from '../dashboard'
-import {DashboardStore} from "../store";
-import * as AppState from "../appState"
-import {ITypeInfo} from "../appState";
+import {PropTypes as Prop} from "react";
+import Dashboard from "../dashboard";
+import * as AppState from "../appState";
+import {ITypeInfo} from "../pluginApi/pluginRegistry";
 
 
 // TODO: Later load all plugins from external URL's ?
@@ -57,25 +54,11 @@ export interface IWidgetPluginState {
     isLoading: boolean
 }
 
-export interface IWidgetPluginModule {
-
-}
 
 export interface IWidgetPluginAction extends AppState.Action {
     id?: string
     url?: string
     typeInfo?: ITypeInfo
-}
-
-export class WidgetPluginRegistry extends PluginRegistry<any, any> {
-
-    constructor(store: DashboardStore) {
-        super(store);
-    }
-
-    createPluginFromModule(module: IWidgetPluginModule) {
-        return new WidgetPlugin(module, this.store);
-    }
 }
 
 
