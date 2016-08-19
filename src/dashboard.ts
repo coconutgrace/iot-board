@@ -1,5 +1,5 @@
 import {DashboardStore} from "./store";
-import {WidgetPluginRegistry} from "./widgets/widgetPlugins.js";
+import {WidgetPluginRegistry, IWidgetPluginState} from "./widgets/widgetPlugins";
 import DatasourcePluginRegistry, {IDatasourcePluginModule} from "./datasource/datasourcePluginRegistry";
 import * as _ from "lodash";
 import * as Plugins from "./pluginApi/plugins";
@@ -75,7 +75,7 @@ export default class Dashboard {
 
         const state = this._store.getState();
         const plugins = _.valuesIn<IDatasourcePluginState>(state.datasourcePlugins)
-            .concat(_.valuesIn<any>(state.widgetPlugins));  // TODO: type IWidgetPluginState
+            .concat(_.valuesIn<IWidgetPluginState>(state.widgetPlugins));
 
         plugins.forEach(plugin => {
             this._store.dispatch(Plugins.startLoadingPluginFromUrl(plugin.url, plugin.id));

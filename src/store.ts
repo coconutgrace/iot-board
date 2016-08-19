@@ -16,7 +16,7 @@ import * as Persist from "./persistence.js";
 import * as Plugins from './pluginApi/plugins'
 import {reducer as formReducer} from "redux-form";
 import * as Action from "./actionNames";
-import * as  WidgetPlugins from "./widgets/widgetPlugins.js";
+import * as  WidgetPlugins from "./widgets/widgetPlugins";
 import * as DatasourcePlugins from "./datasource/datasourcePlugins";
 import * as AppState from "./appState.ts";
 import * as Config from "./config";
