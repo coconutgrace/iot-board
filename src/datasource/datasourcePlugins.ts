@@ -6,6 +6,7 @@ import * as Action from "../actionNames";
 import {genCrudReducer} from "../util/reducer.js";
 import * as AppState from "../appState";
 import Dashboard from "../dashboard";
+import {ITypeInfo} from "../pluginApi/pluginRegistry";
 
 
 // TODO: does it work to have the URL as ID?
@@ -48,13 +49,13 @@ export interface IDatasourcePluginsState {
 
 export interface IDatasourcePluginState {
     id: string
-    typeInfo: AppState.ITypeInfo
+    typeInfo: ITypeInfo
     url: string
 }
 
 
 export interface IDatasourcePluginAction extends AppState.Action {
-    typeInfo: AppState.ITypeInfo
+    typeInfo: ITypeInfo
     url: string
     pluginType: string
     isLoading: boolean

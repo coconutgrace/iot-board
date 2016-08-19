@@ -2,8 +2,8 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import {ITypeInfo} from "../appState";
 import {IDatasourcePlugin} from "../datasource/datasourcePluginFactory";
+import {ITypeInfo} from "./pluginRegistry";
 /**
  * When a Plugin is loaded via the UI, an action is called to do so.
  * The action will load an external script, containing the plugin code, which calls one of the API methods here.
