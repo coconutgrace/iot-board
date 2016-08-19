@@ -8,7 +8,7 @@ import scriptloader from "./util/scriptLoader";
 import * as URI from "urijs";
 import {IDatasourcePluginState} from "./datasource/datasourcePlugins";
 import {IPluginModule} from "./pluginApi/pluginRegistry";
-import WidgetPluginRegistry from "./widgets/WidgetPluginRegistry";
+import WidgetPluginRegistry from "./widgets/widgetPluginRegistry";
 
 /**
  * The root of the Dashboard business Logic

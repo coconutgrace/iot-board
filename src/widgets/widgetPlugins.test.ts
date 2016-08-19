@@ -4,7 +4,7 @@
 
 import {assert} from "chai";
 import * as Store from "../store";
-import WidgetPluginRegistry from "./WidgetPluginRegistry";
+import WidgetPluginRegistry from "./widgetPluginRegistry";
 
 
 describe('Widget Plugins', function () {
