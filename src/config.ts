@@ -4,6 +4,14 @@
 import * as _ from 'lodash'
 
 const configJson = <IConfigState>require('./config.json');
+const defaultConfig: IConfigState = {
+    version: "",
+    revision: "",
+    revisionShort: "",
+    branch: "",
+    persistenceTarget: "local-storage",
+    devMode: true
+};
 
 
 export interface IConfigState {
@@ -18,7 +26,8 @@ export interface IConfigState {
 export function config(state: IConfigState = configJson, action: any): IConfigState {
     switch (action.type) {
         default:
-            return _.assign<any, IConfigState>({}, state, configJson);
+            // Content of configJson overrides everything else!
+            return _.assign<any, IConfigState>({}, defaultConfig, state, configJson);
     }
 }
 
