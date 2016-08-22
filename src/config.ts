@@ -12,7 +12,7 @@ export interface IConfigState {
     revision: string
     revisionShort: string
     branch: string
-    persistenceTarget: string
+    persistenceTarget: string | "local-storage" | ""
 }
 
 export function config(state: IConfigState = configJson, action: any): IConfigState {

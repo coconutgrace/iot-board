@@ -4,6 +4,7 @@
 
 import {Action, State} from "./appState";
 import * as _ from 'lodash'
+import * as $ from 'jquery'
 
 let lastAction: IPersistenceAction = {type: "NONE"};
 let allowSave = true;
@@ -41,7 +42,7 @@ export function persistenceMiddleware({getState}): any {
             // if we would just block saving for some time after saving an action we would loose the last actions
             allowSave = false;
             saveTimeout = setTimeout(() => {
-                saveToLocalStorage(getState());
+                save(getState());
                 console.log('Saved state @' + lastAction.type);
 
                 allowSave = true;
@@ -54,17 +55,32 @@ export function persistenceMiddleware({getState}): any {
     }
 }
 
-export function saveToLocalStorage(state: State) {
-    if (typeof window === 'undefined') {
-        console.warn("Can not save to local storage in current environment.");
-        return;
-    }
+function save(state: State) {
+    const target = state.config.persistenceTarget;
 
     const savableState: State = _.assign<any, State>({}, state);
 
     delete savableState.form;
     delete savableState.modalDialog;
-    window.localStorage.setItem("appState", JSON.stringify(savableState));
+
+    if (target === "local-storage") {
+        saveToLocalStorage(savableState);
+    }
+    else if (target) {
+        saveToServer(target, savableState);
+    }
+}
+
+function saveToServer(target: string, state: State) {
+    $.post(target, state);
+}
+
+function saveToLocalStorage(state: State) {
+    if (typeof window === 'undefined') {
+        console.warn("Can not save to local storage in current environment.");
+        return;
+    }
+    window.localStorage.setItem("appState", JSON.stringify(state));
 }
 
 

@@ -33,7 +33,7 @@
       "initialized": "never"
     }],
     "no-var": "error",
-    "prefer-const": "error",
+    "prefer-const": "warn",
     // To be considdered:
     "no-unused-vars": "off",
     "no-console": "off",
