@@ -4,7 +4,7 @@
 
 
 import * as React from "react";
-import {IWidgetPlugin, IWidgetProps} from "./widgetPlugin";
+import {IWidgetPlugin, IWidgetProps} from "./widgetPluginFactory";
 import ReactInstance = __React.ReactInstance;
 
 

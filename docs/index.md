@@ -5,6 +5,7 @@
 * [Hosting the iot-dashboard](#hosting-the-iot-dashboard)
 * [Contributing](#Contributing) to the dashboard core codebase (this git repo)
 * [Basic Concepts & Architecture](#basic-concepts-&-architecture)
+* [Architecture](architecture.md)
 * [Coding Guidelines](#coding-guidelines)
 * [Plugin Development](pluginDevelopment.md)
 * [Security](security.md) related topics
@@ -26,8 +27,8 @@ Not all Concepts are implemented yet. Not implemented concepts might change in f
 * **Dashboard:** A `Dashboard` defines `Datasources`, `Widgets` and `Layouts` and can be imported and exported.
 * **Layout:** A `Layout` belongs to one `Dashboard` and defines how `Widgets` are arranged.
 * **Widget:** A `Widget` can be arranged inside the `Layout` and renders content based on the `WidgetType`, `WidgetProps` and `Datasources`.
-    * There are several predefined, more and less generic `Widgets` that can be configured and saved as `Widget Blueprints`.
-* **Widget Blueprints:** A `Dashboard` can define `Widget Blueprints` which provides an easy way to compose complex layouts with less widget configuration effort.
+    * There are several predefined, more and less generic `Widgets` that can be configured and saved as `Widget Blueprints`. (not yet)
+* **Widget Blueprints:** A `Dashboard` can define `Widget Blueprints` which provides an easy way to compose complex layouts with less widget configuration effort. (not yet)
 * **Plugins:** Plugins provide the implementations for `Datasources` and `Widgets`.
 * **Datasource:** A `Datasource` provides data for `Widgets` on request.
 * **Datasource Type:** A `Datasource Type` defines how a `Datasource` can fetch data,
@@ -39,18 +40,16 @@ Not all Concepts are implemented yet. Not implemented concepts might change in f
 * **DatasourceInstance:** Can be created by the user based on any `DatasourcePlugin`. Executes the actual data fetching.
 * **DatasourceState:** Contains properties defined by the user when a `DatasourceInstance` is created
  and is updated regularly with data from the `DatasourceInstance`
-* **DatasourceWorker:** Managing the actual updating of the `DatasourceState` based on the `DatasourceInstance` and the current `DatasourceState`
+* **DatasourceScheduler:** Managing the actual updating of the `DatasourceState` based on the `DatasourceInstance` and the current `DatasourceState`
 
 The following needs way more documentation in future, just a quick start:
 
 A `DatasourcePlugin` can provide 2 functions:
-* `fetchNewValues(): [{value}]`
-* `fetchPastValues(since): [{value}]`
-  * Implementation is optional
-* `Value` can be any kind of JSON object.
-    * Widgets can verify if they are able to display given values
-
-And a `TYPE_INFO` constant.
+* `fetchData(resolve, reject)` where `resolve` ad `reject` are callbacks:
+  * `resolve(data)` - Returns new data in the form of `any[]`
+  * `reject(error)` - When fetching data failed
+* Widgets can verify if they are able to display given values (not yet)
+* A `TYPE_INFO` constant that contains metadata for the Plugin
 
 # Coding Guidelines
 

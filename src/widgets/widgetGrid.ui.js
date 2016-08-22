@@ -33,7 +33,7 @@ class WidgetGrid extends Component {
             /*
              if (!widgetPlugin) {
              // TODO: Render widget with error message - currently a loading indicator is displayed and the setting button is hidden
-             console.warn("No WidgetPlugin for type '" + widgetState.type + "'! Skipping rendering.");
+             console.warn("No WidgetPluginFactory for type '" + widgetState.type + "'! Skipping rendering.");
              return null;
              } */
             // WidgetFrame must be loaded as function, else the grid is not working properly.

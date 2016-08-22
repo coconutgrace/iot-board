@@ -40,8 +40,7 @@ export interface IWidgetProps {
     _widgetClass?: IWidgetPluginClass // TODO: type the widget class
 }
 
-// TODO: Rename to ...Factory
-export default class WidgetPlugin implements IPluginFactory<ReactElement<IWidgetProps>> {
+export default class WidgetPluginFactory implements IPluginFactory<ReactElement<IWidgetProps>> {
 
 
     instances: { [id: string]: ReactElement<IWidgetProps>} = {};
