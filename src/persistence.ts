@@ -72,7 +72,12 @@ function save(state: State) {
 }
 
 function saveToServer(target: string, state: State) {
-    $.post(target, state);
+    $.post({
+        url: target,
+        data: JSON.stringify(state),
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8"
+    });
 }
 
 function saveToLocalStorage(state: State) {
