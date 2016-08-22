@@ -5,7 +5,7 @@
 
 import PluginRegistry, {IPluginModule} from "../pluginApi/pluginRegistry";
 import {DashboardStore} from "../store";
-import WidgetPlugin, {IWidgetPluginClass} from "./widgetPluginFactory";
+import WidgetPlugin, {IWidgetPluginClass, default as WidgetPluginFactory} from "./widgetPluginFactory";
 /**
  * Describes how we expect the plugin module to be
  */
@@ -21,6 +21,6 @@ export default class WidgetPluginRegistry extends PluginRegistry<any, any> {
 
     createPluginFromModule(module: IWidgetPluginModule) {
         console.assert(_.isObject(module.TYPE_INFO), "Missing TYPE_INFO on datasource module. Every module must export TYPE_INFO");
-        return new WidgetPlugin(module.TYPE_INFO.type, module.Widget, this.store);
+        return new WidgetPluginFactory(module.TYPE_INFO.type, module.Widget, this.store);
     }
 }

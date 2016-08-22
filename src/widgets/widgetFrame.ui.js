@@ -65,8 +65,19 @@ const WidgetFrame = (props) => {
         </div>)
 };
 
+export const widgetPropType = Prop.shape({
+    id: Prop.string.isRequired,
+    col: Prop.number.isRequired,
+    row: Prop.number.isRequired,
+    width: Prop.number.isRequired,
+    height: Prop.number.isRequired,
+    settings: Prop.shape({
+        name: Prop.string.isRequired
+    }).isRequired
+});
+
 WidgetFrame.propTypes = {
-    widget: Widgets.widgetPropType.isRequired,
+    widget: widgetPropType.isRequired,
     widgetPlugin: WidgetPlugins.widgetPluginType.isRequired,
     isReadOnly: Prop.bool.isRequired
 };
@@ -79,7 +90,7 @@ const LoadingWidget = (props) => {
 };
 
 LoadingWidget.propTypes = {
-    widget: Widgets.widgetPropType.isRequired
+    widget: widgetPropType.isRequired
 };
 
 class WidgetButton extends React.Component {
@@ -93,7 +104,7 @@ class WidgetButton extends React.Component {
 }
 
 WidgetButton.propTypes = {
-    widgetState: Widgets.widgetPropType.isRequired,
+    widgetState: widgetPropType.isRequired,
     icon: Prop.string.isRequired,
     visible: Prop.bool,
     className: Prop.string.isRequired,

@@ -7,6 +7,8 @@ import * as Store from "../store";
 import * as Widgets from "./widgets";
 import * as AppState from "../appState";
 import * as _ from "lodash";
+import {State} from "../appState";
+import {IWidgetState} from "./widgets";
 
 describe('Widget', function () {
     describe('action', function () {
@@ -67,6 +69,20 @@ describe('Widget', function () {
 
 
         });
+
+        it("UPDATED_SINGLE_WIDGET_SETTING", () => {
+            const store = Store.createEmpty(Store.testStoreOptions());
+
+            store.dispatch(Widgets.addWidget("my-widget-type", {setting1: "value1"}, 1, 2, 3, 4, "my-widget-id"));
+
+            let widgetState = store.getState().widgets["my-widget-id"];
+            assert.equal(widgetState.settings["setting1"], "value1");
+
+            store.dispatch(Widgets.updatedSingleSetting("my-widget-id", "setting1", "value2"));
+
+            widgetState = store.getState().widgets["my-widget-id"];
+            assert.equal(widgetState.settings["setting1"], "value2");
+        })
 
         it("calcNewWidgetPosition() calculates the position correctly", function () {
             const result1 = Widgets.calcNewWidgetPosition({"widget1": {col: 0, row: 0, width: 2, height: 4}});

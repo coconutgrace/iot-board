@@ -9,6 +9,7 @@ import {IPluginFactory, ITypeInfo, IPlugin} from "../pluginApi/pluginRegistry";
 import {GetState, State} from "../appState";
 import {DomWidgetContainer} from "./domWidgetContainer";
 import {IWidgetState} from "./widgets";
+import * as Widgets from "./widgets";
 import {IDatasourcesState} from "../datasource/datasource";
 import ComponentSpec = __React.ComponentSpec;
 import ReactInstance = __React.ReactInstance;
@@ -35,8 +36,9 @@ export interface GetDataFunction {
 
 export interface IWidgetProps {
     state?: IWidgetState
-    _datasources?: IDatasourcesState
     getData?: GetDataFunction
+    updateSetting?: (settingId: string, value: any) => void
+    _datasources?: IDatasourcesState
     _widgetClass?: IWidgetPluginClass // TODO: type the widget class
 }
 
@@ -60,6 +62,11 @@ export default class WidgetPluginFactory implements IPluginFactory<ReactElement<
             }
             return ds.data || [];
         }.bind(this, this.store.getState);
+    }
+
+    updateSetting(widgetId: string, settingId: string, value: any) {
+        console.log("update", settingId, "to", value, 'of', widgetId)
+        this.store.dispatch(Widgets.updatedSingleSetting(widgetId, settingId, value));
     }
 
     getInstance(id: string) {
@@ -92,13 +99,14 @@ export default class WidgetPluginFactory implements IPluginFactory<ReactElement<
                         // This is used to trigger re-rendering on Datasource change
                         // TODO: in future only the datasources the Widget is interested in should trigger re-rendering
                         _datasources: state.datasources,
-                        getData: this.getData
+                        getData: this.getData,
+                        updateSetting: this.updateSetting.bind(this, id)
                     }
                 };
             }
         )(<any>widgetComponent); // TODO: get rid of the any?
 
-        this.instances[id] = React.createElement(widget, <IWidgetProps>{_widgetClass: this.widget});
+        this.instances[id] = React.createElement(widget, <any>{_widgetClass: this.widget});
         // Should we create here or always outside?
         return this.instances[id];
     }

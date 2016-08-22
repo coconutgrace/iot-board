@@ -43,6 +43,8 @@ interface IWidgetAction extends Redux.Action {
     height?: number;
     layouts?: Layout[]; // Layout from react-grid-view
     layout?: any; // from layout.js
+    settingId?: string,
+    settingValue?: any
 }
 
 // From react-grid-layout
@@ -107,17 +109,6 @@ export const initialWidgets: IWidgetsState = {
 };
 
 
-export const widgetPropType = Prop.shape({
-    id: Prop.string.isRequired,
-    col: Prop.number.isRequired,
-    row: Prop.number.isRequired,
-    width: Prop.number.isRequired,
-    height: Prop.number.isRequired,
-    settings: Prop.shape({
-        name: Prop.string.isRequired
-    }).isRequired
-});
-
 /* // TODO: better explicitly create initial state? But when? ...
  export function createInitialWidgets() {
  return function(dispatch: AppState.Dispatch) {
@@ -159,10 +150,13 @@ export function createWidget(widgetType: string, widgetSettings: any): AppState.
     }
 }
 
-export function addWidget(widgetType: string, widgetSettings: any = {}, row: number, col: number, width: number = 3, height: number = 3): IWidgetAction {
+export function addWidget(widgetType: string, widgetSettings: any = {}, row: number, col: number, width: number = 3, height: number = 3, id?: string): IWidgetAction {
+    if (!id) {
+        id = Uuid.generate();
+    }
     return {
         type: Action.ADD_WIDGET,
-        id: Uuid.generate(),
+        id,
         col: col,
         row: row,
         width,
@@ -174,9 +168,18 @@ export function addWidget(widgetType: string, widgetSettings: any = {}, row: num
 
 export function updateWidgetSettings(id: string, widgetSettings: any): IWidgetAction {
     return {
-        type: Action.UPDATE_WIDGET_PROPS,
+        type: Action.UPDATE_WIDGET_SETTINGS,
         id,
         widgetSettings
+    }
+}
+
+export function updatedSingleSetting(id: string, settingId: string, settingValue: any): IWidgetAction {
+    return {
+        type: Action.UPDATED_SINGLE_WIDGET_SETTING,
+        id,
+        settingId,
+        settingValue
     }
 }
 
@@ -241,8 +244,14 @@ function widget(state: IWidgetState, action: IWidgetAction): IWidgetState {
                 height: action.height,
                 availableHeightPx: calcAvaliableHeight(action.height)
             };
-        case Action.UPDATE_WIDGET_PROPS:
+        case Action.UPDATE_WIDGET_SETTINGS:
             return _.assign<any, IWidgetState>({}, state, {settings: action.widgetSettings});
+        case Action.UPDATED_SINGLE_WIDGET_SETTING: {
+            const newSettings = _.clone(state.settings);
+            newSettings[action.settingId] = action.settingValue;
+
+            return _.assign<any, IWidgetState>({}, state, {settings: newSettings});
+        }
         case Action.UPDATE_WIDGET_LAYOUT:
             const layout = layoutById(action.layouts, state.id);
             if (layout == null) {

@@ -21,22 +21,16 @@
 
     class Widget extends React.Component {
 
-        constructor(props) {
-            super(props)
-
-            this.state = {value: 0}
-        }
-
-        componentWillUpdate(nextProps, nextState) {
-            this.props.updateSetting("counter", nextState.value);
+        get counterValue() {
+            return parseInt(this.props.state.settings.counter);
         }
 
         render() {
-            const value = this.state.value;
+            const value = this.counterValue;
             return <div style={{width: '100%', height: '100%'}}>
                 <p>Value: {value}</p>
                 <button onClick={() => {
-                    this.setState({value: value + 1})
+                    this.props.updateSetting("counter", value + 1)
                 }}>+1
                 </button>
             </div>
