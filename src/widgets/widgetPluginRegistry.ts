@@ -5,7 +5,7 @@
 
 import PluginRegistry, {IPluginModule} from "../pluginApi/pluginRegistry";
 import {DashboardStore} from "../store";
-import WidgetPlugin, {IWidgetPluginClass, default as WidgetPluginFactory} from "./widgetPluginFactory";
+import {IWidgetPluginClass, default as WidgetPluginFactory} from "./widgetPluginFactory";
 /**
  * Describes how we expect the plugin module to be
  */

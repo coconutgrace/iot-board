@@ -7,8 +7,6 @@ import * as Store from "../store";
 import * as Widgets from "./widgets";
 import * as AppState from "../appState";
 import * as _ from "lodash";
-import {State} from "../appState";
-import {IWidgetState} from "./widgets";
 
 describe('Widget', function () {
     describe('action', function () {
