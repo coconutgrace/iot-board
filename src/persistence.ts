@@ -2,9 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-let lastAction = "NONE";
+import {Action, State} from "./appState";
+import * as _ from 'lodash'
+
+let lastAction: IPersistenceAction = {type: "NONE"};
 let allowSave = true;
-let saveTimeout;
+let saveTimeout: number;
+
+export interface IPersistenceAction extends Action {
+    doNotPersist?: boolean
+}
 
 export function clearData() {
     if (window.confirm("Wipe app data and reload page?")) {
@@ -16,8 +23,9 @@ export function clearData() {
     }
 }
 
-export function persistenceMiddleware({getState}) {
-    return (next) => (action) => {
+// TODO: type middleware
+export function persistenceMiddleware({getState}): any {
+    return (next: any) => (action: IPersistenceAction) => {
 
         const nextState = next(action);
 
@@ -46,13 +54,13 @@ export function persistenceMiddleware({getState}) {
     }
 }
 
-export function saveToLocalStorage(state) {
+export function saveToLocalStorage(state: State) {
     if (typeof window === 'undefined') {
         console.warn("Can not save to local storage in current environment.");
         return;
     }
 
-    const savableState = Object.assign({}, state);
+    const savableState: State = _.assign<any, State>({}, state);
 
     delete savableState.form;
     delete savableState.modalDialog;
@@ -67,7 +75,7 @@ export function loadFromLocalStorage() {
     }
 
     const stateString = window.localStorage.getItem("appState");
-    let state = undefined;
+    let state: State = undefined;
     try {
         if (stateString !== undefined && stateString !== "undefined") {
             state = JSON.parse(stateString);

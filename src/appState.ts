@@ -8,6 +8,7 @@ import * as Widgets from './widgets/widgets'
 import * as DatasourcePlugins from './datasource/datasourcePlugins'
 import * as Config from './config'
 import * as Plugins from './pluginApi/plugins'
+import {IWidgetPluginsState} from "./widgets/widgetPlugins";
 
 export type Dispatch = Redux.Dispatch<State>
 export type GetState = () => State
@@ -23,9 +24,11 @@ export interface State {
     widgets: Widgets.IWidgetsState
     datasources: Datasource.IDatasourcesState
     datasourcePlugins: DatasourcePlugins.IDatasourcePluginsState
-    widgetPlugins: any // TODO: type WidgetPlugins (and migrate to ts)
+    widgetPlugins: IWidgetPluginsState
     pluginLoader: Plugins.IPluginLoaderState
     global: IGlobalState
+    form: any,
+    modalDialog: any
 }
 
 // TODO: move to dashboard/global when converted to ts

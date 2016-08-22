@@ -12,6 +12,7 @@ export interface IConfigState {
     revision: string
     revisionShort: string
     branch: string
+    persistenceTarget: string
 }
 
 export function config(state: IConfigState = configJson, action: any): IConfigState {

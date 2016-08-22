@@ -17,7 +17,7 @@ import DatasourceNavItem from "./datasource/datasourceNavItem.ui.js";
 import WidgetsNavItem from "./widgets/widgetsNavItem.ui.js";
 import PluginNavItem from "./pluginApi/pluginNavItem.ui.js";
 import PluginsDialog from "./pluginApi/pluginsDialog.ui.js";
-import * as Persistence from "./persistence.js";
+import * as Persistence from "./persistence";
 import {IConfigState} from "./config";
 
 interface LayoutProps {

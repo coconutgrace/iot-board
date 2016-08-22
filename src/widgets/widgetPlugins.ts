@@ -50,10 +50,14 @@ export interface IWidgetPluginsState {
 export interface IWidgetPluginState {
     id: string
     url: string
-    typeInfo: ITypeInfo
+    typeInfo: IWidgetTypeInfo
     isLoading: boolean
 }
 
+
+export interface IWidgetTypeInfo extends ITypeInfo {
+    rendering?: "dom" | "react"
+}
 
 export interface IWidgetPluginAction extends AppState.Action {
     id?: string

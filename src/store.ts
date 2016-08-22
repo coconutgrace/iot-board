@@ -12,7 +12,7 @@ import * as Datasource from "./datasource/datasource";
 import * as Global from "./dashboard/global.js";
 import * as Import from "./dashboard/import.js";
 import * as Modal from "./modal/modalDialog.js";
-import * as Persist from "./persistence.js";
+import * as Persist from "./persistence";
 import * as Plugins from './pluginApi/plugins'
 import {reducer as formReducer} from "redux-form";
 import * as Action from "./actionNames";

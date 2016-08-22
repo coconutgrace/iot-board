@@ -9,6 +9,7 @@ import * as _ from "lodash";
 import * as ModalIds from "../modal/modalDialogIds.js";
 import * as Modal from "../modal/modalDialog.js";
 import * as AppState from "../appState";
+import {IPersistenceAction} from "../persistence";
 
 const initialDatasources: IDatasourcesState = {
     "initial_random_source": {
@@ -26,14 +27,13 @@ const initialDatasources: IDatasourcesState = {
     }
 };
 
-export interface IDatasourceAction extends AppState.Action {
+export interface IDatasourceAction extends AppState.Action, IPersistenceAction {
     id?: string
     data?: any[]
     settings?: any
     dsType?: string
     maxValues?: number
     isLoading?: boolean
-    doNotPersist?: boolean
     replaceData?: boolean
 }
 

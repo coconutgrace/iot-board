@@ -17,7 +17,7 @@ import "es6-promise";
 import "react-grid-layout/css/styles.css";
 import * as Renderer from "./renderer.js";
 import * as Store from "./store";
-import * as Persist from "./persistence.js";
+import * as Persist from "./persistence";
 import Dashboard from "./dashboard";
 import * as $ from 'jquery'
 import * as AppState from './appState'
