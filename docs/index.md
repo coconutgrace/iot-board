@@ -4,7 +4,7 @@
 
 * [Hosting the iot-dashboard](#hosting-the-iot-dashboard)
 * [Contributing](#Contributing) to the dashboard core codebase (this git repo)
-* [Basic Concepts & Architecture](#basic-concepts)
+* [Basic Concepts](#basic-concepts)
 * [Coding Guidelines](#coding-guidelines)
 
 **Lean more:**
