@@ -2,16 +2,20 @@
 
 Lets get started and setup the Dashboard and get the first Plugins running in under 15 minutes.
 
+This guide gives you a quick start with fast results. You can always take a look into the [Plugin API Documentation](pluginDevelopment.md) for more detailed information.
+
 ## Step 1: Setup your dev environment
 
 **Prerequisites:**
 * Install git, e.g. from [git-scm.com](https://git-scm.com/)
 * Install nodejs, e.g. from [nodejs.org](https://nodejs.org/en/)
 
+```
     git clone https://github.com/Niondir/iot-dashboard.git
     cd iot-dashboard/
     npm install
     npm run dev
+```
 
 That's it, you can modify code and see the result (dashboard and tests) in the browser.
 
@@ -27,9 +31,9 @@ Just start another task that helps you with that:
 
 You probably want to fetch data from somewhere to render it in the Dashboard.
 
-Data is fetched from the browser of who ever is opening the dashboard. The best way to get data in a web application is to do some http requests but you could also go for some websockets. There are not limitations.
+Data is fetched vy the browser of who ever is opening the dashboard. The best way to get data into a web application is to do http requests but you could also go for websockets. There is no limitation.
 
-For api's that need an API key, e.g. the Twitter API it's best practice to fetch data for your Dashboard on a server, cache it and connect a Datasource to that server. We do not want to cover Serverside stuff here, so let's go for some free data. How about [weather](http://simpleweatherjs.com/)?
+For api's that need an API key, e.g. the Twitter API it's best practice to fetch data for your dashboard on a server, cache it and connect a datasource to that server. We do not want to cover serverside stuff here, so let's use some free data. How about [weather](http://simpleweatherjs.com/)?
 
 Lets build our Datasource plugin!
 
