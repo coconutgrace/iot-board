@@ -1,12 +1,16 @@
 # iot-dashboard Documentation
 
-**Content:**
+**This Page:**
 
 * [Hosting the iot-dashboard](#hosting-the-iot-dashboard)
 * [Contributing](#Contributing) to the dashboard core codebase (this git repo)
-* [Basic Concepts & Architecture](#basic-concepts-&-architecture)
-* [Architecture](architecture.md)
+* [Basic Concepts & Architecture](#basic-concepts)
 * [Coding Guidelines](#coding-guidelines)
+
+**Lean more:**
+
+* [Getting Started: Write your own plugins](https://gitlab.com/lobaro/iot-dashboard/blob/master/docs/pluginDevGettingStarted.md)
+* [Architecture Overview](architecture.md)
 * [Plugin Development](pluginDevelopment.md)
 * [Security](security.md) related topics
 
@@ -19,45 +23,23 @@ All contributions to the core and plugins are very welcome.
 To get started with writing code for the Dashboard core you need a good understanding of the Basic Concepts (see below) and follow the Coding Guidelines (see blow).
 If you want to provide another datasource or visualization in form of a new widget checkout the [Plugin Development](pluginDevelopment.md) page.
 
-# Basic Concepts & Architecture
+# Basic Concepts
 A basic overview of the concepts and ideas behind the Dashboard.
 
-Not all Concepts are implemented yet. Not implemented concepts might change in future.
-
-* **Dashboard:** A `Dashboard` defines `Datasources`, `Widgets` and `Layouts` and can be imported and exported.
+* **Dashboard:** A `Dashboard` defines `Datasources` and `Widgets` based on `Plugins` that can be arranged in different `Layouts`. It can be imported and exported manually or from a server.
 * **Layout:** A `Layout` belongs to one `Dashboard` and defines how `Widgets` are arranged.
 * **Widget:** A `Widget` can be arranged inside the `Layout` and renders content based on the `WidgetType`, `WidgetProps` and `Datasources`.
-    * There are several predefined, more and less generic `Widgets` that can be configured and saved as `Widget Blueprints`. (not yet)
-* **Widget Blueprints:** A `Dashboard` can define `Widget Blueprints` which provides an easy way to compose complex layouts with less widget configuration effort. (not yet)
+* **Datasource:** A `Datasource` provides data for `Widgets` based on the `DatasourceType` and `DatasourceProps`
 * **Plugins:** Plugins provide the implementations for `Datasources` and `Widgets`.
-* **Datasource:** A `Datasource` provides data for `Widgets` on request.
-* **Datasource Type:** A `Datasource Type` defines how a `Datasource` can fetch data,
-    * e.g. a simple REST datasource, or a more sophisticated for specific services like dweet.io, google docs, etc.
-
-## Datasources
-
-* **DatasourcePlugin:** Can be written by anybody to provide logic that fetches data from anywhere
-* **DatasourceInstance:** Can be created by the user based on any `DatasourcePlugin`. Executes the actual data fetching.
-* **DatasourceState:** Contains properties defined by the user when a `DatasourceInstance` is created
- and is updated regularly with data from the `DatasourceInstance`
-* **DatasourceScheduler:** Managing the actual updating of the `DatasourceState` based on the `DatasourceInstance` and the current `DatasourceState`
-
-The following needs way more documentation in future, just a quick start:
-
-A `DatasourcePlugin` can provide 2 functions:
-* `fetchData(resolve, reject)` where `resolve` ad `reject` are callbacks:
-  * `resolve(data)` - Returns new data in the form of `any[]`
-  * `reject(error)` - When fetching data failed
-* Widgets can verify if they are able to display given values (not yet)
-* A `TYPE_INFO` constant that contains metadata for the Plugin
 
 # Coding Guidelines
 
 Eslint and tslint is in place and must be followed to get successful CI builds.
 
-New code must be tested, unittests can be provided next to the code folder as `<filename>.test.ts`, they will be executed automatically during build.
-Read the redux guide about [writing tests](http://redux.js.org/docs/recipes/WritingTests.html).
+JavaScript should be converted to TypeScript when touched.
 
+New code must be tested, unittests can be provided next to the code as `<filename>.test.ts`, they will be executed automatically during build.
+Read the redux guide about [writing tests](http://redux.js.org/docs/recipes/WritingTests.html).
 
 ## Folder Structure
 
