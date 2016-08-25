@@ -95,7 +95,7 @@ Find the coverage report in `dist/coverage` or while the server is running at [h
 
 ## Documentation ##
 
-Check out the [Documentation](https://github.com/Niondir/iot-dashboard/blob/master/docs/index.md) in `/docs`
+Check out the [Documentation](https://gitlab.com/lobaro/iot-dashboard/blob/master/docs/index.md) in `/docs`
 
 ## License ##
 The code is available under [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/) (MPL 2.0)
