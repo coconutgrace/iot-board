@@ -1,17 +1,24 @@
 # Plugin Development
 
-The iot-dashboard is build to provide an easy and flexible API for extensions to cover custom usecases. To get started with Plugin Development you should have a understanding of the Basic Concepts, see: [Wiki Home](https://github.com/Niondir/iot-dashboard/wiki).
+The iot-dashboard is build to provide an easy and flexible API for extensions to cover custom usecases for data fetching (`Datasource`) and visualization (`Widget`)
 
+This page documents all aspects of the API.
+
+**Content**
+
+* [Dashboard Api](#dashboard-api)
+* [Datasource Api](#datasource-api)
+* [Widget Api](#widget-api)
+* [Testing of Plugins](#testing-of-plugins)
 
 # Getting Started
 
-1. Clone the git repository and follow the [Development Setup in the README.md](https://github.com/Niondir/iot-dashboard/blob/master/README.md)
-2. Learn about the API below
+For a quick start read the [Plugin Development Getting Started Guide](pluginDevGettingStarted.md)
 
 # Dashboard Api
 
 All Plugins are loaded as external scripts. One script must contain exactly one plugin.
-All plugins in `./src/plugins` are copied to `./dist/plugins` during the build and can be loaded using relative or absolute URL's from the dashboard Plugin Dialog.
+All plugins in `./src/plugins` are copied to `./dist/plugins` during the build and can be loaded using relative or absolute URL's from the dashboard plugin dialog.
 
 When a script is loaded by the browser it has to register the defined Plugin on the public API at `window.iotDashboardApi`
 
@@ -30,9 +37,9 @@ Since the plugin is loaded in global namespace it should be wrapped into a javas
         window.iotDashboardApi.registerDatasourcePlugin(TYPE_INFO, Plugin)
     })(window)
 
-The plugins should be self containing, module exports are not needed.
+The plugins should be self containing, module exports are not needed. If you need any JavaScript dependencies for the plugin to run, there is a way to load them via the `TYPE_INFO` (see below)
 
-As you can see each plugin contains two parts. The `TYPE_INFO` and the Implementation Function `Plugin`.
+As you can see each plugin contains two parts. The `TYPE_INFO` and the "plugin class" `Plugin`.
 
 ## TypeInfo
 
@@ -81,7 +88,6 @@ Valid setting `types` are:
     * `options` - Array of option values. Each option value can be a `String` or object like `{name: "name", value: "value"}`. DefaultValue must reference the value.
 
 There is still some work left for settings. There is no validation yet, values are not converted to the correct javascript type, etc. The settings api might slightly change in future..
-
 
 # Datasource Api
 
