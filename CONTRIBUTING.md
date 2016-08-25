@@ -7,6 +7,6 @@ contributions are welcome!
 ## Contributor license agreement
 
 By submitting code as an individual you agree to the
-[individual contributor license agreement](https://gitlab.com/lobaro/iot-dashboard/blob/master/doc/legal/individual_contributor_license_agreement.md).
+[individual contributor license agreement](https://gitlab.com/lobaro/iot-dashboard/blob/master/docs/legal/individual_contributor_license_agreement.md).
 By submitting code as an entity you agree to the
-[corporate contributor license agreement](https://gitlab.com/lobaro/iot-dashboard/blob/master/doc/legal/corporate_contributor_license_agreement.md).
+[corporate contributor license agreement](https://gitlab.com/lobaro/iot-dashboard/blob/master/docs/legal/corporate_contributor_license_agreement.md).
