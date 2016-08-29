@@ -10,7 +10,7 @@ import * as WidgetConfig from "./widgets/widgetConfig.js";
 import * as Layouts from "./layouts/layouts.js";
 import * as Datasource from "./datasource/datasource";
 import * as Global from "./dashboard/global.js";
-import * as Import from "./dashboard/import.js";
+import * as Import from "./dashboard/import";
 import * as Modal from "./modal/modalDialog.js";
 import * as Persist from "./persistence";
 import * as Plugins from './pluginApi/plugins'

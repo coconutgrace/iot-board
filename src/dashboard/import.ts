@@ -1,11 +1,13 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as Action from "../actionNames";
 import {DASHBOARD_IMPORT} from "../actionNames";
-import {loadEmptyLayout} from "../layouts/layouts";
-import * as Plugins from "../pluginApi/plugins";
+import {loadEmptyLayout} from "../layouts/layouts.js";
+import {State, GetState, Dispatch} from "../appState";
+import * as _ from "lodash";
+import Dashboard from "../dashboard";
 
 /**
  * To extend the import/export by another property you just need to add the property to the exported data
@@ -15,7 +17,7 @@ import * as Plugins from "../pluginApi/plugins";
  * See: afterImport()
  */
 
-export function serialize(state) {
+export function serialize(state: State) {
     return JSON.stringify({
         widgets: state.widgets,
         datasources: state.datasources,
@@ -24,14 +26,17 @@ export function serialize(state) {
     });
 }
 
-function afterImport(dispatch, getState) {
-    dispatch(Plugins.initializeExternalPlugins());
+function afterImport(dispatch: Dispatch, getState: GetState) {
+    const oldDashboard = Dashboard.getInstance();
+    oldDashboard.dispose();
+    const newDashboard = new Dashboard(oldDashboard.store)
+    newDashboard.init()
 }
 
-export function importReducer(state, action) {
+export function importReducer(state: State, action: any) {
     switch (action.type) {
         case Action.DASHBOARD_IMPORT:
-            const newState = Object.assign({}, state, action.state);
+            const newState = _.assign<any, State>({}, state, action.state);
             console.log("new State:", state, action.state, newState)
             return newState;
         default:
@@ -39,7 +44,7 @@ export function importReducer(state, action) {
     }
 }
 
-export function deserialize(data) {
+export function deserialize(data: any) {
     if (typeof data === "string") {
         return JSON.parse(data);
     }
@@ -48,12 +53,12 @@ export function deserialize(data) {
     }
 }
 
-export function doImport(data) {
+export function doImport(data: any) {
     const state = deserialize(data);
-    return function (dispatch, getState) {
+    return function (dispatch: Dispatch, getState: GetState) {
         // Bad hack to force the grid layout to update correctly
         dispatch(loadEmptyLayout());
-        setTimeout(()=> {
+        setTimeout(() => {
             dispatch({
                 type: DASHBOARD_IMPORT,
                 state

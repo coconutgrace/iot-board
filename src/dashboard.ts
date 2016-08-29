@@ -42,7 +42,6 @@ export default class Dashboard {
         Dashboard._instance = dashboard;
     }
 
-
     /**
      * We have some code that depends on this global instance of the Dashboard
      * This is bad, but better that static references
@@ -56,6 +55,10 @@ export default class Dashboard {
         }
 
         return Dashboard._instance;
+    }
+
+    get store() {
+        return this._store;
     }
 
     get datasourcePluginRegistry() {
@@ -86,7 +89,7 @@ export default class Dashboard {
 
     dispose() {
         this._datasourcePluginRegistry.dispose();
-        // TODO: this._widgetPluginRegistry.dispose();
+        this._widgetPluginRegistry.dispose();
     }
 
     private loadPluginScript(url: string): Promise<void> {
@@ -97,16 +100,16 @@ export default class Dashboard {
         })
 
         this._scriptsLoading[url] = loadScriptsPromise.then(() => {
-                if (PluginCache.hasPlugin()) {
-                    // TODO: use a reference to the pluginCache and only bind that instance to the window object while the script is loaded
-                    // TODO: The scriploader can ensure that only one script is loaded at a time
-                    const plugin = PluginCache.popLoadedPlugin();
-                    return this.loadPluginScriptDependencies(plugin, url);
-                }
-                else {
-                    return Promise.reject(new Error("Failed to load Plugin. Make sure it called window.iotDashboardApi.register***Plugin from url " + url));
-                }
-            })
+            if (PluginCache.hasPlugin()) {
+                // TODO: use a reference to the pluginCache and only bind that instance to the window object while the script is loaded
+                // TODO: The scriploader can ensure that only one script is loaded at a time
+                const plugin = PluginCache.popLoadedPlugin();
+                return this.loadPluginScriptDependencies(plugin, url);
+            }
+            else {
+                return Promise.reject(new Error("Failed to load Plugin. Make sure it called window.iotDashboardApi.register***Plugin from url " + url));
+            }
+        })
             .then((plugin: IPluginModule) => {
                 if ((<IDatasourcePluginModule>plugin).Datasource) {
                     this._datasourcePluginRegistry.registerDatasourcePlugin((<IDatasourcePluginModule>plugin), url);
