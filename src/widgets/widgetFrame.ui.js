@@ -34,7 +34,7 @@ const WidgetFrame = (props) => {
              key={widgetState.id}
              _grid={{x: widgetState.col, y: widgetState.row, w: widgetState.width, h: widgetState.height}}>
 
-            <div className={"ui stacked segment" + (props.isReadOnly ? "" : " drag")}>
+            <div className={"ui stacked segment" + (props.isReadOnly ? "" : " drag")} style={{padding: 8}}>
                 {props.isReadOnly ? null :
                     <div className="ui tiny horizontal right floated list">
 
