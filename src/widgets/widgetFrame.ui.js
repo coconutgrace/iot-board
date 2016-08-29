@@ -34,9 +34,9 @@ const WidgetFrame = (props) => {
              key={widgetState.id}
              _grid={{x: widgetState.col, y: widgetState.row, w: widgetState.width, h: widgetState.height}}>
 
-            <div className={"ui inverted segment" + (props.isReadOnly ? "" : " drag")}>
+            <div className={"ui stacked segment" + (props.isReadOnly ? "" : " drag")}>
                 {props.isReadOnly ? null :
-                    <div className="ui tiny horizontal right floated inverted list">
+                    <div className="ui tiny horizontal right floated list">
 
                         <ConfigWidgetButton className="right item no-drag" widgetState={widgetState}
                                             visible={(props.widgetPlugin && props.widgetPlugin.typeInfo.settings ? true : false)}
