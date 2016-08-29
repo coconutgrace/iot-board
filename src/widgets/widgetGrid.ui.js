@@ -52,6 +52,8 @@ class WidgetGrid extends Component {
                             draggableCancel=".no-drag"
                             draggableHandle=".drag"
                             onLayoutChange={this.onLayoutChange.bind(this)}
+                            isDraggable={!props.isReadOnly}
+                            isResizable={!props.isReadOnly}
             >
                 {widgets}
             </ResponsiveGrid>
