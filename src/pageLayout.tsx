@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from "react";
 import {Component, KeyboardEvent} from "react";
@@ -99,6 +99,17 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                         <div className="header selectable right item">
                             v{this.props.config.version}&nbsp;{this.props.config.revisionShort}
                         </div>
+                        {props.config.auth && props.config.auth.username ?
+                            <div className="header selectable right item">{props.config.auth.username}</div>
+                            : null
+                        }
+                        {props.config.auth && props.config.auth.logoutUrl ?
+                            <div className="header selectable right item">
+                                <a className="ui button" href={props.config.auth.logoutUrl}>Logout</a>
+                            </div>
+                            : null
+                        }
+
                     </div>
 
                 </div>
@@ -127,3 +138,23 @@ export default connect(
         };
     }
 )(Layout);
+
+interface UserNavItemProps {
+    username: string
+    logoutUrl: string
+}
+
+interface UserNavItemState {
+}
+
+class UserNavItem extends React.Component<UserNavItemProps, UserNavItemState> {
+
+    render() {
+        return <div>
+            <div className="header selectable right item">Tobias</div>
+            <div className="header selectable right item">
+                <a className="ui button">Logout</a>
+            </div>
+        </div>
+    }
+}

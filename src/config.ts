@@ -10,7 +10,11 @@ const defaultConfig: IConfigState = {
     revisionShort: "",
     branch: "",
     persistenceTarget: "local-storage",
-    devMode: true
+    devMode: true,
+    auth: {
+        username: null,
+        logoutUrl: null
+    }
 };
 
 
@@ -21,6 +25,12 @@ export interface IConfigState {
     revisionShort: string
     branch: string
     persistenceTarget: string | "local-storage" | ""
+    auth: IAuthConfig
+}
+
+export interface IAuthConfig {
+    username: string
+    logoutUrl: string
 }
 
 export function config(state: IConfigState = configJson, action: any): IConfigState {
