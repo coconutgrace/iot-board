@@ -62,5 +62,5 @@ job_release:
     - job_build
   script:
     - npm prune
-    - npm install
+    - npm update
     - npm run ci-publish

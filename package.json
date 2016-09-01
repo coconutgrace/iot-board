@@ -105,7 +105,7 @@
     "jquery": "3.0.0",
     "json-loader": "^0.5.4",
     "jsx-loader": "0.13.2",
-    "loadjs": "2.1.0",
+    "loadjs": "3.0.0",
     "lodash": "4.11.1",
     "mocha": "2.5.3",
     "mocha-loader": "0.7.1",
