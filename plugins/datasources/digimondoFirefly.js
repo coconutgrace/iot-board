@@ -75,6 +75,10 @@
             }
         }
 
+        getLatestRecivedAt() {
+
+        }
+
         fetchData(resolve, reject) {
 
             const settings = this.props.state.settings;
@@ -82,13 +86,16 @@
             let receivedAfter = null;
 
             if (oldData.length > 0) {
-                receivedAfter = _.reduce(oldData, (result, value) => {
-                    if (result == null) {
-                        return value.received_at
-                    } else if (moment(value.received_at).isAfter(moment(result))) {
-                        return value.received_at
+                let latestPacket = _.reduce(oldData, (result, value) => {
+                    if (moment(value.received_at).isAfter(moment(result.received_at))) {
+                        return value
                     }
-                }, null)
+                    return result
+                })
+
+                if (latestPacket) {
+                    receivedAfter = latestPacket.received_at;
+                }
             }
 
             const request = new Request("http://firefly.lobaro.com/api/v1/devices/eui/" +
