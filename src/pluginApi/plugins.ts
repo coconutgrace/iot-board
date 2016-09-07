@@ -28,6 +28,13 @@ export function startLoadingPluginFromUrl(url: string, id?: string): IPluginLoad
     }
 }
 
+export function pluginFailedLoading(url: string) {
+    return {
+        type: Action.PLUGIN_FAILED_LOADING,
+        url
+    };
+}
+
 export function widgetPluginFinishedLoading(plugin: IPluginModule, url: string = null) {
     return {
         type: Action.WIDGET_PLUGIN_FINISHED_LOADING,
@@ -51,34 +58,23 @@ export function datasourcePluginFinishedLoading(plugin: IDatasourcePluginModule,
 }
 
 export function pluginLoaderReducer(state: IPluginLoaderState = initialState, action: IPluginLoaderAction) {
-    switch (action.type) {
-        case Action.STARTED_LOADING_PLUGIN_FROM_URL:
-        {
-            const newState = _.assign<any, IPluginLoaderState>({}, state);
-            newState.loadingUrls = urlsReducer(state.loadingUrls, action);
-            return newState;
-        }
-        case Action.WIDGET_PLUGIN_FINISHED_LOADING:
-        case Action.DATASOURCE_PLUGIN_FINISHED_LOADING:
-        {
-            const newState = _.assign<any, IPluginLoaderState>({}, state);
-            newState.loadingUrls = urlsReducer(state.loadingUrls, action);
-            return newState;
-        }
-        default:
-            return state;
-    }
+    const newState = _.assign<any, IPluginLoaderState>({}, state);
+    newState.loadingUrls = urlsReducer(state.loadingUrls, action);
+    return newState;
 }
 
 function urlsReducer(state: string[], action: IPluginLoaderAction): string[] {
     switch (action.type) {
         case Action.STARTED_LOADING_PLUGIN_FROM_URL:
+            console.log("add url to pluginLoader: ", action.url)
             if (!action.url) {
                 throw new Error("Can not load plugin from empty URL");
             }
             return [...state].concat([action.url]);
+        case Action.PLUGIN_FAILED_LOADING:
         case Action.WIDGET_PLUGIN_FINISHED_LOADING:
         case Action.DATASOURCE_PLUGIN_FINISHED_LOADING:
+            console.log("remove url from pluginLoader: ", action.url)
             return [...state].filter((url) => url !== action.url);
         default:
             return state;

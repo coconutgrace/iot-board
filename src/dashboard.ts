@@ -95,10 +95,6 @@ export default class Dashboard {
     private loadPluginScript(url: string): Promise<void> {
         const loadScriptsPromise = scriptloader.loadScript([url]);
 
-        loadScriptsPromise.catch((error) => {
-            console.warn("Failed to load script: " + error.message)
-        })
-
         this._scriptsLoading[url] = loadScriptsPromise.then(() => {
             if (PluginCache.hasPlugin()) {
                 // TODO: use a reference to the pluginCache and only bind that instance to the window object while the script is loaded
@@ -113,6 +109,7 @@ export default class Dashboard {
             .then((plugin: IPluginModule) => {
                 if ((<IDatasourcePluginModule>plugin).Datasource) {
                     this._datasourcePluginRegistry.registerDatasourcePlugin((<IDatasourcePluginModule>plugin), url);
+                    // datasourcePluginFinishedLoading is called in registerDatasourcePlugin!
                 }
                 else if ((<any>plugin).Widget) {
                     this._widgetPluginRegistry.register(plugin);
@@ -121,7 +118,10 @@ export default class Dashboard {
 
                 delete this._scriptsLoading[url];
                 return Promise.resolve<void>();
-            });
+            }).catch((error) => {
+                console.warn("Failed to load script: ", error)
+                this._store.dispatch(Plugins.pluginFailedLoading(url));
+            })
         /*.catch((error) => {
          console.error(error.message);
          delete this._scriptsLoading[url];

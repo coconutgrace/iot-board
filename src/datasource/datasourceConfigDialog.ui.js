@@ -63,6 +63,9 @@ class DatasourceConfigModal extends React.Component {
         return this.props.dialogData.datasource;
     }
 
+    clearData() {
+
+    }
 
     render() {
         const props = this.props;
@@ -123,7 +126,6 @@ class DatasourceConfigModal extends React.Component {
         });
 
 
-
         const fields = settings.map(setting => setting.id);
         let initialValues = {};
         if (this._isEditing()) {
@@ -160,11 +162,18 @@ class DatasourceConfigModal extends React.Component {
                         </div>
                         : null
                     }
+                    { this._isEditing() ?
+                        <div className="ui right red button" onClick={(e) => this.clearData()}>
+                            Clear Data
+                        </div>
+                        : null }
                     <div className="field">
                         <label>Type</label>
                         <select className="ui fluid dropdown" name="type" value={this.state.selectedType}
-                                onChange={(e) => {this.setState({selectedType: e.target.value});}}
-                            {...fields.type}
+                                onChange={(e) => {
+                                    this.setState({selectedType: e.target.value});
+                                }}
+                                {...fields.type}
                         >
                             <option key="none" value="">Select Type...</option>
                             {_.valuesIn(props.datasourcePlugins).map(dsPlugin => {
