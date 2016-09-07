@@ -125,6 +125,12 @@ The `Datasource` implementation is based on a JavaScript function
 
 You can define some functions to handle certain events.
 
+    Datasource.prototype.initialize = function (initialProps) {
+          // Initialize datasource, e.g.:
+          props.setFetchInterval(Infinity);
+          props.setFetchReplaceData(true)
+     };
+
     Datasource.prototype.datasourceWillReceiveProps = function (nextProps) {
           // Handle updated props
      };
