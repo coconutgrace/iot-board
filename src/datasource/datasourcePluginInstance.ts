@@ -109,7 +109,7 @@ export class DatasourcePluginInstance {
     datasourceWillReceiveProps(newProps: IDatasourceProps) {
         if (newProps.state.settings !== this.props.state.settings) {
             if (_.isFunction(this.dsInstance.datasourceWillReceiveSettings)) {
-                this.dsInstance.datasourceWillReceiveSettings(this.props.state.settings);
+                this.dsInstance.datasourceWillReceiveSettings(newProps.state.settings);
             }
         }
 

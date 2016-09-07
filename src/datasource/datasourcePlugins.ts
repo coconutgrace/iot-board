@@ -32,9 +32,9 @@ const initialState: IDatasourcePluginsState = {
             type: "will-be-loaded"
         }
     },
-    "digimondo-gps-datasource": {
-        id: "digimondo-gps-datasource",
-        url: "./plugins/datasources/DigimondoGpsDatasource.js",
+    "digimondo-firefly-datasource": {
+        id: "digimondo-firefly-datasource",
+        url: "./plugins/datasources/digimondoFirefly.js",
         typeInfo: {
             type: "will-be-loaded"
         }

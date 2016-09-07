@@ -26,7 +26,6 @@ export class DatasourceScheduler {
                 "Please do not set intervals shorter than 1000ms. If you really need this, file a ticket with explanation!")
         }
 
-        this.clearFetchTimeout();
         this.scheduleFetch(this._fetchInterval);
     }
 
@@ -49,6 +48,7 @@ export class DatasourceScheduler {
     }
 
     private scheduleFetch(ms: number) {
+        this.clearFetchTimeout()
         if (ms === Infinity) {
             return;
         }
@@ -56,6 +56,7 @@ export class DatasourceScheduler {
         if (!this.running) {
             return;
         }
+
         this.fetchTimeoutRef = setTimeout(() => {
             this.doFetchData();
         }, ms)
