@@ -97,22 +97,33 @@
         }
 
         componentWillReceiveProps(nextProps) {
-            if (nextProps.settings !== this.settings
+            if (nextProps.state.settings !== this.props.state.settings
                 || nextProps.state.height !== this.props.state.height) {
                 this._createChart(nextProps);
             }
         }
 
+        getData() {
+            const props = this.props;
+            const config = props.state.settings;
+            let data = props.getData(config.datasource);
+            if (data.length > 0 && config.chartType == "gauge") {
+                data = [data[data.length - 1]]
+                console.log("gauge data: ", data)
+            }
+            return data
+        }
+
         _createChart(props) {
             const config = props.state.settings;
-            const data = props.getData(config.datasource);
+
             this.chart = c3.generate({
                 bindto: '#chart-' + props.state.id,
                 size: {
                     height: props.state.availableHeightPx
                 },
                 data: {
-                    json: data,
+                    json: this.getData(),
                     type: config.chartType,
                     // Seems not to work with chart.load, so on update props we have to recreate the chart to update
                     names: safeParseJsonObject(config.names),
@@ -147,26 +158,9 @@
             }
             const props = this.props;
             const settings = props.state.settings;
-            const data = props.getData(settings.datasource);
-
-            // TODO: Do not take last element, but all new elements ;)
-            const lastElement = data.length > 0 ? data[data.length - 1] : {};
-
-
-            /* chart.flow does not work with x axis categories and messes up the x values.
-             this.chart.flow({
-             json: [lastElement],
-             keys: {
-             //x: "x",//config.xKey || undefined,
-             value: safeParseJsonObject(config.dataKeys)
-             },
-             labels: false,
-             //to: firstElement[config.xKey],
-             duration: 500
-             });     */
 
             this.chart.load({
-                json: data,
+                json: this.getData(),
                 keys: {
                     x: settings.xKey || undefined,
                     value: safeParseJsonObject(settings.dataKeys)
