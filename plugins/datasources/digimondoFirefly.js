@@ -57,6 +57,14 @@
                 description: "How ofter should data be fetched in ms",
                 defaultValue: "1000",
                 type: "number"
+            },
+            {
+                id: "baseUrl",
+                name: "Base Url (trailing slash)",
+                description: "Digimondo API Base Url",
+                defaultValue: "http://firefly.lobaro.com/api/v1/",
+                required: true,
+                type: "string"
             }
         ]
     };
@@ -98,7 +106,7 @@
                 }
             }
 
-            const request = new Request("http://firefly.lobaro.com/api/v1/devices/eui/" +
+            const request = new Request(settings.baseUrl + "devices/eui/" +
                 settings.deviceEui + "/packets" +
                 "?auth=" + settings.auth +
                 (settings.limitToLast ? "&limit_to_last=" + settings.limitToLast : "" ) +
