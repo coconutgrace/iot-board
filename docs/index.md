@@ -7,7 +7,7 @@
 * [Basic Concepts](#basic-concepts)
 * [Coding Guidelines](#coding-guidelines)
 
-**Lean more:**
+**Learn more:**
 
 * [Getting Started: Write your own plugins](https://gitlab.com/lobaro/iot-dashboard/blob/master/docs/pluginDevGettingStarted.md)
 * [Architecture Overview](architecture.md)
