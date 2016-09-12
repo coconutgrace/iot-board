@@ -131,6 +131,13 @@ export function fetchedDatasourceData(id: string, data: any[]): IDatasourceActio
     }
 }
 
+export function clearData(id: string): IDatasourceAction {
+    return {
+        type: ActionNames.CLEAR_DATASOURCE_DATA,
+        id
+    }
+}
+
 export function updatedMaxValues(id: string, maxValues: number): IDatasourceAction {
     return {
         type: ActionNames.UPDATED_MAX_VALUES,
@@ -173,6 +180,12 @@ export function datasources(state: IDatasourcesState = initialDatasources, actio
                 [action.id]: datasource(newState[action.id], action)
             });
         }
+        case ActionNames.CLEAR_DATASOURCE_DATA: {
+            const newState = _.assign<any, IDatasourcesState>({}, state);
+            return _.assign<any, IDatasourcesState>({}, state, {
+                [action.id]: datasource(newState[action.id], action)
+            });
+        }
         default:
             return state;
     }
@@ -192,6 +205,10 @@ function datasource(state: IDatasourceState, action: IDatasourceAction): IDataso
         case ActionNames.SET_DATASOURCE_DATA:
             return _.assign<any, IDatasourceState>({}, state, {
                 data: action.data || []
+            });
+        case ActionNames.CLEAR_DATASOURCE_DATA:
+            return _.assign<any, IDatasourceState>({}, state, {
+                data: []
             });
         case ActionNames.UPDATED_MAX_VALUES:
             let maxValues = action.maxValues;

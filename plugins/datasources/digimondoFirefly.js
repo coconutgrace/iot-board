@@ -114,6 +114,9 @@
                 })
                 .then(function (data) {
                     let parsedData = _.map(data.packets, (d) => _.assign({}, d.parsed, {received_at: d.received_at}))
+                    parsedData = _.sortBy(parsedData, (d) => {
+                        return d.received_at;
+                    });
                     resolve(parsedData)
                 })
         }

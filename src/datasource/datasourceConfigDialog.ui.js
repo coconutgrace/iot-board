@@ -64,15 +64,31 @@ class DatasourceConfigModal extends React.Component {
     }
 
     clearData() {
-
+        this.props.clearData(this._getEditingDatasource().id)
     }
 
     render() {
+        /*
+         { this._isEditing() ?
+         <div className="ui right red button" onClick={(e) => this.clearData()}>
+         Clear Data
+         </div>
+         : null }
+         */
+
         const props = this.props;
         const actions = [
             {
+                className: "ui button",
+                label: "Clear Data",
+                onClick: () => {
+                    this.clearData();
+                    return false;
+                }
+            },
+            {
                 className: "ui right button",
-                label: "Reset",
+                label: "Reset Form",
                 onClick: () => {
                     this.resetForm();
                     return false;
@@ -162,11 +178,6 @@ class DatasourceConfigModal extends React.Component {
                         </div>
                         : null
                     }
-                    { this._isEditing() ?
-                        <div className="ui right red button" onClick={(e) => this.clearData()}>
-                            Clear Data
-                        </div>
-                        : null }
                     <div className="field">
                         <label>Type</label>
                         <select className="ui fluid dropdown" name="type" value={this.state.selectedType}
@@ -189,7 +200,6 @@ class DatasourceConfigModal extends React.Component {
                                   settings={settings}
                                   initialValues={initialValues}
                     />
-
                 </div>
             </div>
         </ModalDialog>
@@ -215,6 +225,7 @@ export default connect(
     (dispatch) => {
         return {
             resetForm: (id) => dispatch(reset(id)),
+            clearData: (id) => dispatch(Datasource.clearData(id)),
             createDatasource: (type, dsSettings) => {
                 dispatch(Datasource.createDatasource(type, dsSettings))
             },
