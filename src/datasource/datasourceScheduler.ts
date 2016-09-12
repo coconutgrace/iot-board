@@ -73,8 +73,9 @@ export class DatasourceScheduler {
         const dsState = this.store.getState().datasources[this.dsInstance.id];
 
         if (!dsState) {
-            console.log("Skipping fetchData because plugin does not exists - it's time to dispose?");
-            this.scheduleFetch(this._fetchInterval);
+            console.log("Disposing Scheduler because datasource instance does not anymore.");
+            this.dispose();
+            return;
         }
 
         if (dsState.isLoading) {
