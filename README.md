@@ -44,15 +44,23 @@ Prerequisite: Download & install [NodeJs](https://nodejs.org)
 
 ### Install from npm ###
 
-Install the Dashboard
+The fastest way to get the dashboard running on your machine.
 
-    npm install -g iot-dashboard
+Install the Dashboard starter
 
-Start the dashboard server
+    npm install -g iot-dashboard-starter
+
+Start the dashboard with
 
     iot-dashboard
 
-Open your browser at http://localhost:8081
+Open your browser at [http://localhost:8081](http://localhost:8081)
+
+---
+
+To just include the dashboard in your own project install it locally
+
+    npm install --save-dev iot-dashboard
 
 ### Run the Dashboard locally from source ###
 
