@@ -1,6 +1,6 @@
 {
   "name": "iot-dashboard",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "A generic dashboard application based on JavaScript, HTML and CSS. http://iot-dashboard.org",
   "main": "dist/app.bundle.js",
   "scripts": {
@@ -57,8 +57,7 @@
       "transform-flow-comments"
     ]
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "6.6.5",
     "babel-core": "6.7.4",
