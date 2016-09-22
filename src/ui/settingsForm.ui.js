@@ -40,7 +40,7 @@ class SettingsForm extends React.Component {
                 chunk(this.props.settings, 1).map(chunk => {
                     return <div key={chunk[0].id} className="field">
                         {chunk.map(setting => {
-                            return <Field key={setting.id} {...setting} field={fields[setting.id]}/>;
+                            return <FormField key={setting.id} {...setting} field={fields[setting.id]}/>;
                         })}
                     </div>
                 })
@@ -61,7 +61,7 @@ SettingsForm.propTypes = {
 
 export default reduxForm({})(SettingsForm);
 
-function Field(props) {
+function FormField(props) {
     return <div className="field">
         <label>{props.name}
             {props.description && props.type !== 'boolean' ?
@@ -71,7 +71,7 @@ function Field(props) {
     </div>
 }
 
-Field.propTypes = {
+FormField.propTypes = {
     field: Prop.object.isRequired, // redux-form field info
     name: Prop.string.isRequired,
     type: Prop.string.isRequired,

@@ -57,7 +57,10 @@
       "transform-flow-comments"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "eslint-plugin-flowtype": "^2.19.0",
+    "git-rev-sync": "^1.7.1"
+  },
   "devDependencies": {
     "babel-cli": "6.6.5",
     "babel-core": "6.7.4",
@@ -111,7 +114,7 @@
     "react-grid-layout": "0.12.6",
     "react-redux": "4.4.1",
     "redux": "3.3.1",
-    "redux-form": "5.1.1",
+    "redux-form": "^6.0.5",
     "redux-logger": "2.6.1",
     "redux-thunk": "2.0.1",
     "require-dot-file": "0.4.0",
