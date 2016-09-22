@@ -11,6 +11,11 @@ import {PropTypes as Prop}  from "react";
 
 class ModalDialog extends React.Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {screen: this.screenSize()}
+    }
+
     componentDidMount() {
         const $modal = $('.ui.modal.' + this.props.id);
         $modal.modal({
@@ -19,6 +24,7 @@ class ModalDialog extends React.Component {
             observeChanges: true,
             onApprove: ($element) => false,
             onDeny: ($element) => false,
+            transition: "fade",
             onVisible: () => {
                 // This is to update the Browser Scrollbar, at least needed in WebKit
                 if (typeof document !== 'undefined') {
@@ -30,6 +36,17 @@ class ModalDialog extends React.Component {
                 }
             }
         })
+
+        $(window).resize(() => {
+            this.setState({screen:this.screenSize()})
+        })
+    }
+
+    screenSize() {
+        return {
+            height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+            width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+        }
     }
 
     onClick(e, action) {
@@ -51,11 +68,18 @@ class ModalDialog extends React.Component {
         });
 
         const props = this.props;
-        return <div id={this.props.id} className={'ui modal ' + this.props.id}>
+        // TODO: realize Modals with React, then isOpen gets handy:
+        //const isOpen = props.dialogState.dialogId == props.id && props.dialogState.isVisible;
+
+        const height = this.state.screen.height;
+        const width = this.state.screen.width;
+
+        return <div id={this.props.id}
+                    className={'ui modal ' + this.props.id} style={{width: width - 80, top: 40, left: 40, margin: 1}}>
             <div className="header">
                 {props.title}
             </div>
-            <div className="content">
+            <div className="content" style={{overflowY: 'scroll', height: height - 300}}>
                 {props.children}
             </div>
             <div className="actions">
@@ -84,7 +108,9 @@ ModalDialog.propTypes = {
 
 export default connect(
     (state) => {
-        return {}
+        return {
+            dialogState: state.modalDialog
+        }
     },
     (dispatch) => {
         return {

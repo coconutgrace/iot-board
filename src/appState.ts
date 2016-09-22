@@ -28,7 +28,13 @@ export interface State {
     pluginLoader: Plugins.IPluginLoaderState
     global: IGlobalState
     form: any,
-    modalDialog: any
+    modalDialog: IModalDialogState
+}
+
+export interface IModalDialogState {
+    dialogId: string
+    data: any
+    isVisible: boolean
 }
 
 // TODO: move to dashboard/global when converted to ts

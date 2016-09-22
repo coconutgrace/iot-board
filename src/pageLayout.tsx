@@ -20,13 +20,13 @@ import PluginsDialog from "./pluginApi/pluginsDialog.ui.js";
 import * as Persistence from "./persistence";
 import {IConfigState} from "./config";
 import {DashboardStore} from "./store";
-import {State} from "./appState";
+import {State, IModalDialogState} from "./appState";
 
 interface LayoutProps {
-    setReadOnly(readOnly: boolean): void;
-    isReadOnly: boolean;
-    devMode: boolean;
-    config: IConfigState;
+    setReadOnly(readOnly: boolean): void
+    isReadOnly: boolean
+    devMode: boolean
+    config: IConfigState
 }
 
 interface LayoutState {
