@@ -58,7 +58,7 @@ export function datasourcePluginFinishedLoading(plugin: IDatasourcePluginModule,
 }
 
 export function pluginLoaderReducer(state: IPluginLoaderState = initialState, action: IPluginLoaderAction) {
-    const newState = _.assign<any, IPluginLoaderState>({}, state);
+    const newState = _.assign({}, state);
     newState.loadingUrls = urlsReducer(state.loadingUrls, action);
     return newState;
 }

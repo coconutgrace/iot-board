@@ -205,7 +205,7 @@ export function widgets(state: IWidgetsState = initialWidgets, action: IWidgetAc
                 .reduce((newState, {id}) => {
                         newState[id] = widget(newState[id], action);
                         return newState;
-                    }, _.assign<any, IWidgetsState>({}, state)
+                    }, _.assign({}, state)
                 );
         case Action.LOAD_LAYOUT:
             console.assert(action.layout.widgets, "Layout is missing Widgets, id: " + action.layout.id);
@@ -214,7 +214,7 @@ export function widgets(state: IWidgetsState = initialWidgets, action: IWidgetAc
             const toDelete = _.valuesIn<IWidgetState>(state).filter(widgetState => {
                 return widgetState.type === action.id
             });
-            const newState = _.assign<any, IWidgetsState>({}, state);
+            const newState = _.assign({}, state);
             toDelete.forEach(widgetState => {
                 delete newState[widgetState.id];
             });
@@ -244,12 +244,12 @@ function widget(state: IWidgetState, action: IWidgetAction): IWidgetState {
                 availableHeightPx: calcAvaliableHeight(action.height)
             };
         case Action.UPDATE_WIDGET_SETTINGS:
-            return _.assign<any, IWidgetState>({}, state, {settings: action.widgetSettings});
+            return _.assign({}, state, {settings: action.widgetSettings});
         case Action.UPDATED_SINGLE_WIDGET_SETTING: {
             const newSettings = _.clone(state.settings);
             newSettings[action.settingId] = action.settingValue;
 
-            return _.assign<any, IWidgetState>({}, state, {settings: newSettings});
+            return _.assign({}, state, {settings: newSettings});
         }
         case Action.UPDATE_WIDGET_LAYOUT:
             const layout = layoutById(action.layouts, state.id);
@@ -257,7 +257,7 @@ function widget(state: IWidgetState, action: IWidgetAction): IWidgetState {
                 console.warn("No layout for widget. Skipping position update of widget with id: " + state.id);
                 return state;
             }
-            return _.assign<any, IWidgetState>({}, state, {
+            return _.assign({}, state, {
                 row: layout.y,
                 col: layout.x,
                 width: layout.w,

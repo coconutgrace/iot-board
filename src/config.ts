@@ -37,7 +37,7 @@ export function config(state: IConfigState = configJson, action: any): IConfigSt
     switch (action.type) {
         default:
             // Content of configJson overrides everything else!
-            return _.assign<any, IConfigState>({}, defaultConfig, state, configJson);
+            return _.assign({}, defaultConfig, state, configJson);
     }
 }
 

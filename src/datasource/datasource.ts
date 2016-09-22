@@ -161,7 +161,7 @@ export function datasources(state: IDatasourcesState = initialDatasources, actio
             const toDelete = _.valuesIn<IDatasourceState>(state).filter(dsState => {
                 return dsState.type === action.id
             });
-            const newState = _.assign<any, IDatasourcesState>({}, state);
+            const newState = _.assign({}, state);
             toDelete.forEach(dsState => {
                 delete newState[dsState.id];
             });
@@ -169,20 +169,20 @@ export function datasources(state: IDatasourcesState = initialDatasources, actio
             return newState;
         }
         case ActionNames.UPDATED_MAX_VALUES: {
-            const newState = _.assign<any, IDatasourcesState>({}, state);
-            return _.assign<any, IDatasourcesState>({}, state, {
+            const newState = _.assign({}, state);
+            return _.assign({}, state, {
                 [action.id]: datasource(newState[action.id], action)
             });
         }
         case ActionNames.UPDATED_FETCH_REPLACE_DATA: {
-            const newState = _.assign<any, IDatasourcesState>({}, state);
-            return _.assign<any, IDatasourcesState>({}, state, {
+            const newState = _.assign({}, state);
+            return _.assign({}, state, {
                 [action.id]: datasource(newState[action.id], action)
             });
         }
         case ActionNames.CLEAR_DATASOURCE_DATA: {
-            const newState = _.assign<any, IDatasourcesState>({}, state);
-            return _.assign<any, IDatasourcesState>({}, state, {
+            const newState = _.assign({}, state);
+            return _.assign({}, state, {
                 [action.id]: datasource(newState[action.id], action)
             });
         }
@@ -203,11 +203,11 @@ function datasource(state: IDatasourceState, action: IDatasourceAction): IDataso
                 replaceData: false
             };
         case ActionNames.SET_DATASOURCE_DATA:
-            return _.assign<any, IDatasourceState>({}, state, {
+            return _.assign({}, state, {
                 data: action.data || []
             });
         case ActionNames.CLEAR_DATASOURCE_DATA:
-            return _.assign<any, IDatasourceState>({}, state, {
+            return _.assign({}, state, {
                 data: []
             });
         case ActionNames.UPDATED_MAX_VALUES:
@@ -215,7 +215,7 @@ function datasource(state: IDatasourceState, action: IDatasourceAction): IDataso
             if (maxValues < 1) {
                 maxValues = 1;
             }
-            return _.assign<any, IDatasourceState>({}, state, {
+            return _.assign({}, state, {
                 settings: _.assign({}, state.settings, {maxValues: maxValues})
             });
         case ActionNames.FETCHED_DATASOURCE_DATA:
@@ -229,15 +229,15 @@ function datasource(state: IDatasourceState, action: IDatasourceAction): IDataso
             if (state.settings.maxValues) {
                 newData = _.takeRight(newData, state.settings.maxValues);
             }
-            return _.assign<any, IDatasourceState>({}, state, {
+            return _.assign({}, state, {
                 data: newData
             });
         case ActionNames.UPDATE_DATASOURCE:
-            return _.assign<any, IDatasourceState>({}, state, {
+            return _.assign({}, state, {
                 settings: action.settings
             });
         case ActionNames.DATASOURCE_FINISHED_LOADING: {
-            let newState = _.assign<any, IDatasourceState>({}, state);
+            let newState = _.assign({}, state);
             newState.isLoading = false;
             return newState;
         }

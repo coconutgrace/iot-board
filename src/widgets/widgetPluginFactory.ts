@@ -92,7 +92,7 @@ export default class WidgetPluginFactory implements IPluginFactory<ReactElement<
         const widget = connect(() => {
                 // This method will be used as mapStateToProps, leading to a constant "getData()" function per instance
                 // Therefor the update is only called when actual state changes
-                return (state: State): IWidgetProps => {
+                return (state: State): any => {
                     const widgetState = state.widgets[id];
                     return {
                         state: widgetState,

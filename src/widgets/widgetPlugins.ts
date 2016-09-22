@@ -116,7 +116,7 @@ function widgetPlugin(state: IWidgetPluginState, action: IWidgetPluginAction): I
                 isLoading: false
             };
         case Action.STARTED_LOADING_PLUGIN_FROM_URL:
-            return _.assign<any, IWidgetPluginState>({}, state, {
+            return _.assign({}, state, {
                 isLoading: true
             });
         default:

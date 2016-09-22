@@ -90,7 +90,7 @@ export default class PluginRegistry<TPluginModule extends IPluginModule, TPlugin
 
 
     getPlugins() {
-        return _.assign<any, IdValueMap<TPluginFactory>>({}, this._plugins);
+        return _.assign({}, this._plugins);
     }
 
     dispose() {

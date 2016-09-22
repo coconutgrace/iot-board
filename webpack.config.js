@@ -18,7 +18,8 @@ var paths = {
     node_modules: path.join(__dirname, "node_modules"),
     css: [
         path.join(__dirname, "node_modules/semantic-ui-css"),
-        path.join(__dirname, "node_modules/react-grid-layout")
+        path.join(__dirname, "node_modules/react-grid-layout"),
+        path.join(__dirname, "node_modules/@salesforce-ux")
     ]
 };
 
@@ -51,7 +52,7 @@ module.exports = function () {
                 d3: path.resolve('./vendor/d3/d3' + dotJs),
                 c3: path.resolve('./vendor/c3/c3' + dotJs),
                 c3css: path.resolve('./vendor/c3/c3' + dotCss),
-                sandie: path.resolve('./vendor/sandie.js'),
+                sandie: path.resolve('./vendor/sandie.js'), // TODO: Remove?
                 'urijs': path.resolve('./node_modules/urijs/src/URI' + dotJs),
                 'react': path.resolve('./node_modules/react/dist/react' + dotJs),
                 'react-dom': path.resolve('./node_modules/react-dom/dist/react-dom' + dotJs),

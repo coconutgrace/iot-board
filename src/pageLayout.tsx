@@ -19,6 +19,8 @@ import PluginNavItem from "./pluginApi/pluginNavItem.ui.js";
 import PluginsDialog from "./pluginApi/pluginsDialog.ui.js";
 import * as Persistence from "./persistence";
 import {IConfigState} from "./config";
+import {DashboardStore} from "./store";
+import {State} from "./appState";
 
 interface LayoutProps {
     setReadOnly(readOnly: boolean): void;
@@ -125,14 +127,14 @@ export class Layout extends Component<LayoutProps, LayoutState> {
 }
 
 export default connect(
-    state => {
+    (state: State) => {
         return {
             isReadOnly: state.global.isReadOnly,
             devMode: state.config.devMode,
             config: state.config
         };
     },
-    dispatch => {
+    (dispatch: any) => {
         return {
             setReadOnly: (isReadOnly: boolean) => dispatch(Global.setReadOnly(isReadOnly))
         };

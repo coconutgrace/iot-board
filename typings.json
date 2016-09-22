@@ -4,24 +4,25 @@
     "main": "./typings"
   },
   "globalDependencies": {
-    "es6-promise": "registry:dt/es6-promise#0.0.0+20160614011821",
-    "jquery": "registry:dt/jquery#1.10.0+20160704162008",
-    "lodash": "registry:dt/lodash#3.10.0+20160619033623",
-    "nock": "registry:dt/nock#0.54.0+20160613160405",
-    "object-assign": "registry:dt/object-assign#4.0.1+20160316155526",
-    "react": "registry:dt/react#0.14.0+20160630100702",
-    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
-    "react-redux": "registry:dt/react-redux#4.4.0+20160703120921",
-    "redux": "registry:dt/redux#3.5.2+20160703092728",
-    "redux-form": "registry:dt/redux-form#4.0.3+20160703120921",
-    "redux-logger": "registry:dt/redux-logger#2.6.0+20160619033847",
-    "redux-thunk": "registry:dt/redux-thunk#2.1.0+20160703120921",
-    "sinon": "registry:dt/sinon#1.16.0+20160517064723",
-    "urijs": "registry:dt/urijs#1.15.1+20160526132152",
-    "webpack-env": "registry:dt/webpack-env#1.12.2+20160316155526"
+    "es6-promise": "registry:dt/es6-promise",
+    "jquery": "registry:dt/jquery",
+    "lodash": "registry:dt/lodash",
+    "object-assign": "registry:dt/object-assign",
+    "react": "registry:dt/react",
+    "react-dom": "registry:dt/react-dom",
+    "react-modal": "registry:dt/react-modal",
+    "react-redux": "registry:dt/react-redux",
+    "redux": "registry:dt/redux",
+    "redux-form": "registry:dt/redux-form",
+    "redux-logger": "registry:dt/redux-logger",
+    "redux-thunk": "registry:dt/redux-thunk",
+    "sinon": "registry:dt/sinon",
+    "urijs": "registry:dt/urijs",
+    "webpack-env": "registry:dt/webpack-env"
   },
   "globalDevDependencies": {
-    "chai": "registry:dt/chai#3.4.0+20160601211834",
-    "mocha": "registry:dt/mocha#2.2.5+20160619032855"
+    "chai": "registry:dt/chai",
+    "mocha": "registry:dt/mocha",
+    "nock": "registry:dt/nock#0.54.0+20160613160405"
   }
 }

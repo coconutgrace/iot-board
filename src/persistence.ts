@@ -58,7 +58,7 @@ export function persistenceMiddleware({getState}): any {
 function save(state: State) {
     const target = state.config.persistenceTarget;
 
-    const savableState: State = _.assign<any, State>({}, state);
+    const savableState: State = _.assign({}, state);
 
     delete savableState.form;
     delete savableState.modalDialog;
