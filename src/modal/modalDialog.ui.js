@@ -38,7 +38,7 @@ class ModalDialog extends React.Component {
         })
 
         $(window).resize(() => {
-            this.setState({screen:this.screenSize()})
+            this.setState({screen: this.screenSize()})
         })
     }
 
