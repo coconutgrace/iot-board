@@ -66,7 +66,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
         const devMode = true;
         const showMenu = props.devMode && (!props.isReadOnly || this.state.hover);
 
-        return <div onKeyUp={(event) => this.onReadOnlyModeKeyPress(event)}>
+        return <div className="slds-grid slds-wrap" onKeyUp={(event) => this.onReadOnlyModeKeyPress(event)}>
             <div>
                 <WidgetConfigDialog/>
                 <ImportExportDialog/>
@@ -77,18 +77,17 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                  onMouseOver={()=> { this.setState({hover:true})}}
                  onMouseEnter={()=> {this.setState({hover:true})}}
             />
+
             {devMode ?
-                <div className={"slds-context-bar" + (showMenu ? " topnav--visible" : " topnav--hidden")}
+                <div className={"slds-size--1-of-1 slds-context-bar" + (showMenu ? " topnav--visible" : " topnav--hidden")}
                      onMouseOver={()=> { this.setState({hover:true})}}
                      onMouseLeave={()=> {this.setState({hover:false})}}
                 >
                     <div className="slds-context-bar__primary slds-context-bar__item--divider-right">
-                        <div
-                            className="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger--click slds-no-hover">
-
-                        <span className="slds-context-bar__label-action slds-context-bar__app-name">
-        <span className="slds-truncate"><a href="http://iot-dashboard.org"> IoT-Dashboard</a></span>
-      </span>
+                        <div className="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger--click slds-no-hover">
+                            <span className="slds-context-bar__label-action slds-context-bar__app-name">
+                                <span className="slds-truncate"><a href="http://iot-dashboard.org"> IoT-Dashboard</a></span>
+                            </span>
                         </div>
                     </div>
                     <div className="slds-context-bar__secondary" role="navigation">
@@ -149,12 +148,11 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                 </div>
                 : null }
 
-            <div className="container slds-grid-TODO">
-                {/* TODO: Use custom classes for everything inside the Grid to make it customizable without breaking semantic-ui */}
-                <div className="ui grid">
-                    <WidgetGrid/>
-                </div>
+            {/* TODO: Use custom classes for everything inside the Grid to make it customizable without breaking semantic-ui */}
+            <div className="slds-size--1-of-1">
+                <WidgetGrid/>
             </div>
+
         </div>
     }
 
