@@ -9,7 +9,7 @@ import {genCrudReducer} from "../util/reducer.js";
 import * as Action from "../actionNames";
 import * as AppState from "../appState";
 
-export const HEADER_HEIGHT = 77;
+export const HEADER_HEIGHT = 34;
 export const ROW_HEIGHT = 100;
 
 export interface IWidgetsState {
