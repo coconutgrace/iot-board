@@ -148,7 +148,6 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                 </div>
                 : null }
 
-            {/* TODO: Use custom classes for everything inside the Grid to make it customizable without breaking semantic-ui */}
             <div className="slds-size--1-of-1">
                 <WidgetGrid/>
             </div>
@@ -172,23 +171,3 @@ export default connect(
         };
     }
 )(Layout);
-
-interface UserNavItemProps {
-    username: string
-    logoutUrl: string
-}
-
-interface UserNavItemState {
-}
-
-class UserNavItem extends React.Component<UserNavItemProps, UserNavItemState> {
-
-    render() {
-        return <div>
-            <div className="header selectable right item">Tobias</div>
-            <div className="header selectable right item">
-                <a className="ui button">Logout</a>
-            </div>
-        </div>
-    }
-}

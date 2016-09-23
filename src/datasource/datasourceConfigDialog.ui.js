@@ -141,8 +141,6 @@ class DatasourceConfigModal extends React.Component {
             defaultValue: selectedDsPluginState ? selectedDsPluginState.typeInfo.name : ""
         });
 
-
-        const fields = settings.map(setting => setting.id);
         let initialValues = {};
         if (this._isEditing()) {
             initialValues = Object.assign({}, this._getEditingDatasource().settings)
@@ -184,7 +182,6 @@ class DatasourceConfigModal extends React.Component {
                                 onChange={(e) => {
                                     this.setState({selectedType: e.target.value});
                                 }}
-                                {...fields.type}
                         >
                             <option key="none" value="">Select Type...</option>
                             {_.valuesIn(props.datasourcePlugins).map(dsPlugin => {
@@ -196,7 +193,6 @@ class DatasourceConfigModal extends React.Component {
                     <SettingsForm ref="form"
                                   form={FORM_ID}
                                   onSubmit={this.onSubmit.bind(this)}
-                                  fields={["type", "name", "interval", ...fields]}
                                   settings={settings}
                                   initialValues={initialValues}
                     />

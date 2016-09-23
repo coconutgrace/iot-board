@@ -29,38 +29,40 @@ const WidgetFrame = (props) => {
 
 
     return (
-        <div className="ui raised segments"
+        <div className="lob-shadow--raised slds-has-dividers--around"
              style={{margin: 0, overflow: "hidden"}}
              key={widgetState.id}
              _grid={{x: widgetState.col, y: widgetState.row, w: widgetState.width, h: widgetState.height}}>
+            <div className="slds-grid slds-wrap slds-item">
+                <div className={"slds-size--1-of-1 slds-tile slds-tile--board slds-has-dividers--bottom " + (props.isReadOnly ? "" : " drag")} style={{padding: 8}}>
+                    {props.isReadOnly ? null :
+                        <div className="slds-float--right">
 
-            <div className={"ui stacked segment" + (props.isReadOnly ? "" : " drag")} style={{padding: 8}}>
-                {props.isReadOnly ? null :
-                    <div className="ui tiny horizontal right floated list">
-
-                        <ConfigWidgetButton className="right item no-drag" widgetState={widgetState}
-                                            visible={(props.widgetPlugin && props.widgetPlugin.typeInfo.settings ? true : false)}
-                                            icon="configure"/>
-                        {/* <!--<a className="right item drag">
-                         <i className="move icon drag"></i>
-                         </a>*/}
-                        <DeleteWidgetButton className="right floated item no-drag" widgetState={widgetState}
-                                            icon="remove"/>
+                            <ConfigWidgetButton className="no-drag" widgetState={widgetState}
+                                                visible={(props.widgetPlugin && props.widgetPlugin.typeInfo.settings ? true : false)}
+                                                icon="settings"/>
+                            {/* <!--<a className="right item drag">
+                             <i className="move icon drag"></i>
+                             </a>*/}
+                            <DeleteWidgetButton className=" no-drag" widgetState={widgetState}
+                                                icon="remove" iconType="action"/>
 
 
+                        </div>
+                    }
+                    <div className={"" + (props.isReadOnly ? "" : " drag")}>
+                        {widgetState.settings.name || "\u00a0"}
                     </div>
-                }
-                <div className={"ui item top attached" + (props.isReadOnly ? "" : " drag")}>
-                    {widgetState.settings.name || "\u00a0"}
                 </div>
-            </div>
 
-            <div className="ui segment"
-                 style={{height: widgetState.availableHeightPx, padding: 0, border: "red dashed 0px"}}>
-                {
-                    pluginLoaded ? widgetFactory.getInstance(widgetState.id)
-                        : <LoadingWidget widget={widgetState}/>
-                }
+                {/* Actual widget content*/}
+                <div className="slds-size--1-of-1"
+                     style={{height: widgetState.availableHeightPx, padding: 0, border: "red dashed 0px"}}>
+                    {
+                        pluginLoaded ? widgetFactory.getInstance(widgetState.id)
+                            : <LoadingWidget widget={widgetState}/>
+                    }
+                </div>
             </div>
         </div>)
 };
@@ -95,7 +97,17 @@ LoadingWidget.propTypes = {
 
 class WidgetButton extends React.Component {
     render() {
+        const iconType = this.props.iconType || "utility"
         const data = this.props.widgetState;
+        return <button className="slds-button slds-button--icon">
+            <svg aria-hidden="true" className="slds-button__icon slds-button__icon--small"
+                 onClick={() => this.props.onClick(data)}
+            >
+                <use xlinkHref={"/assets/icons/" + iconType + "-sprite/svg/symbols.svg#" + this.props.icon}></use>
+            </svg>
+            <span className="slds-assistive-text">Settings</span>
+        </button>
+
         return <a className={this.props.className + (this.props.visible !== false ? "" : " hidden transition")}
                   onClick={() => this.props.onClick(data)}>
             <i className={this.props.icon + " icon"}></i>
@@ -106,6 +118,7 @@ class WidgetButton extends React.Component {
 WidgetButton.propTypes = {
     widgetState: widgetPropType.isRequired,
     icon: Prop.string.isRequired,
+    iconType: Prop.string,
     visible: Prop.bool,
     className: Prop.string.isRequired,
     onClick: Prop.func.isRequired

@@ -117,7 +117,7 @@ class MyLayoutItem extends React.Component {
         let selected = props.currentLayout.id == props.layout.id;
         return <ui.DropdownItem onClick={() => props.onClick(props)}
                              selected={selected}
-                             isCheckbox={true}
+                             isCheckbox="true"
                              icon="check" iconRight="delete"
                              iconRightClick={() => {
                                  props.deleteLayout(props);

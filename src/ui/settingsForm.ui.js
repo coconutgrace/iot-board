@@ -1,11 +1,11 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
 import {connect} from 'react-redux'
 import * as ui from './elements.ui'
-import {reduxForm, reset} from 'redux-form';
+import {Field, reduxForm, reset} from 'redux-form';
 import {chunk} from '../util/collection'
 import * as _ from 'lodash'
 import {PropTypes as Prop}  from "react";
@@ -32,15 +32,13 @@ class SettingsForm extends React.Component {
 
     render() {
         const props = this.props;
-        const fields = props.fields;
-
         return <form className="ui form">
             {/*className="two fields" with chunk size of 2*/}
             {
                 chunk(this.props.settings, 1).map(chunk => {
                     return <div key={chunk[0].id} className="field">
                         {chunk.map(setting => {
-                            return <FormField key={setting.id} {...setting} field={fields[setting.id]}/>;
+                            return <LabeledField key={setting.id} setting={setting}/>;
                         })}
                     </div>
                 })
@@ -51,99 +49,110 @@ class SettingsForm extends React.Component {
 }
 
 SettingsForm.propTypes = {
+    initialValues: Prop.object.isRequired,
     settings: Prop.arrayOf(Prop.shape({
-            id: Prop.string.isRequired,
-            type: Prop.string.isRequired,
-            name: Prop.string.isRequired
-        }
+            id: Prop.string.isRequired
+        },
     )).isRequired
 };
 
-export default reduxForm({})(SettingsForm);
+export default reduxForm({enableReinitialize: "true"})(SettingsForm);
 
-function FormField(props) {
+
+function LabeledField(props) {
+    const setting = props.setting;
     return <div className="field">
-        <label>{props.name}
-            {props.description && props.type !== 'boolean' ?
-                <ui.Icon type="help circle" data-content={props.description}/> : null}
+        <label>{setting.name}
+            {setting.description && setting.type !== 'boolean' ?
+                <ui.Icon type="help circle" data-content={setting.description}/> : null}
         </label>
-        <SettingsInput {...props} />
+        <SettingsInput setting={props.setting}/>
     </div>
 }
 
-FormField.propTypes = {
-    field: Prop.object.isRequired, // redux-form field info
-    name: Prop.string.isRequired,
-    type: Prop.string.isRequired,
-    description: Prop.string
+LabeledField.propTypes = {
+    setting: Prop.shape({
+        id: Prop.string.isRequired,
+        type: Prop.string.isRequired,
+        name: Prop.string.isRequired,
+        description: Prop.string
+    }).isRequired
 };
 
-
 function SettingsInput(props) {
-    switch (props.type) {
+    const setting = props.setting;
+    switch (setting.type) {
         case "text":
-            return <textarea rows="3" placeholder={props.description} {...props.field}  />;
+            return <Field name={setting.id} component="textarea" rows="3" placeholder={setting.description}/>;
         case "string":
-            return <input placeholder={props.description} {...props.field} />;
+            return <Field name={setting.id} component="input" type="text" placeholder={setting.description}/>;
         case "json": // TODO: Offer better editor + validation
-            return <textarea rows="3" placeholder={props.description} {...props.field}  />;
+            return <Field name={setting.id} component="textarea" rows="3" placeholder={setting.description}/>;
         case "number": // TODO: Validate numbers, distinct between integers and decimals?
-            return <input type="number" min={props.min} max={props.max}
-                          placeholder={props.description} {...props.field} />;
+            return <Field name={setting.id} component="input" type="number" min={setting.min} max={setting.max}
+                          placeholder={setting.description}/>;
         case "boolean":
-            return <input type="checkbox" {...props.field} />;
+            return <Field name={setting.id} component="input" type="checkbox"/>;
         case "option":
-            return <select className="ui fluid dropdown" {...props.field} >
+            return <Field name={setting.id} component="select" className="ui fluid dropdown">
                 <option>{"Select " + props.name + " ..."}</option>
-                {props.options.map(option => {
+                {setting.options.map(option => {
                     const optionValue = _.isObject(option) ? option.value : option;
                     const optionName = _.isObject(option) ? option.name : option;
                     return <option key={optionValue} value={optionValue}>{optionName}</option>
                 })}
-            </select>;
+            </Field>;
         case "datasource":
-            return <DatasourceInputContainer {...props}/>
+            return <DatasourceInputContainer setting={setting}/>
         default:
-            console.error("Unknown type for settings field with id '" + props.id + "': " + props.type);
-            return <input placeholder={props.description} readonly value={"Unknown field type: " + props.type}/>;
+            console.error("Unknown type for settings field with id '" + setting.id + "': " + setting.type);
+            return <input placeholder={setting.description} readonly value={"Unknown field type: " + setting.type}/>;
     }
 }
 
+
 SettingsInput.propTypes = {
-    field: Prop.object.isRequired, // redux-form field info
-    type: Prop.string.isRequired,
-    id: Prop.string.isRequired,
-    name: Prop.string.isRequired,
-    description: Prop.string,
-    min: Prop.number, // for number
-    max: Prop.number, // for number
-    options: Prop.oneOfType([
-            Prop.arrayOf( // For option
-                Prop.shape({
-                        name: Prop.string,
-                        value: Prop.string.isRequired
-                    }.isRequired
-                )).isRequired,
-            Prop.arrayOf(Prop.string).isRequired
-        ]
-    )
+    setting: Prop.shape({
+        type: Prop.string.isRequired,
+        id: Prop.string.isRequired,
+        name: Prop.string.isRequired,
+        description: Prop.string,
+        defaultValue: Prop.any,
+        min: Prop.number, // for number
+        max: Prop.number, // for number
+        options: Prop.oneOfType([
+                Prop.arrayOf( // For option
+                    Prop.shape({
+                            name: Prop.string,
+                            value: Prop.string.isRequired
+                        }.isRequired
+                    )).isRequired,
+                Prop.arrayOf(Prop.string).isRequired
+            ]
+        )
+    }).isRequired
+
 };
 
 const DatasourceInput = (props) => {
     const datasources = props.datasources;
+    const setting = props.setting;
 
-    return <select className="ui fluid dropdown" {...props.field} >
-        <option>{"Select " + props.name + " ..."}</option>
+    return <Field name={setting.id} component="select"  className="ui fluid dropdown">
+        <option>{"Select " + setting.name + " ..."}</option>
         {_.toPairs(datasources).map(([id, ds]) => {
             return <option key={id} value={id}>{ds.settings.name + " (" + ds.type + ")"}</option>
         })}
-    </select>;
+    </Field>;
 };
 
 DatasourceInput.propTypes = {
     datasources: Prop.object.isRequired,
-    field: Prop.object.isRequired,
-    name: Prop.string.isRequired
+    setting: Prop.shape({
+        id: Prop.string.isRequired,
+        type: Prop.string.isRequired,
+        name: Prop.string.isRequired
+    }).isRequired
 };
 
 
