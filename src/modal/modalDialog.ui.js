@@ -43,6 +43,13 @@ class ModalDialog extends React.Component {
     }
 
     screenSize() {
+        if (typeof window === 'undefined') {
+            console.log("Running on nodeJS!")
+            return {
+                height: 500,
+                width: 500
+            }
+        }
         return {
             height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
             width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
