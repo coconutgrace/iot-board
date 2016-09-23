@@ -20,7 +20,7 @@ const DashboardTopNavItem = (props) => {
         <div className="slds-context-bar__icon-action slds-p-left--none" tabindex="0">
             <button className="slds-button slds-button--icon slds-context-bar__button" tabindex="-1">
                 <svg aria-hidden="true" className="slds-button__icon">
-                    <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#chevrondown"></use>
+                    <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#chevrondown"></use>
                 </svg>
                 <span className="slds-assistive-text">Open Board submenu</span>
             </button>

@@ -114,7 +114,7 @@ class WidgetButton extends React.Component {
             <svg aria-hidden="true" className="slds-button__icon slds-button__icon--small"
                  onClick={() => this.props.onClick(data)}
             >
-                <use xlinkHref={"/assets/icons/" + iconType + "-sprite/svg/symbols.svg#" + this.props.icon}></use>
+                <use xlinkHref={"assets/icons/" + iconType + "-sprite/svg/symbols.svg#" + this.props.icon}></use>
             </svg>
             <span className="slds-assistive-text">{this.props.description}</span>
         </button>

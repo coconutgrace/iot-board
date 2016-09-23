@@ -19,7 +19,7 @@ const LayoutsTopNavItem = (props) => {
         <div className="slds-context-bar__icon-action slds-p-left--none" tabindex="0">
             <button className="slds-button slds-button--icon slds-context-bar__button" tabindex="-1">
                 <svg aria-hidden="true" className="slds-button__icon">
-                    <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#chevrondown"></use>
+                    <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#chevrondown"></use>
                 </svg>
                 <span className="slds-assistive-text">Open Layout submenu</span>
             </button>
@@ -80,7 +80,7 @@ class SaveInput extends React.Component {
                 <svg aria-hidden="true" className="slds-input__icon slds-icon-text-default"
                      onClick={() => this.save()}
                 >
-                    <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                    <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#add"></use>
                 </svg>
                 <input id="text-input-save-layout" className="slds-input" type="text" placeholder="Save as ..."
                        ref="input"

@@ -109,7 +109,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                                     <svg aria-hidden="true"
                                          className="slds-icon slds-icon--small slds-icon-text-default">
                                         <use
-                                            xlinkHref={"/assets/icons/utility-sprite/svg/symbols.svg#" + (props.isReadOnly ? "lock" : "unlock")}/>
+                                            xlinkHref={"assets/icons/utility-sprite/svg/symbols.svg#" + (props.isReadOnly ? "lock" : "unlock")}/>
                                     </svg>
                                     <span className="slds-assistive-text">Lock / Unlock</span>
                                 </div>
@@ -129,7 +129,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                                    href={props.config.auth.logoutUrl}
                                 >
                                     <svg aria-hidden="true" className="slds-button__icon slds-button__icon--left">
-                                        <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#logout"/>
+                                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#logout"/>
                                     </svg>
                                     Logout
                                 </a>

@@ -15,7 +15,7 @@ export const DropdownItem = (props) => {
     if (props.icon) {
         icon = <svg aria-hidden="true"
                     className={"slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small" + (props.isCheckbox ? " slds-icon--selected" : "")}>
-            <use xlinkHref={"/assets/icons/utility-sprite/svg/symbols.svg#" + props.icon}></use>
+            <use xlinkHref={"assets/icons/utility-sprite/svg/symbols.svg#" + props.icon}></use>
         </svg>;
     }
     if (props.iconRight) {
@@ -29,7 +29,7 @@ export const DropdownItem = (props) => {
                              }
                          }}
         >
-            <use xlinkHref={"/assets/icons/utility-sprite/svg/symbols.svg#" + props.iconRight}></use>
+            <use xlinkHref={"assets/icons/utility-sprite/svg/symbols.svg#" + props.iconRight}></use>
         </svg>;
     }
 
