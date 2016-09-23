@@ -4,6 +4,34 @@
 
 /* BEGIN app.css */
 
+/* Normalize Font Size to make semantic-ui work with lightning design
+ TOODO: remove html and boy decl when semantic-ui is replaced
+ */
+
+html {
+    font-size: 14px;
+
+    /* Salesforce values */
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    font-family: "Salesforce Sans", Arial, sans-serif;
+    line-height: 1.5;
+    background: white;
+    color: #16325c;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-size: 1rem;
+    /*Salesforce values*/
+    margin: 0;
+    background: transparent;
+}
+
+/*
+Custom classes
+*/
+
 .drag {
     cursor: move;
     /*
@@ -43,6 +71,8 @@
     -webkit-transition: all 1s, transform 1s;
     transition: all 1s, transform 1s;
 }
+
+/* Utility classes */
 
 .monospace {
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
