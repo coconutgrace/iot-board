@@ -11,13 +11,15 @@ import {PropTypes as Prop}  from "react";
 
 
 const PluginsTopNavItem = (props) => {
-    return <a className="item" onClick={() => props.showPluginsDialog()}>
-        Plugins
-    </a>
+    return <li className="slds-context-bar__item">
+        <a href="javascript:void(0);"  onClick={() => props.showPluginsDialog()} className="slds-context-bar__label-action" title="Menu Item 1">
+            <span className="slds-truncate">Plugins</span>
+        </a>
+    </li>
 };
 
 PluginsTopNavItem.propTypes = {
-    showPluginsDialog: Prop.func.isRequired 
+    showPluginsDialog: Prop.func.isRequired
 };
 
 

@@ -100,12 +100,12 @@ module.exports = function () {
                     loader: ExtractTextPlugin.extract("style-loader", "css-loader")
                 },
                 {
-                    test: /\.(ttf|eot|svg|woff(2)?)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                    test: /\.(ttf|eot|woff(2)?)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                     loader: "file-loader?name=fonts/[name].[sha256:hash:base58:10].[ext]",
                     include: paths.css
                 },
                 {
-                    test: /\.(png)$/,
+                    test: /\.(svg|png)$/,
                     loader: "file-loader?name=img/[name].[sha256:hash:base58:10].[ext]",
                     include: paths.css
                 }

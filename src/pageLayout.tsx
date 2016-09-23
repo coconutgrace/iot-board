@@ -59,8 +59,11 @@ export class Layout extends Component<LayoutProps, LayoutState> {
     }
 
     render() {
-        const props = this.props;
 
+        const props = this.props;
+        props.config.auth = {username: "Tobias", logoutUrl: "/"}
+        //props.config.auth = null
+        const devMode = true;
         const showMenu = props.devMode && (!props.isReadOnly || this.state.hover);
 
         return <div onKeyUp={(event) => this.onReadOnlyModeKeyPress(event)}>
@@ -70,52 +73,83 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                 <DatasourceConfigDialog/>
                 <PluginsDialog/>
             </div>
-            <div className="container">
-                <div className={showMenu ? "menu-trigger" : "menu-trigger"}
-                     onMouseOver={()=> { this.setState({hover:true})}}
-                     onMouseEnter={()=> {this.setState({hover:true})}}
-
-                ></div>
-                <div className={"ui inverted fixed main menu " + (showMenu ? "topnav--visible" : "topnav--hidden")}
+            <div className={showMenu ? "menu-trigger" : "menu-trigger"}
+                 onMouseOver={()=> { this.setState({hover:true})}}
+                 onMouseEnter={()=> {this.setState({hover:true})}}
+            />
+            {devMode ?
+                <div className={"slds-context-bar" + (showMenu ? " topnav--visible" : " topnav--hidden")}
                      onMouseOver={()=> { this.setState({hover:true})}}
                      onMouseLeave={()=> {this.setState({hover:false})}}
                 >
-                    <div className="ui container">
-                        <a href="#" className="header item">
-                            {/*<img className="logo" src="assets/images/logo.png"/>*/}
-                            Dashboard
-                        </a>
+                    <div className="slds-context-bar__primary slds-context-bar__item--divider-right">
+                        <div
+                            className="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger--click slds-no-hover">
 
-                        <DashboardMenuEntry/>
-                        <WidgetsNavItem/>
-                        <DatasourceNavItem/>
-                        <PluginNavItem/>
-                        <LayoutsNavItem/>
-                        <a className="item" onClick={() => Persistence.clearData()}>
-                            <i className="red bomb icon"/>
-                            Reset Everything!
-                        </a>
-                        <a className="item" onClick={() => props.setReadOnly(!props.isReadOnly)}>
-                            <i className={ (props.isReadOnly ? "lock" : "unlock alternate")  + " icon"}/> {/*expand*/}
-                        </a>
-                        <div className="header selectable right item">
-                            v{this.props.config.version}&nbsp;{this.props.config.revisionShort}
+                        <span className="slds-context-bar__label-action slds-context-bar__app-name">
+        <span className="slds-truncate"><a href="http://iot-dashboard.org"> IoT-Dashboard</a></span>
+      </span>
                         </div>
-                        {props.config.auth && props.config.auth.username ?
-                            <div className="header selectable right item">{props.config.auth.username}</div>
-                            : null
-                        }
-                        {props.config.auth && props.config.auth.logoutUrl ?
-                            <div className="header selectable right item">
-                                <a className="ui button" href={props.config.auth.logoutUrl}>Logout</a>
-                            </div>
-                            : null
-                        }
-
                     </div>
+                    <div className="slds-context-bar__secondary" role="navigation">
+                        <ul className="slds-grid">
+                            <DashboardMenuEntry/>
+                            <WidgetsNavItem/>
+                            <DatasourceNavItem/>
+                            <PluginNavItem/>
+                            <LayoutsNavItem/>
+                            <div className="slds-context-bar__vertical-divider"/>
+                            <li className="slds-context-bar__item">
+                                <a href="javascript:void(0);" onClick={() => Persistence.clearData()}
+                                   className="slds-context-bar__label-action" title="Reset Everything!">
+                                    <span className="slds-truncate">Reset Everything!</span>
+                                </a>
+                            </li>
 
+                            <li className="slds-context-bar__item">
+                                <div className="slds-context-bar__icon-action"
+                                     onClick={() => props.setReadOnly(!props.isReadOnly)}
+                                >
+                                    <svg aria-hidden="true"
+                                         className="slds-icon slds-icon--small slds-icon-text-default">
+                                        <use
+                                            xlinkHref={"/assets/icons/utility-sprite/svg/symbols.svg#" + (props.isReadOnly ? "lock" : "unlock")}/>
+                                    </svg>
+                                    <span className="slds-assistive-text">Lock / Unlock</span>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div className="slds-context-bar__tertiary">
+                        <ul className="slds-grid slds-grid--vertical-align-center">
+
+                            {props.config.auth && props.config.auth.username ?
+                                <div className="slds-m-right--small">Tobias</div>
+                                : null
+                            }
+                            {props.config.auth && props.config.auth.logoutUrl ?
+                                <a className="slds-button slds-button--neutral"
+                                   href={props.config.auth.logoutUrl}
+                                >
+                                    <svg aria-hidden="true" className="slds-button__icon slds-button__icon--left">
+                                        <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#logout"/>
+                                    </svg>
+                                    Logout
+                                </a>
+                                : null
+                            }
+
+                            <div className="slds-context-bar__vertical-divider"/>
+                            <span className="slds-truncate slds-m-left--small">
+                            v{this.props.config.version}
+                        </span>
+                        </ul>
+                    </div>
                 </div>
+                : null }
 
+            <div className="container slds-grid-TODO">
                 {/* TODO: Use custom classes for everything inside the Grid to make it customizable without breaking semantic-ui */}
                 <div className="ui grid">
                     <WidgetGrid/>

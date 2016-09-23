@@ -1,35 +1,47 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import * as React from 'react'
-import * as Widgets from "./widgets";
+import * as React from "react";
+import {PropTypes as Prop} from "react";
 import {connect} from "react-redux";
-import * as WidgetConfig from './widgetConfig'
-import * as _ from 'lodash'
+import * as WidgetConfig from "./widgetConfig";
+import * as _ from "lodash";
 import * as ui from "../ui/elements.ui";
-import * as WidgetPlugins from './widgetPlugins'
+import * as WidgetPlugins from "./widgetPlugins";
 import {reset} from "redux-form";
-import {PropTypes as Prop}  from "react";
 
 
 const WidgetsNavItem = (props) => {
 
-    return <div className="ui simple dropdown item">
-        Add Widget
-        <i className="dropdown icon"/>
-        <div className="ui menu">
-
-            <ui.Divider/>
-            {
-                _.valuesIn(props.widgetPlugins).map(widgetPlugin => {
-                    return <AddWidget key={widgetPlugin.id}
-                                      text={widgetPlugin.typeInfo.name}
-                                      type={widgetPlugin.typeInfo.type}/>;
-                })
-            }
+    return <li
+        className="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger--hover"
+        aria-haspopup="true">
+        <a href="javascript:void(0);" className="slds-context-bar__label-action" title="Menu Item">
+            <span className="slds-truncate">Add Widget</span>
+        </a>
+        <div className="slds-context-bar__icon-action slds-p-left--none" tabindex="0">
+            <button className="slds-button slds-button--icon slds-context-bar__button" tabindex="-1">
+                <svg aria-hidden="true" className="slds-button__icon">
+                    <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#chevrondown"></use>
+                </svg>
+                <span className="slds-assistive-text">Open Add Widget submenu</span>
+            </button>
         </div>
-    </div>;
+        <div className="slds-dropdown slds-dropdown--right">
+            <ul className="dropdown__list" role="menu">
+                {
+                    _.valuesIn(props.widgetPlugins).map(widgetPlugin => {
+                        return <ui.DropdownItem key={widgetPlugin.id}
+                                                text={widgetPlugin.typeInfo.name}
+                                                icon="add"
+                                                onClick={() => props.createWidget(widgetPlugin.typeInfo.type)}
+                        />
+                    })
+                }
+            </ul>
+        </div>
+    </li>
 };
 
 WidgetsNavItem.propTypes = {
@@ -43,18 +55,13 @@ export default connect(
         return {
             widgetPlugins: state.widgetPlugins
         }
-    }
-)(WidgetsNavItem);
-
-const AddWidget = connect(
-    (state) => {
-        return {}
     },
     (dispatch) => {
         return {
-            onClick: (props) => {
-                dispatch(WidgetConfig.createWidget(props.type))
+            createWidget: (type) => {
+                dispatch(WidgetConfig.createWidget(type))
             }
         }
     }
-)(ui.LinkItem);
+)(WidgetsNavItem);
+

@@ -20,7 +20,7 @@ gutil.log("NODE_ENV = '" + process.env.NODE_ENV + "'");
 /**
  * Setup everything for a smooth development
  */
-gulp.task("dev", sequence(['inject', 'compile:plugins'], 'webpack:dev-server'));
+gulp.task("dev", sequence(['inject', 'compile:plugins'], 'compile:design-system', 'webpack:dev-server'));
 
 /**
  * Keeps files up to date that are not covered by Webpack
@@ -42,7 +42,7 @@ gulp.task("build", ['test', 'compile', 'lint']);
  * Compile all code to /dist
  * - no tests, no overhead, just what is needed to generate a runnable application
  * */
-gulp.task('compile', sequence('compile:plugins', 'webpack:client'));
+gulp.task('compile', ['compile:design-system', 'compile:plugins', 'webpack:client']);
 
 // TODO: We do not have uiTests yet. All tests are running with node
 // There is some ui test code already but it's considered unstable (should we just delete it for now?)
@@ -159,6 +159,11 @@ gulp.task('compile:plugins', [], function () {
         .pipe(gulp.dest('./dist/plugins'));
 });
 
+gulp.task('compile:design-system', [], function () {
+    return gulp.src('./node_modules/@salesforce-ux/design-system/assets/**/*.*')
+        .pipe(gulp.dest('./dist/assets/'));
+});
+
 
 const webpackErrorHandler = function (callback, error, stats) {
     if (error) {
@@ -254,7 +259,7 @@ gulp.task('clean:lib', function () {
 //////////////////////
 
 var WebpackDevServer = require("webpack-dev-server");
-gulp.task("webpack:dev-server", ['compile:plugins', 'inject', 'compile:ts'], function (callback) {
+gulp.task("webpack:dev-server", ['compile:plugins', 'inject', 'compile:ts', 'compile:design-system'], function (callback) {
     // Start a webpack-dev-server
     var webpackConfig = require('./webpack.client.js');
     webpackConfig.entry.app.unshift("webpack-dev-server/client?http://localhost:8080/", "webpack/hot/dev-server");

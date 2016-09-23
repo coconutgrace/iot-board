@@ -9,6 +9,55 @@ import {PropTypes as Prop}  from "react";
  * This module contains generic UI Elements reuse in the app
  */
 
+export const DropdownItem = (props) => {
+    let icon;
+    let iconRight;
+    if (props.icon) {
+        icon = <svg aria-hidden="true"
+                    className={"slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small" + (props.isCheckbox ? " slds-icon--selected" : "")}>
+            <use xlinkHref={"/assets/icons/utility-sprite/svg/symbols.svg#" + props.icon}></use>
+        </svg>;
+    }
+    if (props.iconRight) {
+        iconRight = <svg aria-hidden="true"
+                         className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-left--small slds-shrink-none"
+                         onClick={(e) => {
+                             if (props.iconRightClick) {
+                                 e.stopPropagation();
+                                 e.preventDefault();
+                                 props.iconRightClick(e);
+                             }
+                         }}
+        >
+            <use xlinkHref={"/assets/icons/utility-sprite/svg/symbols.svg#" + props.iconRight}></use>
+        </svg>;
+    }
+
+    return <li className={"slds-dropdown__item" + (props.selected ? " slds-is-selected" : "")} role="presentation">
+        <a href="javascript:void(0);" role={props.isCheckbox ? "menuitemcheckbox" : "menuitem"}
+           aria-checked={props.selected ? "true" : "false"}
+           onClick={(e) => {
+               e.stopPropagation();
+               e.preventDefault();
+               props.onClick(e);
+           }}
+           tabindex="-1">
+            <span className="slds-truncate">{icon} {props.text}</span>{iconRight}
+        </a>
+    </li>
+};
+
+DropdownItem.propTypes = {
+    onClick: Prop.func.isRequired,
+    iconRightClick: Prop.func,
+    text: Prop.string,
+    icon: Prop.string,
+    iconRight: Prop.string,
+    isCheckbox: Prop.string,
+    children: Prop.any,
+    selected: Prop.bool
+};
+
 export const LinkItem = (props) => {
     let icon;
     if (props.icon) {

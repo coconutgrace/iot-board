@@ -38,21 +38,10 @@
 
 .topnav--visible {
     min-height: 0 !important;
-    height: 40px;
-    overflow: visible;
+    /*height: 40px;*/
+    overflow: visible; /*else not popups :( */
     -webkit-transition: all 1s, transform 1s;
     transition: all 1s, transform 1s;
-}
-
-.topnav--hidden + .ui.grid {
-    padding-top: 0 !important;
-    -webkit-transition: all 1s, transform 1s;
-    transition: padding-top 1s, transform 1s;
-}
-
-.topnav--visible + .ui.grid {
-    /*-webkit-transition: all 0s, transform 1s;
-    transition: padding-top 0s, transform 1s; */
 }
 
 .monospace {

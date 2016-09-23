@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-//import "@salesforce-ux/design-system/assets/styles/salesforce-lightning-design-system.css"
 import "semantic-ui-css/semantic.css";
 import "semantic-ui-css/semantic";
 import "c3css";
