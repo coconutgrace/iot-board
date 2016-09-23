@@ -59,10 +59,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
     }
 
     render() {
-
         const props = this.props;
-        props.config.auth = {username: "Tobias", logoutUrl: "/"}
-        //props.config.auth = null
         const devMode = true;
         const showMenu = props.devMode && (!props.isReadOnly || this.state.hover);
 
