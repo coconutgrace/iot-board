@@ -38,25 +38,38 @@ class PluginsModal extends React.Component {
                             title="Plugins"
                             actions={actions}
         >
-            <div className="ui one column grid">
-                <div className="column">
-                    <form className="ui form">
-                        <h4 className="ui dividing header">Load Plugin</h4>
-                        <div className="field">
-                            <label>From URL</label>
-                            <input ref="pluginUrl" type="text" name="plugin-url"
-                                   placeholder="http://my-page.com/myPlugin.js"
-                                   defaultValue="plugins/TestWidgetPlugin.js"
-                            />
+            <div className="slds-grid">
+                <div className="slds-size--1-of-1">
+                    <h2 className="slds-section-title--divider slds-m-bottom--medium">Load Plugin</h2>
+                    <form className="slds-form--inline slds-grid"
+                          onSubmit={(e) => {
+                              props.loadPlugin(this.refs.pluginUrl.value);
+                              e.preventDefault()
+                          }}
+                    >
+                        <div className="slds-form-element slds-has-flexi-truncate">
+                            <div className="slds-form-element__control slds-size--1-of-1">
+                                <div className="slds-input-has-icon slds-input-has-icon--right">
+                                    <svg aria-hidden="true" className="slds-input__icon">
+                                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                                    </svg>
+                                    <input className="slds-lookup__search-input slds-input" type="search" placeholder="URL or Id from Plugin Registry"
+                                           id="plugin-url-input" ref="pluginUrl" name="plugin-url"
+                                           defaultValue="plugins/TestWidgetPlugin.js"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                        <div className="ui button" onClick={() => props.loadPlugin(this.refs.pluginUrl.value)}
-                             tabIndex="0">
-                            Load Plugin
+                        <div className="slds-form-element slds-no-flex">
+                            <button className="slds-button slds-button--brand" type="submit" tabIndex="0">
+                                Load&nbsp;Plugin
+                            </button>
                         </div>
                     </form>
-                    <h4 className="ui dividing header">Datasource Plugins</h4>
+
+                    <h4 className="slds-section-title--divider slds-m-top--medium slds-m-bottom--medium">Datasource Plugins (Installed)</h4>
                     <DatasourcePluginList datasourceStates={datasourcePluginStates} {...props} />
-                    <h4 className="ui dividing header">Widget Plugins</h4>
+                    <h4 className="slds-section-title--divider slds-m-top--medium slds-m-bottom--medium">Widget Plugins (Installed)</h4>
                     <WidgetPluginList widgetPluginStates={widgetPluginStates} {...props} />
                 </div>
             </div>
@@ -89,10 +102,10 @@ export default connect(
 )(PluginsModal);
 
 const DatasourcePluginList = (props) => {
-    return <div className="ui five cards">
+    return <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
         {
             props.datasourceStates.map(dsState => {
-                return <DatasourcePluginCard key={dsState.id} pluginState={dsState} {...props}/>;
+                return <DatasourcePluginTile key={dsState.id} pluginState={dsState} {...props}/>;
             })
         }
     </div>
@@ -108,10 +121,10 @@ DatasourcePluginList.propTypes = {
 
 
 const WidgetPluginList = (props) => {
-    return <div className="ui five cards">
+    return <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
         {
             props.widgetPluginStates.map(dsState => {
-                return <WidgetPluginCard key={dsState.id} pluginState={dsState} {...props}/>;
+                return <WidgetPluginTile key={dsState.id} pluginState={dsState} {...props}/>;
             })
         }
     </div>
@@ -122,7 +135,12 @@ WidgetPluginList.propTypes = {
 };
 
 
-class PluginCard extends React.Component {
+class PluginTile extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {actionMenuOpen: false}
+    }
 
     _copyUrl() {
         this.refs.url.focus();
@@ -130,43 +148,84 @@ class PluginCard extends React.Component {
         document.execCommand('copy');
     }
 
+    toggleActionMenu() {
+        this.setState({actionMenuOpen: !this.state.actionMenuOpen})
+    }
+
+    closeActionMenu() {
+        this.setState({actionMenuOpen: false})
+    }
+
     render() {
         const props = this.props;
         const pluginState = props.pluginState;
-        return <div className="card">
-            <div className="content">
-                <div className="header">{pluginState.typeInfo.name}</div>
-                <div className="description">
-                    <p>Type: {pluginState.typeInfo.type}</p>
-                    <p>{pluginState.typeInfo.description ? pluginState.typeInfo.description : "No Description."}</p>
+        const description = pluginState.typeInfo.description ? pluginState.typeInfo.description : "No Description."
+        const url = pluginState.url ? pluginState.url : "Packaged"
+
+        return <div className="slds-tile slds-item slds-size--1-of-5 slds-m-around--x-small xxslds-p-left--small xxslds-p-right--small" style={{marginTop:"0.5rem"}}>
+            <div className="slds-grid slds-grid--align-spread slds-has-flexi-truncate slds-m-bottom--x-small">
+                <h3 className="slds-text-heading--medium">{pluginState.typeInfo.name}</h3>
+                <div className={"slds-shrink-none slds-dropdown-trigger slds-dropdown-trigger--click" + (this.state.actionMenuOpen ? " slds-is-open" : "")}>
+                    <button className="slds-button slds-button--icon-border-filled slds-button--icon-x-small" aria-haspopup="true"
+                            onClick={() => this.toggleActionMenu()} onBlur={() => setTimeout(()=>this.closeActionMenu(), 50)}
+                    >
+                        <svg aria-hidden="true" className="slds-button__icon slds-button__icon--hint">
+                            <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#down"></use>
+                        </svg>
+                        <span className="slds-assistive-text">Actions</span>
+                    </button>
+                    <div className="slds-dropdown slds-dropdown--left slds-dropdown--actions">
+                        <ul className="dropdown__list" role="menu">
+                            <li className="slds-dropdown__item" role="presentation">
+                                <a href="javascript:void(0);" role="menuitem" tabIndex="0" onClick={() => props.removePlugin(pluginState.id)}>
+                                    <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
+                                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#delete"/>
+                                    </svg>
+                                    <span className="slds-truncate">Remove</span>
+
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div className="extra content">
-                <i className="copy outline icon" onClick={() => {
-                    this._copyUrl()
-                }} style={{display: "inline"}}/>
-                <div className="ui large transparent input">
-                    <input type="text" ref="url"
-                           readOnly
-                           style={{width: "100%", paddingLeft: 0, paddingRight: 0}}
-                           placeholder="Plugin Url ..."
-                           defaultValue={pluginState.url ? pluginState.url : "Packaged"}/>
-                </div>
-            </div>
-            <div className="ui bottom attached button" onClick={() => props.removePlugin(pluginState.id)}>
-                <i className="trash icon"/>
-                Remove
+            <div className="slds-tile__detail">
+                <dl className="slds-dl--horizontal">
+                    <dt className="slds-dl--horizontal__label">
+                        <p className="slds-truncate" title="Type">Type:</p>
+                    </dt>
+                    <dd className="slds-dl--horizontal__detail slds-tile__meta">
+                        <p className="slds-truncate" title={pluginState.typeInfo.type}>{pluginState.typeInfo.type}</p>
+                    </dd>
+                    <dt className="slds-dl--horizontal__label">
+                        <p className="slds-truncate" title="Type">Url:</p>
+                    </dt>
+                    <dd className="slds-dl--horizontal__detail slds-tile__meta">
+                        <div className="slds-form-element__control slds-input-has-icon slds-input-has-icon--left" title={url}>
+                            <svg aria-hidden="true" className="slds-input__icon slds-icon-text-default"
+                                 onClick={() => this._copyUrl()}>
+                                <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#copy"></use>
+                            </svg>
+                            <input className="slds-input" type="text" ref="url"
+                                   readOnly
+                                   style={{width: "100%", paddingRight: 0}}
+                                   placeholder="Plugin Url ..."
+                                   defaultValue={url}/>
+                        </div>
+                    </dd>
+                </dl>
+                <p>{description}</p>
             </div>
         </div>
     }
 }
 
-PluginCard.propTypes = {
+PluginTile.propTypes = {
     pluginState: Prop.object.isRequired,
     removePlugin: Prop.func.isRequired
 };
 
-const WidgetPluginCard = connect(
+const WidgetPluginTile = connect(
     state => {
         return {}
     },
@@ -175,9 +234,9 @@ const WidgetPluginCard = connect(
             removePlugin: (type) => dispatch(WidgetsPlugins.unloadPlugin(type))
         }
     }
-)(PluginCard);
+)(PluginTile);
 
-const DatasourcePluginCard = connect(
+const DatasourcePluginTile = connect(
     state => {
         return {}
     },
@@ -186,4 +245,4 @@ const DatasourcePluginCard = connect(
             removePlugin: (type) => dispatch(DatasourcePlugins.unloadPlugin(type))
         }
     }
-)(PluginCard);
+)(PluginTile);
