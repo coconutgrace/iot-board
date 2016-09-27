@@ -81,11 +81,28 @@ function deletePlugin(type: string): IWidgetPluginAction {
     }
 }
 
+export function publishedWidgetPlugin(type: string, url: string, typeInfo: ITypeInfo) {
+    return {
+        type: Action.PUBLISHED_WIDGET_PLUGIN,
+        id: type,
+        url: url,
+        typeInfo: typeInfo
+    }
+}
+
 const pluginsCrudReducer = genCrudReducer([Action.WIDGET_PLUGIN_FINISHED_LOADING, Action.DELETE_WIDGET_PLUGIN], widgetPlugin);
 export function widgetPlugins(state: IWidgetPluginsState = initialState, action: IWidgetPluginAction) {
 
     state = pluginsCrudReducer(state, action);
     switch (action.type) {
+        case Action.PUBLISHED_WIDGET_PLUGIN: {
+            if (state[action.id]) {
+                return _.assign({}, state, {
+                    [action.id]: widgetPlugin(state[action.id], action)
+                });
+            }
+            return state;
+        }
         case Action.STARTED_LOADING_PLUGIN_FROM_URL:
             if (state[action.id]) {
                 return _.assign({}, state, {
@@ -103,6 +120,12 @@ export function widgetPlugins(state: IWidgetPluginsState = initialState, action:
 
 function widgetPlugin(state: IWidgetPluginState, action: IWidgetPluginAction): IWidgetPluginState {
     switch (action.type) {
+        case Action.PUBLISHED_WIDGET_PLUGIN: {
+            return _.assign({}, state, {
+                url: action.url,
+                typeInfo: action.typeInfo
+            });
+        }
         case Action.WIDGET_PLUGIN_FINISHED_LOADING:
             if (!action.typeInfo.type) {
                 // TODO: Catch this earlier

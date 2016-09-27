@@ -126,7 +126,7 @@ class ModalDialog extends React.Component<ModalDialogProps, any> {
 }
 
 export default connect(
-    (state: AppState.State) => {
+    (state: AppState.State, ownProps: any) => {
         return {
             dialogState: state.modalDialog
         }

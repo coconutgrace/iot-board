@@ -6,14 +6,24 @@ import * as React from 'react'
 import ModalDialog from '../modal/modalDialog.ui'
 import {connect} from 'react-redux'
 import * as _ from 'lodash'
-import {reset} from 'redux-form';
-import * as Modal from '../modal/modalDialog'
+import * as Modal from '../modal/modalDialog.js'
 import * as Plugins from '../pluginApi/plugins'
 import * as WidgetsPlugins from '../widgets/widgetPlugins'
 import * as DatasourcePlugins from '../datasource/datasourcePlugins'
-import {PropTypes as Prop}  from "react";
+import {IDatasourcePluginsState} from "../datasource/datasourcePlugins";
+import {IWidgetPluginsState} from "../widgets/widgetPlugins";
+import {Dispatch, State} from "../appState";
+import {IDatasourcePluginState} from "../datasource/datasourcePlugins";
+import {IWidgetPluginState} from "../widgets/widgetPlugins";
 
-class PluginsModal extends React.Component {
+interface PluginsModalProps {
+    datasourcePlugins: IDatasourcePluginsState
+    widgetPlugins: IWidgetPluginsState
+    closeDialog: () => void
+    loadPlugin: (url: string) => void
+}
+
+class PluginsModal extends React.Component<PluginsModalProps, void> {
 
     render() {
         const props = this.props;
@@ -31,6 +41,7 @@ class PluginsModal extends React.Component {
 
         const datasourcePluginStates = _.valuesIn(props.datasourcePlugins);
         const widgetPluginStates = _.valuesIn(props.widgetPlugins);
+        const pluginUrlInput: any = this.refs['pluginUrl'] // HTMLInputElement
 
         return <ModalDialog id="plugins-dialog"
                             title="Plugins"
@@ -41,7 +52,7 @@ class PluginsModal extends React.Component {
                     <h2 className="slds-section-title--divider slds-m-bottom--medium">Load Plugin</h2>
                     <form className="slds-form--inline slds-grid"
                           onSubmit={(e) => {
-                              props.loadPlugin(this.refs.pluginUrl.value);
+                              props.loadPlugin(pluginUrlInput.value);
                               e.preventDefault()
                           }}
                     >
@@ -66,83 +77,59 @@ class PluginsModal extends React.Component {
                     </form>
 
                     <h4 className="slds-section-title--divider slds-m-top--medium slds-m-bottom--medium">Datasource Plugins (Installed)</h4>
-                    <DatasourcePluginList datasourceStates={datasourcePluginStates} {...props} />
+                    <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
+                        {datasourcePluginStates.map(dsState => {
+                            return <DatasourcePluginTile key={dsState.id} pluginId={dsState.id}/>;
+                        })}
+                    </div>
                     <h4 className="slds-section-title--divider slds-m-top--medium slds-m-bottom--medium">Widget Plugins (Installed)</h4>
-                    <WidgetPluginList widgetPluginStates={widgetPluginStates} {...props} />
+                    <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
+                        {widgetPluginStates.map(dsState => {
+                            return <WidgetPluginTile key={dsState.id} pluginId={dsState.id}/>;
+                        })}
+                    </div>
                 </div>
             </div>
         </ModalDialog>
     }
 }
 
-PluginsModal.propTypes = {
-    datasourcePlugins: Prop.object.isRequired,
-    widgetPlugins: Prop.object.isRequired,
-    closeDialog: Prop.func.isRequired,
-    loadPlugin: Prop.func.isRequired
-};
-
 export default connect(
-    (state) => {
+    (state: State) => {
         return {
             widgetPlugins: state.widgetPlugins,
             datasourcePlugins: state.datasourcePlugins
         }
     },
-    (dispatch) => {
+    (dispatch: Dispatch) => {
         return {
             closeDialog: () => dispatch(Modal.closeModal()),
             // TODO: Render loading indicator while Plugin loads
             // maybe build some generic solution for Ajax calls where the state can hold all information to render loading indicators / retry buttons etc...
-            loadPlugin: (url) => dispatch(Plugins.startLoadingPluginFromUrl(url))
+            loadPlugin: (url: string) => dispatch(Plugins.startLoadingPluginFromUrl(url))
         }
     }
 )(PluginsModal);
 
-const DatasourcePluginList = (props) => {
-    return <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
-        {
-            props.datasourceStates.map(dsState => {
-                return <DatasourcePluginTile key={dsState.id} pluginId={dsState.id}/>;
-            })
-        }
-    </div>
-};
 
-DatasourcePluginList.propTypes = {
-    datasourceStates: Prop.arrayOf(
-        Prop.shape({
-            id: Prop.string.isRequired
-        })
-    ).isRequired
-};
+class PluginTileProps {
+    pluginId: string
+    pluginState: IDatasourcePluginState & IWidgetPluginState
+    removePlugin: (type: string) => any
+    publishPlugin: (type: string) => void
+}
 
+class PluginTile extends React.Component<PluginTileProps, any> {
 
-const WidgetPluginList = (props) => {
-    return <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
-        {
-            props.widgetPluginStates.map(dsState => {
-                return <WidgetPluginTile key={dsState.id} pluginId={dsState.id}/>;
-            })
-        }
-    </div>
-};
-
-WidgetPluginList.propTypes = {
-    widgetPluginStates: Prop.arrayOf(WidgetsPlugins.widgetPluginType)
-};
-
-
-class PluginTile extends React.Component {
-
-    constructor(props) {
+    constructor(props: PluginTileProps) {
         super(props)
         this.state = {actionMenuOpen: false}
     }
 
     _copyUrl() {
-        this.refs.url.focus();
-        this.refs.url.select();
+        const urlInput: any = this.refs['url'];
+        urlInput.focus();
+        urlInput.select();
         document.execCommand('copy');
     }
 
@@ -240,35 +227,31 @@ class PluginTile extends React.Component {
     }
 }
 
-PluginTile.propTypes = {
-    pluginId: Prop.string.isRequired,
-    pluginState: Prop.object.isRequired,
-    removePlugin: Prop.func.isRequired
-};
 
 const WidgetPluginTile = connect(
-    (state, ownProps) => {
+    (state: State, ownProps: any) => {
         return {
             pluginState: state.widgetPlugins[ownProps.pluginId]
         }
     },
-    dispatch => {
+    (dispatch: Dispatch) => {
         return {
-            removePlugin: (type) => dispatch(WidgetsPlugins.unloadPlugin(type))
+            removePlugin: (type: string) => dispatch(WidgetsPlugins.unloadPlugin(type)),
+            publishPlugin: (type: string) => dispatch(Plugins.publishPlugin(type))
         }
     }
 )(PluginTile);
 
 const DatasourcePluginTile = connect(
-    (state, ownProps) => {
+    (state: State, ownProps: any) => {
         return {
             pluginState: state.datasourcePlugins[ownProps.pluginId]
         }
     },
-    dispatch => {
+    (dispatch: Dispatch) => {
         return {
-            removePlugin: (type) => dispatch(DatasourcePlugins.unloadPlugin(type)),
-            publishPlugin: (type) => {console.log("pub"); dispatch(DatasourcePlugins.publishPlugin(type))}
+            removePlugin: (type: string) => dispatch(DatasourcePlugins.unloadPlugin(type)),
+            publishPlugin: (type: string) => dispatch(Plugins.publishPlugin(type))
         }
     }
 )(PluginTile);

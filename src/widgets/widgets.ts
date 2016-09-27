@@ -91,7 +91,7 @@ export const initialWidgets: IWidgetsState = {
         "id": "106913f4-44fb-4f69-ab89-5d5ae857cf3c",
         "type": "chart",
         "settings": {
-            "name": "Bars",
+            "name": "Random Values",
             "datasource": "initial_random_source",
             "chartType": "spline",
             "dataKeys": "[\"value\", \"value2\"]",

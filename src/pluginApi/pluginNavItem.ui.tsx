@@ -4,13 +4,16 @@
 
 import * as React from 'react'
 import {connect} from 'react-redux'
-import {reset} from "redux-form";
 import * as ModalIds from '../modal/modalDialogIds'
-import * as Modal from '../modal/modalDialog'
-import {PropTypes as Prop}  from "react";
+import * as Modal from '../modal/modalDialog.js'
+import {State, Dispatch} from "../appState";
+
+interface PluginsTopNavItemProps {
+    showPluginsDialog: () => void
+}
 
 
-const PluginsTopNavItem = (props) => {
+const PluginsTopNavItem = (props: PluginsTopNavItemProps) => {
     return <li className="slds-context-bar__item">
         <a href="javascript:void(0);"  onClick={() => props.showPluginsDialog()} className="slds-context-bar__label-action" title="Plugins">
             <span className="slds-truncate">Plugins</span>
@@ -18,16 +21,11 @@ const PluginsTopNavItem = (props) => {
     </li>
 };
 
-PluginsTopNavItem.propTypes = {
-    showPluginsDialog: Prop.func.isRequired
-};
-
-
 export default connect(
-    (state) => {
+    (state: State) => {
         return {}
     },
-    (dispatch) => {
+    (dispatch: Dispatch) => {
         return {
             showPluginsDialog: () => {
                 dispatch(Modal.showModal(ModalIds.PLUGINS))
