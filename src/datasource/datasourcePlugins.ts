@@ -6,6 +6,7 @@ import * as Action from "../actionNames";
 import {genCrudReducer} from "../util/reducer.js";
 import * as AppState from "../appState";
 import Dashboard from "../dashboard";
+import * as ModalDialog from "../modal/modalDialog.js";
 import {ITypeInfo} from "../pluginApi/pluginRegistry";
 
 
@@ -70,6 +71,59 @@ export function unloadPlugin(type: string) {
     }
 }
 
+export function publishPlugin(type: string) {
+    return function (dispatch: AppState.Dispatch, getState: AppState.GetState) {
+        const state = getState()
+        const plugin = state.datasourcePlugins[type]
+
+
+        const registryBaseUrl = "http://localhost:8081" // TODO: Configure in UI
+        const apiKey = 'f1566816767de275ff898dd36a0ee608'  // TODO: Configure in UI
+
+        fetch(plugin.url, {
+            method: 'get'
+        }).then((response) => {
+            return response.text();
+        }).then((scriptContent) => {
+            const data = {
+                "MetaInfo": plugin.typeInfo,
+                "Code": scriptContent
+            }
+
+            return fetch(registryBaseUrl + '/api/plugins/' + type, {
+                method: 'post',
+                body: JSON.stringify(data),
+                headers: {
+                    Authorization: apiKey
+                }
+            })
+        }).then(function (response) {
+            if (response.status >= 400) {
+                return response.json().then((json) => {
+                    if (json.error) {
+                        throw new Error("Failed to publish Plugin: " + json.error);
+                    }
+                    throw new Error("Failed to publish Plugin");
+                })
+            }
+            return response.json();
+        }).then(function (json: any) {
+            dispatch(publishedDatasourcePlugin(type, registryBaseUrl + json.url, json.typeInfo))
+        }).catch(function (err) {
+            dispatch(ModalDialog.addError(err.message))
+        });
+    }
+}
+
+function publishedDatasourcePlugin(type: string, url: string, typeInfo: ITypeInfo) {
+    return {
+        type: Action.PUBLISHED_DATASOURCE_PLUGIN,
+        id: type,
+        url: url,
+        typeInfo: typeInfo
+    }
+}
+
 function deletePlugin(type: string) {
     return {
         type: Action.DELETE_DATASOURCE_PLUGIN,
@@ -82,15 +136,22 @@ export function datasourcePlugins(state: IDatasourcePluginsState = initialState,
 
     state = pluginsCrudReducer(state, action);
     switch (action.type) {
-        case Action.STARTED_LOADING_PLUGIN_FROM_URL:
+        case Action.PUBLISHED_DATASOURCE_PLUGIN: {
             if (state[action.id]) {
                 return _.assign({}, state, {
                     [action.id]: datasourcePlugin(state[action.id], action)
                 });
             }
-            else {
-                return state;
+            return state;
+        }
+        case Action.STARTED_LOADING_PLUGIN_FROM_URL: {
+            if (state[action.id]) {
+                return _.assign({}, state, {
+                    [action.id]: datasourcePlugin(state[action.id], action)
+                });
             }
+            return state;
+        }
         default:
             return state;
     }
@@ -99,6 +160,12 @@ export function datasourcePlugins(state: IDatasourcePluginsState = initialState,
 
 function datasourcePlugin(state: IDatasourcePluginState, action: IDatasourcePluginAction): IDatasourcePluginState {
     switch (action.type) {
+        case Action.PUBLISHED_DATASOURCE_PLUGIN: {
+            return _.assign({}, state, {
+                url: action.url,
+                typeInfo: action.typeInfo
+            });
+        }
         case Action.DATASOURCE_PLUGIN_FINISHED_LOADING:
             if (!action.typeInfo.type) {
                 // TODO: Catch this earlier

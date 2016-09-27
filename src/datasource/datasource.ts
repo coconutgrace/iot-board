@@ -6,7 +6,7 @@ import {genCrudReducer} from "../util/reducer.js";
 import * as ActionNames from "../actionNames";
 import * as Uuid from "../util/uuid.js";
 import * as _ from "lodash";
-import * as ModalIds from "../modal/modalDialogIds.js";
+import * as ModalIds from "../modal/modalDialogIds";
 import * as Modal from "../modal/modalDialog.js";
 import * as AppState from "../appState";
 import {IPersistenceAction} from "../persistence";

@@ -4,26 +4,50 @@
 
 import * as React from 'react'
 import {connect} from 'react-redux'
-import * as Modal from './modalDialog'
-import * as ui from '../ui/elements.ui.js'
-import {PropTypes as Prop}  from "react";
+import * as Modal from './modalDialog.js'
+import * as AppState from '../appState'
+
+export interface IModalDialogState {
+    dialogId: string
+    data: any
+    isVisible: boolean
+    errors: string[]
+}
+
+interface DialogAction {
+    className: string
+    iconClass: string
+    label: string
+    onClick: Function
+}
+
+interface ModalDialogProps {
+    children: any
+    title: string
+    id: string
+    dialogState: IModalDialogState
+    actions: DialogAction[]
+    handlePositive: () => void
+    handleDeny: () => void
+    closeDialog: () => void
+}
 
 
-class ModalDialog extends React.Component {
+class ModalDialog extends React.Component<ModalDialogProps, any> {
 
-    constructor(props) {
+    constructor(props: ModalDialogProps) {
         super(props)
         this.state = {screen: this.screenSize()}
     }
 
     componentDidMount() {
-        const $modal = $('.ui.modal.' + this.props.id);
+        const $modal: any = $('.ui.modal.' + this.props.id);
         $modal.modal({
             detachable: false,
             closable: false,
             observeChanges: true,
-            onApprove: ($element) => false,
-            onDeny: ($element) => false,
+            onApprove: ($element: any) => false,
+            onDeny: ($element: any) => false,
             transition: "fade",
             onVisible: () => {
                 // This is to update the Browser Scrollbar, at least needed in WebKit
@@ -56,7 +80,7 @@ class ModalDialog extends React.Component {
         }
     }
 
-    onClick(e, action) {
+    onClick(e: React.MouseEvent, action: DialogAction) {
         if (action.onClick(e)) {
             // Closing is done externally (by redux)
             this.props.closeDialog();
@@ -87,6 +111,11 @@ class ModalDialog extends React.Component {
                 {props.title}
             </div>
             <div className="content" style={{overflowY: 'scroll', height: height - 300}}>
+                {this.props.dialogState.errors ?
+                    this.props.dialogState.errors.map((message, i) => {
+                        return <ModalErrorComponent key={i} errorMessage={message}/>
+                    })
+                    : null}
                 {props.children}
             </div>
             <div className="actions">
@@ -96,32 +125,58 @@ class ModalDialog extends React.Component {
     }
 }
 
-ModalDialog.propTypes = {
-    children: React.PropTypes.element.isRequired,
-    title: Prop.string.isRequired,
-    id: Prop.string.isRequired,
-    actions: Prop.arrayOf(
-        Prop.shape({
-            className: Prop.string.isRequired,
-            iconClass: Prop.string,
-            label: Prop.string.isRequired,
-            onClick: Prop.func.isRequired
-        })
-    ).isRequired,
-    handlePositive: Prop.func,
-    handleDeny: Prop.func,
-    closeDialog: Prop.func
-};
-
 export default connect(
-    (state) => {
+    (state: AppState.State) => {
         return {
             dialogState: state.modalDialog
         }
     },
-    (dispatch) => {
+    (dispatch: AppState.Dispatch) => {
         return {
             closeDialog: () => dispatch(Modal.closeModal())
         }
     }
 )(ModalDialog)
+
+interface ModalErrorProps {
+    errorMessage: string
+    close: (message: string) => void
+}
+
+class ModalError extends React.Component<ModalErrorProps, any> {
+    close() {
+        this.props.close(this.props.errorMessage)
+    }
+
+    render() {
+        return <div className="slds-notify_container slds-is-relative slds-m-bottom--x-small">
+            <div className="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+                <button className="slds-button slds-notify__close slds-button--icon-inverse"
+                        onClick={() => this.close()}
+                >
+                    <svg aria-hidden="true" className="slds-button__icon">
+                        <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span className="slds-assistive-text">Close</span>
+                </button>
+                <span className="slds-assistive-text">Error</span>
+                <h2>{this.props.errorMessage}</h2>
+            </div>
+        </div>
+    }
+}
+
+const ModalErrorComponent = connect(
+    (state: AppState.State, ownProps: any) => {
+        return {
+            errorMessage: ownProps.errorMessage
+        }
+    },
+    (dispatch: AppState.Dispatch) => {
+        return {
+            close: (message: string) => {
+                dispatch(Modal.deleteError(message))
+            }
+        }
+    }
+)(ModalError)

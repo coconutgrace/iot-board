@@ -21,6 +21,7 @@ export default class Dashboard {
     private _initialized: boolean = false;
 
     private _scriptsLoading: {[url: string]: Promise<void>} = {};
+    private _lastLoadingUrls: string[];
 
     constructor(private _store: DashboardStore) {
         this._datasourcePluginRegistry = new DatasourcePluginRegistry(_store);
@@ -30,6 +31,10 @@ export default class Dashboard {
             // Whenever a datasource is added that is still loading, we create an instance and update the loading state
             const state = _store.getState();
 
+            if (this._lastLoadingUrls === state.pluginLoader.loadingUrls) {
+                return;
+            }
+            this._lastLoadingUrls = state.pluginLoader.loadingUrls;
             state.pluginLoader.loadingUrls.forEach((urlToLoad) => {
                 if (!this._scriptsLoading[urlToLoad]) {
                     this.loadPluginScript(urlToLoad);
@@ -93,6 +98,7 @@ export default class Dashboard {
     }
 
     private loadPluginScript(url: string): Promise<void> {
+        console.log("Start loading plugin from: " + url)
         const loadScriptsPromise = scriptloader.loadScript([url]);
 
         this._scriptsLoading[url] = loadScriptsPromise.then(() => {
@@ -120,6 +126,7 @@ export default class Dashboard {
                 return Promise.resolve<void>();
             }).catch((error) => {
                 console.warn("Failed to load script: ", error)
+                delete this._scriptsLoading[url];
                 this._store.dispatch(Plugins.pluginFailedLoading(url));
             })
         /*.catch((error) => {

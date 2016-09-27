@@ -5,8 +5,7 @@
 import * as React from 'react'
 import {connect} from 'react-redux'
 import * as Import from './import'
-import ModalDialog from '../modal/modalDialog.ui.js'
-import * as ModalIds from '../modal/modalDialogIds'
+import ModalDialog from '../modal/modalDialog.ui'
 import {PropTypes as Prop}  from "react";
 
 class ImportExportDialog extends React.Component {
@@ -69,7 +68,7 @@ class ImportExportDialog extends React.Component {
             }
         ];
 
-        return <ModalDialog id={ModalIds.DASHBOARD_IMPORT_EXPORT}
+        return <ModalDialog id="dashboard-import-export-dialog"
                             title="Import / Export Dashboard"
                             actions={actions}
         >

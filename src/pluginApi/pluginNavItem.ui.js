@@ -12,7 +12,7 @@ import {PropTypes as Prop}  from "react";
 
 const PluginsTopNavItem = (props) => {
     return <li className="slds-context-bar__item">
-        <a href="javascript:void(0);"  onClick={() => props.showPluginsDialog()} className="slds-context-bar__label-action" title="Menu Item 1">
+        <a href="javascript:void(0);"  onClick={() => props.showPluginsDialog()} className="slds-context-bar__label-action" title="Plugins">
             <span className="slds-truncate">Plugins</span>
         </a>
     </li>

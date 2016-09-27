@@ -4,8 +4,10 @@
 
 import * as Action from "../actionNames";
 import * as AppState from "../appState";
+import * as ModalDialog from "../modal/modalDialog.js"
 import {IPluginModule} from "./pluginRegistry";
 import {IDatasourcePluginModule} from "../datasource/datasourcePluginRegistry";
+import {Dispatch} from "../appState";
 
 const initialState: IPluginLoaderState = {
     loadingUrls: []
@@ -29,10 +31,14 @@ export function startLoadingPluginFromUrl(url: string, id?: string): IPluginLoad
 }
 
 export function pluginFailedLoading(url: string) {
-    return {
-        type: Action.PLUGIN_FAILED_LOADING,
-        url
-    };
+    return (dispatch: Dispatch) => {
+        dispatch(ModalDialog.addError("Failed to load plugin from " + url))
+
+        dispatch({
+            type: Action.PLUGIN_FAILED_LOADING,
+            url
+        })
+    }
 }
 
 export function widgetPluginFinishedLoading(plugin: IPluginModule, url: string = null) {

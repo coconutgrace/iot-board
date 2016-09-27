@@ -9,8 +9,9 @@ import * as DatasourcePlugins from './datasource/datasourcePlugins'
 import * as Config from './config'
 import * as Plugins from './pluginApi/plugins'
 import {IWidgetPluginsState} from "./widgets/widgetPlugins";
+import {IModalDialogState} from "./modal/modalDialog.ui";
 
-export type Dispatch = Redux.Dispatch<State>
+export type Dispatch = (action: any) => any
 export type GetState = () => State
 export type ThunkAction = Redux.ThunkAction<any, State, any>
 export interface Action extends Redux.Action {
@@ -31,11 +32,7 @@ export interface State {
     modalDialog: IModalDialogState
 }
 
-export interface IModalDialogState {
-    dialogId: string
-    data: any
-    isVisible: boolean
-}
+
 
 // TODO: move to dashboard/global when converted to ts
 export interface IGlobalState {

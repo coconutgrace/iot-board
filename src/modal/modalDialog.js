@@ -70,20 +70,49 @@ export function closeModal() {
     }
 }
 
+export function addError(message) {
+    return {
+        type: Action.MODAL_ADD_ERROR,
+        message: message
+    }
+}
+
+export function deleteError(message) {
+    return {
+        type: Action.MODAL_DELETE_ERROR,
+        message: message
+    }
+}
+
 export function modalDialog(state = initialState, action) {
     switch (action.type) {
         case Action.SHOW_MODAL:
             return Object.assign({}, state, {
                 dialogId: action.dialogId,
                 data: action.data,
-                isVisible: true
+                isVisible: true,
+                errors: []
             });
         case Action.HIDE_MODAL:
             return Object.assign({}, state, {
                 dialogId: null,
                 data: null,
-                isVisible: false
+                isVisible: false,
+                errors: []
             });
+        case Action.MODAL_ADD_ERROR: {
+            const stateErrors = state.errors || []
+            const errors = [...stateErrors, action.message]
+            return Object.assign({}, state, {
+                errors: errors
+            });
+        }
+        case Action.MODAL_DELETE_ERROR: {
+            const errors = _.filter([...state.errors], (e) => e != action.message)
+            return Object.assign({}, state, {
+                errors: errors
+            });
+        }
         default:
             return state;
     }

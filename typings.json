@@ -5,6 +5,7 @@
   },
   "globalDependencies": {
     "es6-promise": "registry:dt/es6-promise",
+    "isomorphic-fetch": "registry:dt/isomorphic-fetch",
     "jquery": "registry:dt/jquery",
     "lodash": "registry:dt/lodash",
     "object-assign": "registry:dt/object-assign",

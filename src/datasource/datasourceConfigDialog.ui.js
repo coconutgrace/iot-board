@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
-import ModalDialog from '../modal/modalDialog.ui.js'
+import ModalDialog from '../modal/modalDialog.ui'
 import * as Datasource from './datasource'
 import {connect} from 'react-redux'
 import * as _ from 'lodash'

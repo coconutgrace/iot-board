@@ -127,7 +127,6 @@ WidgetButton.propTypes = {
     description: Prop.string,
     iconType: Prop.string,
     visible: Prop.bool,
-    className: Prop.string.isRequired,
     onClick: Prop.func.isRequired
 };
 

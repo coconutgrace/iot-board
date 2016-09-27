@@ -4,6 +4,7 @@
 
 import {IDatasourcePlugin} from "../datasource/datasourcePluginFactory";
 import {ITypeInfo} from "./pluginRegistry";
+import {IWidgetPlugin} from "../widgets/widgetPluginFactory";
 /**
  * When a Plugin is loaded via the UI, an action is called to do so.
  * The action will load an external script, containing the plugin code, which calls one of the API methods here.
@@ -34,8 +35,7 @@ export function registerDatasourcePlugin(typeInfo: ITypeInfo, datasource: IDatas
     });
 }
 
-// TODO: type Widget as soon as it is in typescript
-export function registerWidgetPlugin(typeInfo: ITypeInfo, widget: any) {
+export function registerWidgetPlugin(typeInfo: ITypeInfo, widget: IWidgetPlugin) {
     console.assert(!hasPlugin(), "Plugin must be finished loading before another can be registered", pluginCache);
     pluginCache = ({
         TYPE_INFO: typeInfo,

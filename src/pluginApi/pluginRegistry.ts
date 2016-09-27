@@ -15,6 +15,8 @@ export interface IPluginModule {
 
 export interface ITypeInfo {
     type: string // The name of the type - must be unique
+    author?: string // The creator of the plugin
+    version?: string // The version of the plugin, use semantic versioning (e.g. 1.4.2)
     name?: string // The user friendly name of the Plugin
     description?: string // A user friendly description that explains the Plugin
     dependencies?: string[] // A list of URL's to load external scripts from. Some scripts like jQuery will be available by default in future

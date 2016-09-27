@@ -19,8 +19,7 @@ import PluginNavItem from "./pluginApi/pluginNavItem.ui.js";
 import PluginsDialog from "./pluginApi/pluginsDialog.ui.js";
 import * as Persistence from "./persistence";
 import {IConfigState} from "./config";
-import {DashboardStore} from "./store";
-import {State, IModalDialogState} from "./appState";
+import {State} from "./appState";
 
 interface LayoutProps {
     setReadOnly(readOnly: boolean): void

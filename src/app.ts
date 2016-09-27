@@ -13,8 +13,9 @@ import "./pluginApi/freeboardPluginApi";
 import "./pluginApi/pluginApi";
 import "./app.css";
 import "file?name=[name].[ext]!./index.html";
-import "es6-promise";
 import "react-grid-layout/css/styles.css";
+import "isomorphic-fetch";
+import * as es6promise from "es6-promise";
 import * as Renderer from "./renderer.js";
 import * as Store from "./store";
 import * as Persist from "./persistence";
@@ -23,6 +24,7 @@ import * as $ from 'jquery'
 import * as AppState from './appState'
 
 const loadPredefinedState = $.get('./dashboard.json');
+es6promise.polyfill()
 
 loadPredefinedState.then((data) => {
     console.log("Starting dashboard with predefined state");

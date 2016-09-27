@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
-import ModalDialog from "../modal/modalDialog.ui.js";
+import ModalDialog from "../modal/modalDialog.ui.tsx";
 import * as WidgetPlugins from "./widgetPlugins";
 import * as WidgetConfig from "./widgetConfig";
 import {connect} from "react-redux";

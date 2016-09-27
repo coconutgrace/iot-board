@@ -15,7 +15,7 @@ const DatasourceTopNavItem = (props) => {
     return <li
         className="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger--hover"
         aria-haspopup="true">
-        <a href="javascript:void(0);" className="slds-context-bar__label-action" title="Menu Item">
+        <a href="javascript:void(0);" className="slds-context-bar__label-action" title="Datasources">
             <span className="slds-truncate">Datasources</span>
         </a>
         <div className="slds-context-bar__icon-action slds-p-left--none" tabindex="0">

@@ -5,7 +5,7 @@
 import * as Widgets from "./widgets";
 import {START_CREATE_WIDGET, START_CONFIGURE_WIDGET} from "../actionNames";
 import * as Modal from "../modal/modalDialog";
-import * as ModalIds from "../modal/modalDialogIds";
+import * as ModalIds from "../modal/modalDialogIds.ts";
 
 const initialState = {
     type: null,

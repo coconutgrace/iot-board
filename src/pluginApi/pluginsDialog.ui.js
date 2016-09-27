@@ -3,12 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as React from 'react'
-import ModalDialog from '../modal/modalDialog.ui.js'
+import ModalDialog from '../modal/modalDialog.ui'
 import {connect} from 'react-redux'
 import * as _ from 'lodash'
 import {reset} from 'redux-form';
-import * as ui from '../ui/elements.ui'
-import * as ModalIds from '../modal/modalDialogIds'
 import * as Modal from '../modal/modalDialog'
 import * as Plugins from '../pluginApi/plugins'
 import * as WidgetsPlugins from '../widgets/widgetPlugins'
@@ -34,7 +32,7 @@ class PluginsModal extends React.Component {
         const datasourcePluginStates = _.valuesIn(props.datasourcePlugins);
         const widgetPluginStates = _.valuesIn(props.widgetPlugins);
 
-        return <ModalDialog id={ModalIds.PLUGINS}
+        return <ModalDialog id="plugins-dialog"
                             title="Plugins"
                             actions={actions}
         >
@@ -105,7 +103,7 @@ const DatasourcePluginList = (props) => {
     return <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
         {
             props.datasourceStates.map(dsState => {
-                return <DatasourcePluginTile key={dsState.id} pluginState={dsState} {...props}/>;
+                return <DatasourcePluginTile key={dsState.id} pluginId={dsState.id}/>;
             })
         }
     </div>
@@ -124,7 +122,7 @@ const WidgetPluginList = (props) => {
     return <div className="slds-grid slds-grid--vertical-stretch slds-wrap slds-has-dividers--around-space">
         {
             props.widgetPluginStates.map(dsState => {
-                return <WidgetPluginTile key={dsState.id} pluginState={dsState} {...props}/>;
+                return <WidgetPluginTile key={dsState.id} pluginId={dsState.id}/>;
             })
         }
     </div>
@@ -159,15 +157,16 @@ class PluginTile extends React.Component {
     render() {
         const props = this.props;
         const pluginState = props.pluginState;
+        console.log("Render plugin tile with state", pluginState)
         const description = pluginState.typeInfo.description ? pluginState.typeInfo.description : "No Description."
         const url = pluginState.url ? pluginState.url : "Packaged"
 
-        return <div className="slds-tile slds-item slds-size--1-of-5 slds-m-around--x-small xxslds-p-left--small xxslds-p-right--small" style={{marginTop:"0.5rem"}}>
+        return <div className="slds-tile slds-item slds-size--1-of-5 slds-m-around--x-small xxslds-p-left--small xxslds-p-right--small" style={{marginTop: "0.5rem"}}>
             <div className="slds-grid slds-grid--align-spread slds-has-flexi-truncate slds-m-bottom--x-small">
                 <h3 className="slds-text-heading--medium">{pluginState.typeInfo.name}</h3>
                 <div className={"slds-shrink-none slds-dropdown-trigger slds-dropdown-trigger--click" + (this.state.actionMenuOpen ? " slds-is-open" : "")}>
                     <button className="slds-button slds-button--icon-border-filled slds-button--icon-x-small" aria-haspopup="true"
-                            onClick={() => this.toggleActionMenu()} onBlur={() => setTimeout(()=>this.closeActionMenu(), 50)}
+                            onClick={() => this.toggleActionMenu()} onBlur={() => setTimeout(()=>this.closeActionMenu(), 200)}
                     >
                         <svg aria-hidden="true" className="slds-button__icon slds-button__icon--hint">
                             <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#down"></use>
@@ -182,7 +181,15 @@ class PluginTile extends React.Component {
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#delete"/>
                                     </svg>
                                     <span className="slds-truncate">Remove</span>
+                                </a>
+                            </li>
 
+                            <li className="slds-dropdown__item" role="presentation">
+                                <a href="javascript:void(0);" role="menuitem" tabIndex="0" onClick={() => props.publishPlugin(pluginState.id)}>
+                                    <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
+                                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#upload"/>
+                                    </svg>
+                                    <span className="slds-truncate">Publish</span>
                                 </a>
                             </li>
                         </ul>
@@ -198,6 +205,19 @@ class PluginTile extends React.Component {
                         <p className="slds-truncate" title={pluginState.typeInfo.type}>{pluginState.typeInfo.type}</p>
                     </dd>
                     <dt className="slds-dl--horizontal__label">
+                        <p className="slds-truncate" title="Version">Version:</p>
+                    </dt>
+                    <dd className="slds-dl--horizontal__detail slds-tile__meta">
+                        <p className="slds-truncate" title={pluginState.typeInfo.version}>{pluginState.typeInfo.version}</p>
+                    </dd>
+
+                    <dt className="slds-dl--horizontal__label">
+                        <p className="slds-truncate" title="Author">Author:</p>
+                    </dt>
+                    <dd className="slds-dl--horizontal__detail slds-tile__meta">
+                        <p className="slds-truncate" title={pluginState.typeInfo.author}>{pluginState.typeInfo.author}</p>
+                    </dd>
+                    <dt className="slds-dl--horizontal__label">
                         <p className="slds-truncate" title="Type">Url:</p>
                     </dt>
                     <dd className="slds-dl--horizontal__detail slds-tile__meta">
@@ -210,24 +230,27 @@ class PluginTile extends React.Component {
                                    readOnly
                                    style={{width: "100%", paddingRight: 0}}
                                    placeholder="Plugin Url ..."
-                                   defaultValue={url}/>
+                                   value={url}/>
                         </div>
                     </dd>
                 </dl>
-                <p>{description}</p>
+                <p className="slds-m-top--x-small">{description}</p>
             </div>
         </div>
     }
 }
 
 PluginTile.propTypes = {
+    pluginId: Prop.string.isRequired,
     pluginState: Prop.object.isRequired,
     removePlugin: Prop.func.isRequired
 };
 
 const WidgetPluginTile = connect(
-    state => {
-        return {}
+    (state, ownProps) => {
+        return {
+            pluginState: state.widgetPlugins[ownProps.pluginId]
+        }
     },
     dispatch => {
         return {
@@ -237,12 +260,15 @@ const WidgetPluginTile = connect(
 )(PluginTile);
 
 const DatasourcePluginTile = connect(
-    state => {
-        return {}
+    (state, ownProps) => {
+        return {
+            pluginState: state.datasourcePlugins[ownProps.pluginId]
+        }
     },
     dispatch => {
         return {
-            removePlugin: (type) => dispatch(DatasourcePlugins.unloadPlugin(type))
+            removePlugin: (type) => dispatch(DatasourcePlugins.unloadPlugin(type)),
+            publishPlugin: (type) => {console.log("pub"); dispatch(DatasourcePlugins.publishPlugin(type))}
         }
     }
 )(PluginTile);
