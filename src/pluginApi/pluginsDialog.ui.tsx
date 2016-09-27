@@ -2,19 +2,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import * as React from 'react'
-import ModalDialog from '../modal/modalDialog.ui'
-import {connect} from 'react-redux'
-import * as _ from 'lodash'
-import * as Modal from '../modal/modalDialog.js'
-import * as Plugins from '../pluginApi/plugins'
-import * as WidgetsPlugins from '../widgets/widgetPlugins'
-import * as DatasourcePlugins from '../datasource/datasourcePlugins'
-import {IDatasourcePluginsState} from "../datasource/datasourcePlugins";
-import {IWidgetPluginsState} from "../widgets/widgetPlugins";
+import * as React from "react";
+import ModalDialog from "../modal/modalDialog.ui";
+import {connect} from "react-redux";
+import * as _ from "lodash";
+import * as Modal from "../modal/modalDialog.js";
+import * as Plugins from "../pluginApi/plugins";
+import * as WidgetsPlugins from "../widgets/widgetPlugins";
+import {IWidgetPluginsState, IWidgetPluginState} from "../widgets/widgetPlugins";
+import * as DatasourcePlugins from "../datasource/datasourcePlugins";
+import {IDatasourcePluginsState, IDatasourcePluginState} from "../datasource/datasourcePlugins";
 import {Dispatch, State} from "../appState";
-import {IDatasourcePluginState} from "../datasource/datasourcePlugins";
-import {IWidgetPluginState} from "../widgets/widgetPlugins";
+import FormEvent = __React.FormEvent;
+import {ITypeInfo} from "./pluginRegistry";
 
 interface PluginsModalProps {
     datasourcePlugins: IDatasourcePluginsState
@@ -23,7 +23,36 @@ interface PluginsModalProps {
     loadPlugin: (url: string) => void
 }
 
-class PluginsModal extends React.Component<PluginsModalProps, void> {
+interface PluginsModalState {
+    pluginUrl?: string
+    isSearchOpen?: boolean
+}
+
+class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState> {
+
+    constructor(props: PluginsModalProps) {
+        super(props)
+        this.state = {
+            pluginUrl: "",
+            isSearchOpen: false
+        }
+    }
+
+    pluginSearchValueChange(e: FormEvent) {
+        const pluginUrlInput: any = this.refs['pluginUrl'] // HTMLInputElement
+        this.setState({pluginUrl: pluginUrlInput.value});
+    }
+
+    onBlurPluginSearchInput(e: FormEvent) {
+        setTimeout(() => {
+            this.setState({isSearchOpen: false});
+        }, 300)
+
+    }
+
+    onFocusPluginSearchInput(e: FormEvent) {
+        this.setState({isSearchOpen: true});
+    }
 
     render() {
         const props = this.props;
@@ -56,24 +85,31 @@ class PluginsModal extends React.Component<PluginsModalProps, void> {
                               e.preventDefault()
                           }}
                     >
-                        <div className="slds-form-element slds-has-flexi-truncate">
+                        <div className={"slds-form-element slds-has-flexi-truncate slds-lookup" + (this.state.isSearchOpen ? " slds-is-open" : "")} data-select="single">
                             <div className="slds-form-element__control slds-size--1-of-1">
                                 <div className="slds-input-has-icon slds-input-has-icon--right">
                                     <svg aria-hidden="true" className="slds-input__icon">
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#search"></use>
                                     </svg>
                                     <input className="slds-lookup__search-input slds-input" type="search" placeholder="URL or Id from Plugin Registry"
-                                           id="plugin-url-input" ref="pluginUrl" name="plugin-url"
+                                           id="plugin-lookup-menu" ref="pluginUrl"
                                            defaultValue="plugins/TestWidgetPlugin.js"
+                                           onChange={(e) => this.pluginSearchValueChange(e)}
+                                           onBlur={(e) => this.onBlurPluginSearchInput(e)}
+                                           onFocus={(e) => this.onFocusPluginSearchInput(e)}
+                                           aria-owns="plugin-lookup-menu" role="combobox" aria-activedescendent=""
+                                           aria-expanded={(this.state.isSearchOpen ? "true" : "false")} aria-autocomplete="list"
                                     />
                                 </div>
                             </div>
+                            <LookupMenu id="plugin-lookup-menu" searchString={this.state.pluginUrl}/>
                         </div>
                         <div className="slds-form-element slds-no-flex">
                             <button className="slds-button slds-button--brand" type="submit" tabIndex="0">
                                 Load&nbsp;Plugin
                             </button>
                         </div>
+
                     </form>
 
                     <h4 className="slds-section-title--divider slds-m-top--medium slds-m-bottom--medium">Datasource Plugins (Installed)</h4>
@@ -94,10 +130,14 @@ class PluginsModal extends React.Component<PluginsModalProps, void> {
     }
 }
 
-export default connect(
+export
+default
+
+connect(
     (state: State) => {
         return {
-            widgetPlugins: state.widgetPlugins,
+            widgetPlugins: state.widgetPlugins
+            ,
             datasourcePlugins: state.datasourcePlugins
         }
     },
@@ -109,7 +149,8 @@ export default connect(
             loadPlugin: (url: string) => dispatch(Plugins.startLoadingPluginFromUrl(url))
         }
     }
-)(PluginsModal);
+)
+(PluginsModal);
 
 
 class PluginTileProps {
@@ -148,7 +189,7 @@ class PluginTile extends React.Component<PluginTileProps, any> {
         const description = pluginState.typeInfo.description ? pluginState.typeInfo.description : "No Description."
         const url = pluginState.url ? pluginState.url : "Packaged"
 
-        return <div className="slds-tile slds-item slds-size--1-of-5 slds-m-around--x-small xxslds-p-left--small xxslds-p-right--small" style={{marginTop: "0.5rem"}}>
+        return <div className="slds-tile slds-item slds-size--1-of-5 slds-m-around--x-small" style={{marginTop: "0.5rem"}}>
             <div className="slds-grid slds-grid--align-spread slds-has-flexi-truncate slds-m-bottom--x-small">
                 <h3 className="slds-text-heading--medium">{pluginState.typeInfo.name}</h3>
                 <div className={"slds-shrink-none slds-dropdown-trigger slds-dropdown-trigger--click" + (this.state.actionMenuOpen ? " slds-is-open" : "")}>
@@ -255,3 +296,76 @@ const DatasourcePluginTile = connect(
         }
     }
 )(PluginTile);
+
+
+interface LookupMenuProps {
+    id: string
+    searchString: string
+}
+
+interface LookupMenuState {
+    searchResult: ITypeInfo[]
+}
+
+class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
+
+    constructor(props: LookupMenuProps) {
+        super(props)
+        this.state = {
+            searchResult: []
+        }
+    }
+
+    componentWillReceiveProps(nextProps: LookupMenuProps) {
+        if (!nextProps.searchString) {
+            this.setState({
+                searchResult: []
+            })
+            return;
+        }
+
+        fetch("http://localhost:8081/api/plugins/?q=" + nextProps.searchString)
+            .then((result) => {
+                return result.json()
+            })
+            .then((json: any) => {
+                this.setState({
+                    searchResult: json.plugins
+                })
+            })
+    }
+
+    render() {
+        const props = this.props;
+
+        /*Icons for Widget = dashboard, report, poll / Datasource = feed */
+
+        return <div className="slds-lookup__menu" id={props.id}>
+            <ul className="slds-lookup__list" role="presentation">
+                <li role="presentation">
+                    <span className="slds-lookup__item-action slds-lookup__item-action--label" id="lookup-option-368" role="option">
+                      <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default">
+                        <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                      </svg>
+                      <span className="slds-truncate">&quot;{props.searchString}&quot; in plugin registry</span>
+                    </span>
+                </li>
+                {
+                    this.state.searchResult.map((item) => {
+                        return <li role="presentation" key={item.type}>
+                    <span className="slds-lookup__item-action slds-media slds-media--center" id="lookup-option-369" role="option">
+                      <svg aria-hidden="true" className="slds-icon slds-icon-standard-account slds-icon--small slds-media__figure">
+                        <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#dashboard"></use>
+                      </svg>
+                      <div className="slds-media__body">
+                        <div className="slds-lookup__result-text"><mark>{item.name}</mark> ({item.type})</div>
+                        <span className="slds-lookup__result-meta slds-text-body--small">DS/Widget • by {item.author} • {item.description}</span>
+                      </div>
+                    </span>
+                        </li>
+                    })
+                }
+            </ul>
+        </div>
+    }
+}
