@@ -82,7 +82,14 @@ export const widgetPropType = Prop.shape({
 
 WidgetFrame.propTypes = {
     widget: widgetPropType.isRequired,
-    widgetPlugin: WidgetPlugins.widgetPluginType.isRequired,
+    widgetPlugin: Prop.shape({
+        id: Prop.string.isRequired,
+        typeInfo: Prop.shape({
+            type: Prop.string.isRequired,
+            name: Prop.string.isRequired,
+            settings: Prop.array
+        })
+    }).isRequired,
     isReadOnly: Prop.bool.isRequired
 };
 

@@ -4,7 +4,6 @@
 
 import * as Action from "../actionNames";
 import {genCrudReducer} from "../util/reducer.js";
-import {PropTypes as Prop} from "react";
 import Dashboard from "../dashboard";
 import * as AppState from "../appState";
 import {ITypeInfo} from "../pluginApi/pluginRegistry";
@@ -32,16 +31,6 @@ const initialState: IWidgetPluginsState = {
     }
 
 };
-
-// TODO: Remove when not used anymore
-export const widgetPluginType = Prop.shape({
-    id: Prop.string.isRequired,
-    typeInfo: Prop.shape({
-        type: Prop.string.isRequired,
-        name: Prop.string.isRequired,
-        settings: Prop.array
-    })
-});
 
 export interface IWidgetPluginsState {
     [id: string]: IWidgetPluginState

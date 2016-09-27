@@ -46,7 +46,14 @@ const WidgetsNavItem = (props) => {
 
 WidgetsNavItem.propTypes = {
     widgetPlugins: Prop.objectOf(
-        WidgetPlugins.widgetPluginType
+        Prop.shape({
+            id: Prop.string.isRequired,
+            typeInfo: Prop.shape({
+                type: Prop.string.isRequired,
+                name: Prop.string.isRequired,
+                settings: Prop.array
+            })
+        })
     )
 };
 

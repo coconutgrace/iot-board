@@ -6,7 +6,6 @@ import * as Action from "../actionNames";
 import {genCrudReducer} from "../util/reducer.js";
 import * as AppState from "../appState";
 import Dashboard from "../dashboard";
-import * as ModalDialog from "../modal/modalDialog.js";
 import {ITypeInfo} from "../pluginApi/pluginRegistry";
 
 

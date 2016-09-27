@@ -140,7 +140,14 @@ WidgetConfigModal.propTypes = {
     resetForm: Prop.func.isRequired,  // reset
     widgetType: Prop.string,
     widgetSettings: Prop.object.isRequired,
-    widgetPlugin: WidgetPlugins.widgetPluginType
+    widgetPlugin: Prop.shape({
+        id: Prop.string.isRequired,
+        typeInfo: Prop.shape({
+            type: Prop.string.isRequired,
+            name: Prop.string.isRequired,
+            settings: Prop.array
+        })
+    })
 };
 
 export default connect(
