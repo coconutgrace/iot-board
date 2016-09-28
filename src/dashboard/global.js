@@ -5,8 +5,7 @@
 import * as Action from '../actionNames'
 
 export const initialState = {
-    isReadOnly: false,
-    devMode: true
+    isReadOnly: false
 };
 
 

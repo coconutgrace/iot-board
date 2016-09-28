@@ -7,7 +7,7 @@ import * as Datasource from './datasource/datasource'
 import * as Widgets from './widgets/widgets'
 import * as DatasourcePlugins from './datasource/datasourcePlugins'
 import * as Config from './config'
-import * as Plugins from './pluginApi/plugins'
+import * as Plugins from './pluginApi/pluginLoader'
 import {IWidgetPluginsState} from "./widgets/widgetPlugins";
 import {IModalDialogState} from "./modal/modalDialog.ui";
 

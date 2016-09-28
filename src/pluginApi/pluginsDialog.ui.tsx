@@ -7,7 +7,8 @@ import ModalDialog from "../modal/modalDialog.ui";
 import {connect} from "react-redux";
 import * as _ from "lodash";
 import * as Modal from "../modal/modalDialog.js";
-import * as Plugins from "../pluginApi/plugins";
+import * as Config from "../config";
+import * as Plugins from "../pluginApi/pluginLoader";
 import * as WidgetsPlugins from "../widgets/widgetPlugins";
 import {IWidgetPluginsState, IWidgetPluginState} from "../widgets/widgetPlugins";
 import * as DatasourcePlugins from "../datasource/datasourcePlugins";
@@ -19,8 +20,11 @@ import {ITypeInfo} from "./pluginRegistry";
 interface PluginsModalProps {
     datasourcePlugins: IDatasourcePluginsState
     widgetPlugins: IWidgetPluginsState
+    pluginRegistryApiKey: string
+    pluginRegistryUrl: string
     closeDialog: () => void
     loadPlugin: (url: string) => void
+    setConfigValue: (key: string, value: any) => void
 }
 
 interface PluginsModalState {
@@ -78,7 +82,14 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
         >
             <div className="slds-grid">
                 <div className="slds-size--1-of-1">
-                    <h2 className="slds-section-title--divider slds-m-bottom--medium">Load Plugin</h2>
+                    <h2 className="slds-section-title--divider slds-m-bottom--medium">
+                        Load Plugin <PluginRegistrySettings
+                        pluginRegistryApiKey={props.pluginRegistryApiKey}
+                        pluginRegistryUrl={props.pluginRegistryUrl}
+                        onApiKeyChanged={(key) => this.props.setConfigValue("pluginRegistryApiKey", key)}
+                        onRegistryUrlChanged={(url) =>  this.props.setConfigValue("pluginRegistryUrl", url)}
+                    />
+                    </h2>
                     <form className="slds-form--inline slds-grid"
                           onSubmit={(e) => {
                               props.loadPlugin(pluginUrlInput.value);
@@ -104,7 +115,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                                 </div>
                             </div>
                             <LookupMenu id="plugin-lookup-menu" searchString={this.state.pluginUrl}
-                                        onItemClicked={(item: ITypeInfo) => props.loadPlugin('plugin://'+ item.type)}
+                                        onItemClicked={(item: ITypeInfo) => props.loadPlugin('plugin://' + item.type)}
                             />
                         </div>
                         <div className="slds-form-element slds-no-flex">
@@ -136,9 +147,10 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
 export default connect(
     (state: State) => {
         return {
-            widgetPlugins: state.widgetPlugins
-            ,
-            datasourcePlugins: state.datasourcePlugins
+            widgetPlugins: state.widgetPlugins,
+            datasourcePlugins: state.datasourcePlugins,
+            pluginRegistryApiKey: state.config.pluginRegistryApiKey,
+            pluginRegistryUrl: state.config.pluginRegistryUrl
         }
     },
     (dispatch: Dispatch) => {
@@ -146,7 +158,8 @@ export default connect(
             closeDialog: () => dispatch(Modal.closeModal()),
             // TODO: Render loading indicator while Plugin loads
             // maybe build some generic solution for Ajax calls where the state can hold all information to render loading indicators / retry buttons etc...
-            loadPlugin: (url: string) => dispatch(Plugins.startLoadingPluginFromUrl(url))
+            loadPlugin: (url: string) => dispatch(Plugins.startLoadingPluginFromUrl(url)),
+            setConfigValue: (key: string, value: any) => dispatch(Config.setConfigValue(key, value))
         }
     }
 )
@@ -367,6 +380,101 @@ class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
                     })
                 }
             </ul>
+        </div>
+    }
+}
+
+interface RegistrySettingsProps {
+    pluginRegistryApiKey: string
+    pluginRegistryUrl: string
+    onRegistryUrlChanged(value: string): void
+    onApiKeyChanged(value: string): void
+}
+
+interface RegistrySettingsState {
+    actionMenuOpen: boolean
+}
+
+class PluginRegistrySettings extends React.Component<RegistrySettingsProps, RegistrySettingsState> {
+
+    private timeout: number
+
+    constructor(props: RegistrySettingsProps) {
+        super(props)
+        this.state = {actionMenuOpen: false}
+    }
+
+    toggleActionMenu() {
+        this.clearTimeout()
+        this.setState({actionMenuOpen: !this.state.actionMenuOpen})
+    }
+
+    closeActionMenu() {
+        this.clearTimeout()
+        this.setState({actionMenuOpen: false})
+    }
+
+    closeActionMenuIn(ms: number) {
+        this.clearTimeout()
+        this.timeout = setTimeout(() => this.closeActionMenu(), ms)
+    }
+
+    clearTimeout() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+    }
+
+    onRegistryUrlChanged(e: FormEvent) {
+        const target: any = e.target;
+        this.props.onRegistryUrlChanged(target.value)
+    }
+
+    onApiKeyChanged(e: FormEvent) {
+        const target: any = e.target;
+        this.props.onApiKeyChanged(target.value)
+    }
+
+    render() {
+        return <div className={"slds-shrink-none slds-dropdown-trigger slds-dropdown-trigger--click" + (this.state.actionMenuOpen ? " slds-is-open" : "")}>
+            <button className="slds-button slds-button--icon-border-filled slds-button--icon-x-small" aria-haspopup="true"
+                    onClick={() => this.toggleActionMenu()} onBlur={() => this.closeActionMenuIn(200)}
+            >
+                <svg aria-hidden="true" className="slds-button__icon slds-button__icon--hint">
+                    <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#settings"></use>
+                </svg>
+                <span className="slds-assistive-text">Actions</span>
+            </button>
+            <div className="slds-dropdown slds-dropdown--left slds-dropdown--large">
+                <ul className="dropdown__list" role="menu">
+                    <li className="slds-dropdown__item" role="presentation">
+                        <span className="slds-truncate slds-m-around--x-small">Registry Url</span>
+                    </li>
+                    <li className="slds-dropdown__item" role="presentation">
+                        <div className="slds-form-element__control">
+                            <input className="slds-input" type="text" placeholder="http://dashboard.lobaro.com"
+                                   defaultValue={this.props.pluginRegistryUrl}
+                                   onFocus={() => this.clearTimeout()}
+                                   onBlur={() => this.closeActionMenuIn(200)}
+                                   onChange={(e) => this.onRegistryUrlChanged(e)}
+                            />
+                        </div>
+                    </li>
+                    <li className="slds-dropdown__item" role="presentation">
+                        <span className="slds-truncate slds-m-around--x-small">Api Key</span>
+                    </li>
+                    <li className="slds-dropdown__item" role="presentation">
+                        <div className="slds-form-element__control">
+                            <input className="slds-input" type="text" placeholder="Api Key"
+                                   defaultValue={this.props.pluginRegistryApiKey}
+                                   onFocus={() => this.clearTimeout()}
+                                   onBlur={() => this.closeActionMenuIn(200)}
+                                   onChange={(e) => this.onApiKeyChanged(e)}
+                            />
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     }
 }

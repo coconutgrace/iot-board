@@ -6,7 +6,7 @@ import {assert} from "chai";
 import * as Store from "../store";
 import * as Action from "../actionNames";
 import * as Redux from "redux";
-import * as Plugins from "./plugins";
+import * as Plugins from "./pluginLoader";
 
 
 describe("pluginApi > plugins", () => {

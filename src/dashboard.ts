@@ -2,7 +2,7 @@ import {DashboardStore} from "./store";
 import {IWidgetPluginState} from "./widgets/widgetPlugins";
 import DatasourcePluginRegistry, {IDatasourcePluginModule} from "./datasource/datasourcePluginRegistry";
 import * as _ from "lodash";
-import * as Plugins from "./pluginApi/plugins";
+import * as Plugins from "./pluginApi/pluginLoader";
 import * as PluginCache from "./pluginApi/pluginCache";
 import scriptloader from "./util/scriptLoader";
 import * as URI from "urijs";

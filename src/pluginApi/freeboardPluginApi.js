@@ -3,9 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as FreeboardDatasource from './freeboardDatasource'
-import * as Plugins from '../pluginApi/plugins'
 import * as PluginCache from './pluginCache'
-import store from '../store'
 
 function mapSettings(settings) {
     return settings.map(setting => {

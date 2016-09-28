@@ -31,17 +31,19 @@ export interface IPluginLoaderAction extends AppState.Action {
  *  Load plugin from URL or registry when starting with plugin://
  */
 export function startLoadingPluginFromUrl(url: string) {
-    const registryBaseUrl = "http://localhost:8081" // TODO: Configure in UI
-    if (_.startsWith(url, "plugin://")) {
-        url = url.replace("plugin://", registryBaseUrl + "/plugins/")
-    }
-    // No absolute or relative URL
-    if (!_.startsWith(url, "/") && !_.startsWith(url, ".") && !_.startsWith(url, "http:") && !_.startsWith(url, "https:")) {
-        url = registryBaseUrl + "/plugins/" + url
-    }
-
     return (dispatch: Dispatch, getState: GetState) => {
         const state = getState()
+
+        const registryBaseUrl = state.config.pluginRegistryUrl
+        if (_.startsWith(url, "plugin://")) {
+            url = url.replace("plugin://", registryBaseUrl + "/plugins/")
+        }
+        // No absolute or relative URL
+        if (!_.startsWith(url, "/") && !_.startsWith(url, ".") && !_.startsWith(url, "http:") && !_.startsWith(url, "https:")) {
+            url = registryBaseUrl + "/plugins/" + url
+        }
+
+
         if (_.some(_.valuesIn(state.datasourcePlugins), (p: IDatasourcePluginState) => p.url === url && !p.isLoading)) {
             dispatch(ModalDialog.addError("Plugin already loaded: " + url))
             return
@@ -115,9 +117,8 @@ export function publishPlugin(id: string) {
 
         const plugin = isDatasource ? dsPlugin : widgetPlugin
 
-
-        const registryBaseUrl = "http://localhost:8081" // TODO: Configure in UI
-        const apiKey = 'f1566816767de275ff898dd36a0ee608'  // TODO: Configure in UI
+        const registryBaseUrl = state.config.pluginRegistryUrl
+        const apiKey = state.config.pluginRegistryApiKey
 
         fetch(plugin.url, {
             method: 'get'

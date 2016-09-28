@@ -13,6 +13,9 @@
 
 export const CLEAR_STATE = "CLEAR_STATE";
 
+// Config
+export const SET_CONFIG_VALUE = "SET_CONFIG_VALUE";
+
 // Dashboard
 export const DASHBOARD_IMPORT = "DASHBOARD_IMPORT";
 export const SET_READONLY = "SET_READONLY";
