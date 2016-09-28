@@ -88,7 +88,8 @@ export default class Dashboard {
             .concat(_.valuesIn<IWidgetPluginState>(state.widgetPlugins));
 
         plugins.forEach(plugin => {
-            this._store.dispatch(Plugins.startLoadingPluginFromUrl(plugin.url, plugin.id));
+
+            this._store.dispatch(Plugins.reloadExistingPlugin(plugin.url, plugin.id));
         });
     }
 
@@ -97,8 +98,10 @@ export default class Dashboard {
         this._widgetPluginRegistry.dispose();
     }
 
+    /**
+     * Load plugin from URL
+     */
     private loadPluginScript(url: string): Promise<void> {
-        console.log("Start loading plugin from: " + url)
         const loadScriptsPromise = scriptloader.loadScript([url]);
 
         this._scriptsLoading[url] = loadScriptsPromise.then(() => {
@@ -111,29 +114,23 @@ export default class Dashboard {
             else {
                 return Promise.reject(new Error("Failed to load Plugin. Make sure it called window.iotDashboardApi.register***Plugin from url " + url));
             }
-        })
-            .then((plugin: IPluginModule) => {
-                if ((<IDatasourcePluginModule>plugin).Datasource) {
-                    this._datasourcePluginRegistry.registerDatasourcePlugin((<IDatasourcePluginModule>plugin), url);
-                    // datasourcePluginFinishedLoading is called in registerDatasourcePlugin!
-                }
-                else if ((<any>plugin).Widget) {
-                    this._widgetPluginRegistry.register(plugin);
-                    this._store.dispatch(Plugins.widgetPluginFinishedLoading(plugin, url));
-                }
+        }).then((plugin: IPluginModule) => {
+            if ((<IDatasourcePluginModule>plugin).Datasource) {
+                this._datasourcePluginRegistry.registerDatasourcePlugin((<IDatasourcePluginModule>plugin), url);
+                // datasourcePluginFinishedLoading is called in registerDatasourcePlugin!
+            }
+            else if ((<any>plugin).Widget) {
+                this._widgetPluginRegistry.register(plugin);
+                this._store.dispatch(Plugins.widgetPluginFinishedLoading(plugin, url));
+            }
 
-                delete this._scriptsLoading[url];
-                return Promise.resolve<void>();
-            }).catch((error) => {
-                console.warn("Failed to load script: ", error)
-                delete this._scriptsLoading[url];
-                this._store.dispatch(Plugins.pluginFailedLoading(url));
-            })
-        /*.catch((error) => {
-         console.error(error.message);
-         delete this._scriptsLoading[url];
-         throw error;
-         }); */
+            delete this._scriptsLoading[url];
+            return Promise.resolve<void>();
+        }).catch((error) => {
+            console.warn("Failed to load script: ", error)
+            delete this._scriptsLoading[url];
+            this._store.dispatch(Plugins.pluginFailedLoading(url));
+        })
 
         return this._scriptsLoading[url];
     }

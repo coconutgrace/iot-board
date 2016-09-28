@@ -16,28 +16,32 @@ const initialState: IDatasourcePluginsState = {
         url: "./plugins/datasources/randomDatasource.js",
         typeInfo: {
             type: "will-be-loaded"
-        }
+        },
+        isLoading: true
     },
     "time": {
         id: "time",
         url: "./plugins/datasources/timeDatasource.js",
         typeInfo: {
             type: "will-be-loaded"
-        }
+        },
+        isLoading: true
     },
     "static-data": {
         id: "static-data",
         url: "./plugins/datasources/staticData.js",
         typeInfo: {
             type: "will-be-loaded"
-        }
+        },
+        isLoading: true
     },
     "digimondo-firefly-datasource": {
         id: "digimondo-firefly-datasource",
         url: "./plugins/datasources/digimondoFirefly.js",
         typeInfo: {
             type: "will-be-loaded"
-        }
+        },
+        isLoading: true
     }
 };
 
@@ -51,6 +55,7 @@ export interface IDatasourcePluginState {
     id: string
     typeInfo: ITypeInfo
     url: string
+    isLoading: boolean
 }
 
 
@@ -130,7 +135,8 @@ function datasourcePlugin(state: IDatasourcePluginState, action: IDatasourcePlug
             return <IDatasourcePluginState>{
                 id: action.typeInfo.type,
                 url: action.url,
-                typeInfo: action.typeInfo
+                typeInfo: action.typeInfo,
+                isLoading: false
             };
         case Action.STARTED_LOADING_PLUGIN_FROM_URL:
             return _.assign({}, state, {

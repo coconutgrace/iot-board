@@ -106,11 +106,11 @@ class ModalDialog extends React.Component<ModalDialogProps, any> {
         const width = this.state.screen.width;
 
         return <div id={this.props.id}
-                    className={'ui modal ' + this.props.id} style={{width: width - 80, top: 40, left: 40, margin: 1}}>
+                    className={'ui modal ' + this.props.id} style={{width: width - 80, top: 40, left: 40, margin: 1, minHeight:"500px"}}>
             <div className="header">
                 {props.title}
             </div>
-            <div className="content" style={{overflowY: 'scroll', height: height - 300}}>
+            <div className="content" style={{overflowY: 'scroll', height: height - 300, minHeight:"500px"}}>
                 {this.props.dialogState.errors ?
                     this.props.dialogState.errors.map((message, i) => {
                         return <ModalErrorComponent key={i} errorMessage={message}/>

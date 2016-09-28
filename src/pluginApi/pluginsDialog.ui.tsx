@@ -82,6 +82,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                     <form className="slds-form--inline slds-grid"
                           onSubmit={(e) => {
                               props.loadPlugin(pluginUrlInput.value);
+                              pluginUrlInput.value = ""
                               e.preventDefault()
                           }}
                     >
@@ -92,8 +93,8 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#search"></use>
                                     </svg>
                                     <input className="slds-lookup__search-input slds-input" type="search" placeholder="URL or Id from Plugin Registry"
-                                           id="plugin-lookup-menu" ref="pluginUrl"
-                                           defaultValue="plugins/TestWidgetPlugin.js"
+                                           id="plugin-lookup-menu" ref="pluginUrl" autoComplete="off"
+                                           defaultValue=""
                                            onChange={(e) => this.pluginSearchValueChange(e)}
                                            onBlur={(e) => this.onBlurPluginSearchInput(e)}
                                            onFocus={(e) => this.onFocusPluginSearchInput(e)}
@@ -102,7 +103,9 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                                     />
                                 </div>
                             </div>
-                            <LookupMenu id="plugin-lookup-menu" searchString={this.state.pluginUrl}/>
+                            <LookupMenu id="plugin-lookup-menu" searchString={this.state.pluginUrl}
+                                        onItemClicked={(item: ITypeInfo) => props.loadPlugin('plugin://'+ item.type)}
+                            />
                         </div>
                         <div className="slds-form-element slds-no-flex">
                             <button className="slds-button slds-button--brand" type="submit" tabIndex="0">
@@ -130,10 +133,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
     }
 }
 
-export
-default
-
-connect(
+export default connect(
     (state: State) => {
         return {
             widgetPlugins: state.widgetPlugins
@@ -185,7 +185,6 @@ class PluginTile extends React.Component<PluginTileProps, any> {
     render() {
         const props = this.props;
         const pluginState = props.pluginState;
-        console.log("Render plugin tile with state", pluginState)
         const description = pluginState.typeInfo.description ? pluginState.typeInfo.description : "No Description."
         const url = pluginState.url ? pluginState.url : "Packaged"
 
@@ -204,20 +203,19 @@ class PluginTile extends React.Component<PluginTileProps, any> {
                     <div className="slds-dropdown slds-dropdown--left slds-dropdown--actions">
                         <ul className="dropdown__list" role="menu">
                             <li className="slds-dropdown__item" role="presentation">
-                                <a href="javascript:void(0);" role="menuitem" tabIndex="0" onClick={() => props.removePlugin(pluginState.id)}>
-                                    <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
-                                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#delete"/>
-                                    </svg>
-                                    <span className="slds-truncate">Remove</span>
-                                </a>
-                            </li>
-
-                            <li className="slds-dropdown__item" role="presentation">
                                 <a href="javascript:void(0);" role="menuitem" tabIndex="0" onClick={() => props.publishPlugin(pluginState.id)}>
                                     <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#upload"/>
                                     </svg>
                                     <span className="slds-truncate">Publish</span>
+                                </a>
+                            </li>
+                            <li className="slds-dropdown__item" role="presentation">
+                                <a href="javascript:void(0);" role="menuitem" tabIndex="0" onClick={() => props.removePlugin(pluginState.id)}>
+                                    <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
+                                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#delete"/>
+                                    </svg>
+                                    <span className="slds-truncate">Remove</span>
                                 </a>
                             </li>
                         </ul>
@@ -301,6 +299,7 @@ const DatasourcePluginTile = connect(
 interface LookupMenuProps {
     id: string
     searchString: string
+    onItemClicked(item: ITypeInfo): void
 }
 
 interface LookupMenuState {
@@ -343,7 +342,7 @@ class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
         return <div className="slds-lookup__menu" id={props.id}>
             <ul className="slds-lookup__list" role="presentation">
                 <li role="presentation">
-                    <span className="slds-lookup__item-action slds-lookup__item-action--label" id="lookup-option-368" role="option">
+                    <span className="slds-lookup__item-action slds-lookup__item-action--label" id={props.id + "-header"} role="option">
                       <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default">
                         <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
                       </svg>
@@ -351,17 +350,19 @@ class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
                     </span>
                 </li>
                 {
-                    this.state.searchResult.map((item) => {
-                        return <li role="presentation" key={item.type}>
-                    <span className="slds-lookup__item-action slds-media slds-media--center" id="lookup-option-369" role="option">
-                      <svg aria-hidden="true" className="slds-icon slds-icon-standard-account slds-icon--small slds-media__figure">
-                        <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#dashboard"></use>
-                      </svg>
-                      <div className="slds-media__body">
-                        <div className="slds-lookup__result-text"><mark>{item.name}</mark> ({item.type})</div>
-                        <span className="slds-lookup__result-meta slds-text-body--small">DS/Widget • by {item.author} • {item.description}</span>
-                      </div>
-                    </span>
+                    this.state.searchResult.map((item, i) => {
+                        return <li role="presentation" key={item.type}
+                                   onClick={(e) => this.props.onItemClicked(item)}
+                        >
+                            <span className="slds-lookup__item-action slds-media slds-media--center" id={props.id + "-" + i} role="option">
+                              <svg aria-hidden="true" className="slds-icon slds-icon-standard-account slds-icon--small slds-media__figure">
+                                <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#dashboard"></use>
+                              </svg>
+                              <div className="slds-media__body">
+                                <div className="slds-lookup__result-text"><mark>{item.name}</mark> ({item.type})</div>
+                                <span className="slds-lookup__result-meta slds-text-body--small">DS/Widget • by {item.author} • {item.description}</span>
+                              </div>
+                            </span>
                         </li>
                     })
                 }

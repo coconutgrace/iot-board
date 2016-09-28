@@ -10,6 +10,9 @@ import * as WidgetPlugins from "../widgets/widgetPlugins"
 import {IPluginModule} from "./pluginRegistry";
 import {IDatasourcePluginModule} from "../datasource/datasourcePluginRegistry";
 import {Dispatch} from "../appState";
+import {GetState} from "../appState";
+import {IDatasourcePluginState} from "../datasource/datasourcePlugins";
+import {IWidgetPluginState} from "../widgets/widgetPlugins";
 
 const initialState: IPluginLoaderState = {
     loadingUrls: []
@@ -24,7 +27,38 @@ export interface IPluginLoaderAction extends AppState.Action {
 }
 
 
-export function startLoadingPluginFromUrl(url: string, id?: string): IPluginLoaderAction {
+/**
+ *  Load plugin from URL or registry when starting with plugin://
+ */
+export function startLoadingPluginFromUrl(url: string) {
+    const registryBaseUrl = "http://localhost:8081" // TODO: Configure in UI
+    if (_.startsWith(url, "plugin://")) {
+        url = url.replace("plugin://", registryBaseUrl + "/plugins/")
+    }
+    // No absolute or relative URL
+    if (!_.startsWith(url, "/") && !_.startsWith(url, ".") && !_.startsWith(url, "http:") && !_.startsWith(url, "https:")) {
+        url = registryBaseUrl + "/plugins/" + url
+    }
+
+    return (dispatch: Dispatch, getState: GetState) => {
+        const state = getState()
+        if (_.some(_.valuesIn(state.datasourcePlugins), (p: IDatasourcePluginState) => p.url === url && !p.isLoading)) {
+            dispatch(ModalDialog.addError("Plugin already loaded: " + url))
+            return
+        }
+        if (_.some(_.valuesIn(state.widgetPlugins), (p: IWidgetPluginState) => p.url === url && !p.isLoading)) {
+            dispatch(ModalDialog.addError("Plugin already loaded: " + url))
+            return
+        }
+
+        dispatch({
+            type: Action.STARTED_LOADING_PLUGIN_FROM_URL,
+            url
+        })
+    }
+}
+
+export function reloadExistingPlugin(url: string, id: string): IPluginLoaderAction {
     return {
         type: Action.STARTED_LOADING_PLUGIN_FROM_URL,
         id,
@@ -128,7 +162,6 @@ export function publishPlugin(id: string) {
 function urlsReducer(state: string[], action: IPluginLoaderAction): string[] {
     switch (action.type) {
         case Action.STARTED_LOADING_PLUGIN_FROM_URL:
-            console.log("add url to pluginLoader: ", action.url)
             if (!action.url) {
                 throw new Error("Can not load plugin from empty URL");
             }
@@ -136,7 +169,6 @@ function urlsReducer(state: string[], action: IPluginLoaderAction): string[] {
         case Action.PLUGIN_FAILED_LOADING:
         case Action.WIDGET_PLUGIN_FINISHED_LOADING:
         case Action.DATASOURCE_PLUGIN_FINISHED_LOADING:
-            console.log("remove url from pluginLoader: ", action.url)
             return [...state].filter((url) => url !== action.url);
         default:
             return state;
