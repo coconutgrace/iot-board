@@ -18,7 +18,6 @@
     "redux-logger": "registry:dt/redux-logger",
     "redux-thunk": "registry:dt/redux-thunk",
     "sinon": "registry:dt/sinon",
-    "urijs": "registry:dt/urijs",
     "webpack-env": "registry:dt/webpack-env"
   },
   "globalDevDependencies": {
