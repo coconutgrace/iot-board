@@ -15,7 +15,7 @@ And of course for all other IoT, M2M, Industry 4.0, BigData, whatever dashboards
 
 ---
 
-The **latest stable version** is on the `master` branch.
+[Documentation](https://gitlab.com/lobaro/iot-dashboard/wikis/home)
 
 ## Demo ##
 
@@ -100,10 +100,6 @@ To just run the tests (not enough to survive the CI build!)
     npm test
 
 Find the coverage report in `dist/coverage` or while the server is running at [http://localhost:8080/coverage/](http://localhost:8080/coverage/)
-
-## Documentation ##
-
-Check out the [Documentation](https://gitlab.com/lobaro/iot-dashboard/blob/master/docs/index.md) in `/docs`
 
 ## License ##
 The code is available under [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/) (MPL 2.0)
