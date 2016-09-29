@@ -18,7 +18,7 @@ import {reducer as formReducer} from "redux-form";
 import * as Action from "./actionNames";
 import * as  WidgetPlugins from "./widgets/widgetPlugins";
 import * as DatasourcePlugins from "./datasource/datasourcePlugins";
-import * as AppState from "./appState.ts";
+import * as AppState from "./appState";
 import * as Config from "./config";
 import Dashboard from "./dashboard";
 

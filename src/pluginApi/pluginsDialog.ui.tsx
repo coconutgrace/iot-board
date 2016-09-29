@@ -119,7 +119,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                             />
                         </div>
                         <div className="slds-form-element slds-no-flex">
-                            <button className="slds-button slds-button--brand" type="submit" tabIndex="0">
+                            <button className="slds-button slds-button--brand" type="submit" tabIndex={0}>
                                 Load&nbsp;Plugin
                             </button>
                         </div>
@@ -216,7 +216,7 @@ class PluginTile extends React.Component<PluginTileProps, any> {
                     <div className="slds-dropdown slds-dropdown--left slds-dropdown--actions">
                         <ul className="dropdown__list" role="menu">
                             <li className="slds-dropdown__item" role="presentation">
-                                <a href="javascript:void(0);" role="menuitem" tabIndex="0" onClick={() => props.publishPlugin(pluginState.id)}>
+                                <a href="javascript:void(0);" role="menuitem" tabIndex={0} onClick={() => props.publishPlugin(pluginState.id)}>
                                     <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#upload"/>
                                     </svg>
@@ -224,7 +224,7 @@ class PluginTile extends React.Component<PluginTileProps, any> {
                                 </a>
                             </li>
                             <li className="slds-dropdown__item" role="presentation">
-                                <a href="javascript:void(0);" role="menuitem" tabIndex="0" onClick={() => props.removePlugin(pluginState.id)}>
+                                <a href="javascript:void(0);" role="menuitem" tabIndex={0} onClick={() => props.removePlugin(pluginState.id)}>
                                     <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#delete"/>
                                     </svg>

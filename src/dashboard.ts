@@ -35,7 +35,7 @@ export default class Dashboard {
                 return;
             }
             this._lastLoadingUrls = state.pluginLoader.loadingUrls;
-            state.pluginLoader.loadingUrls.forEach((urlToLoad) => {
+            state.pluginLoader.loadingUrls.forEach((urlToLoad: string) => {
                 if (!this._scriptsLoading[urlToLoad]) {
                     this.loadPluginScript(urlToLoad);
                 }

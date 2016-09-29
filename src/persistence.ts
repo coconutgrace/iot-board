@@ -5,6 +5,7 @@
 import {Action, State} from "./appState";
 import * as _ from 'lodash'
 import * as $ from 'jquery'
+import Store = Redux.Store;
 
 let lastAction: IPersistenceAction = {type: "NONE"};
 let allowSave = true;
@@ -25,7 +26,7 @@ export function clearData() {
 }
 
 // TODO: type middleware
-export function persistenceMiddleware({getState}): any {
+export function persistenceMiddleware({getState}: Store<State>): any {
     return (next: any) => (action: IPersistenceAction) => {
 
         const nextState = next(action);
