@@ -155,7 +155,7 @@ class ModalError extends React.Component<ModalErrorProps, any> {
                         onClick={() => this.close()}
                 >
                     <svg aria-hidden="true" className="slds-button__icon">
-                        <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#close"></use>
                     </svg>
                     <span className="slds-assistive-text">Close</span>
                 </button>

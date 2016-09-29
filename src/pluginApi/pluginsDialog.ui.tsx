@@ -357,7 +357,7 @@ class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
                 <li role="presentation">
                     <span className="slds-lookup__item-action slds-lookup__item-action--label" id={props.id + "-header"} role="option">
                       <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default">
-                        <use xlinkHref="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#search"></use>
                       </svg>
                       <span className="slds-truncate">&quot;{props.searchString}&quot; in plugin registry</span>
                     </span>
@@ -369,7 +369,7 @@ class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
                         >
                             <span className="slds-lookup__item-action slds-media slds-media--center" id={props.id + "-" + i} role="option">
                               <svg aria-hidden="true" className="slds-icon slds-icon-standard-account slds-icon--small slds-media__figure">
-                                <use xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#dashboard"></use>
+                                <use xlinkHref="assets/icons/standard-sprite/svg/symbols.svg#dashboard"></use>
                               </svg>
                               <div className="slds-media__body">
                                 <div className="slds-lookup__result-text"><mark>{item.name}</mark> ({item.type})</div>
