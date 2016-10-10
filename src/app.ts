@@ -26,7 +26,7 @@ import * as AppState from './appState'
 const loadPredefinedState = $.get('./dashboard.json');
 es6promise.polyfill()
 
-loadPredefinedState.then((data) => {
+loadPredefinedState.then((data: any) => {
     console.log("Starting dashboard with predefined state");
     runWithState(data);
 }).fail((error) => {

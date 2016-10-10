@@ -5,6 +5,7 @@ var PROD = (process.env.NODE_ENV === 'production');
 
 webpackConfig.entry = {
     app: ["./src/app.ts"],
+    widget: ["./src/widgetApp.ts"],
     "browser-tests": ['mocha!./src/browser-tests.ts'],
     vendor: [
         "react", "react-dom", "react-grid-layout", "react-grid-layout/css/styles.css",
@@ -15,7 +16,7 @@ webpackConfig.entry = {
 };
 
 webpackConfig.plugins.push(
-    new webpack.optimize.CommonsChunkPlugin({names: ["vendor"], filename: "vendor.bundle.js", minChunks: Infinity, chunks: ["app", "vendor"]}),
+    new webpack.optimize.CommonsChunkPlugin({names: ["vendor"], filename: "vendor.bundle.js", minChunks: Infinity, chunks: ["app", "widget", "vendor"]}),
     new webpack.PrefetchPlugin(webpackConfig.paths.node_modules, 'semantic-ui-css/semantic.css'),
     new webpack.PrefetchPlugin(webpackConfig.paths.node_modules, 'react-grid-layout/build/ReactGridLayout.js')
 

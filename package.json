@@ -97,7 +97,7 @@
     "gulp-sequence": "^0.4.5",
     "gulp-sort": "^2.0.0",
     "gulp-tslint": "^6.0.1",
-    "gulp-typescript": "2.13.6",
+    "gulp-typescript": "3.0.2",
     "gulp-util": "3.0.7",
     "gulp-watch": "4.3.5",
     "imports-loader": "^0.6.5",

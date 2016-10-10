@@ -142,8 +142,7 @@ var tsProject = ts.createProject('./tsconfig.json');
  */
 gulp.task('compile:ts', [], function () {
     var tsResult = tsProject.src()
-        .pipe(ts(tsProject));
-
+        .pipe(tsProject());
     return tsResult.js.pipe(gulp.dest('./lib'));
 });
 
