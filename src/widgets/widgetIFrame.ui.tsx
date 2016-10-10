@@ -21,9 +21,14 @@ class WidgetIFrame extends React.Component<WidgetIFrameProps, void> {
         super(props)
     }
 
+    // allow-popups allow-same-origin allow-modals allow-forms
+    // A sandbox that includes both the allow-same-origin and allow-scripts flags,
+    // then the framed page can reach up into the parent, and remove the sandbox attribute entirely.
+    // Only if the framed content comes from the same origin of course.
+
     render() {
         return <iframe id={this.props.widget.id} src={"widget.html#" + this.props.widgetPlugin.url} frameBorder="0" width="100%" height="100%" scrolling="no"
-                       sandbox="allow-forms allow-popups allow-scripts allow-same-origin allow-modals">
+                       sandbox="allow-scripts">
             Browser does not support iFrames.
         </iframe>
     };
