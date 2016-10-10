@@ -11,7 +11,10 @@ console.log("URL: " + widgetUrl)
 const pluginApi = {
     registerDatasourcePlugin: () => {console.error("Can not register datasource in Widget context")},
     registerWidgetPlugin: (typeInfo: ITypeInfo, widget: IWidgetPlugin) => {
+        // TODO: Store instance to dispose?
 
+        // ComponentClass
+        React.createElement(widget, <any>{_widgetClass: this.widget});
     }
 };
 

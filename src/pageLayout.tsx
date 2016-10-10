@@ -39,7 +39,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
         this.state = {hover: false};
     }
 
-    onReadOnlyModeKeyPress(e: KeyboardEvent) {
+    onReadOnlyModeKeyPress(e: KeyboardEvent<any>) {
         //console.log("key pressed", event.keyCode);
         const intKey = (window.event) ? e.which : e.keyCode;
         if (intKey === 27) {

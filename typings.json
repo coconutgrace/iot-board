@@ -9,8 +9,6 @@
     "jquery": "registry:dt/jquery",
     "lodash": "registry:dt/lodash",
     "object-assign": "registry:dt/object-assign",
-    "react": "registry:dt/react",
-    "react-dom": "registry:dt/react-dom",
     "react-modal": "registry:dt/react-modal",
     "react-redux": "registry:dt/react-redux",
     "redux": "registry:dt/redux",

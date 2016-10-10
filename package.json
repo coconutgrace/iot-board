@@ -64,6 +64,11 @@
   "devDependencies": {
     "@salesforce-ux/design-system": "^2.1.2",
     "@types/jquery": "^2.0.32",
+    "@types/react": "^0.14.39",
+    "@types/react-dom": "^0.14.17",
+    "@types/react-modal": "^1.3.4",
+    "@types/react-redux": "^4.4.32",
+    "@types/redux-form": "^4.0.30",
     "@types/urijs": "^1.15.30",
     "babel-cli": "6.6.5",
     "babel-core": "6.7.4",

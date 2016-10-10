@@ -7,12 +7,8 @@ import * as React from "react";
 import {DashboardStore} from "../store";
 import {ITypeInfo, IPlugin, IPluginFactory, IWidgetState} from "../pluginApi/pluginTypes";
 import {GetState, State} from "../appState";
-import {DomWidgetContainer} from "./domWidgetContainer";
 import * as Widgets from "./widgets";
 import {IDatasourcesState} from "../datasource/datasource";
-import ComponentSpec = __React.ComponentSpec;
-import ReactInstance = __React.ReactInstance;
-import ReactElement = __React.ReactElement;
 
 
 export interface IWidgetPluginClass {
@@ -20,8 +16,8 @@ export interface IWidgetPluginClass {
 }
 
 // ComponentSpec<any, any>
-export interface IWidgetPlugin extends IPlugin, ComponentSpec<IWidgetProps, any> {
-    element: ReactInstance
+export interface IWidgetPlugin extends IPlugin, React.ComponentSpec<IWidgetProps, any> {
+    element: React.ReactInstance
 }
 
 export interface IWidgetPluginModule {
@@ -41,10 +37,10 @@ export interface IWidgetProps {
     _widgetClass?: IWidgetPluginClass // TODO: type the widget class
 }
 
-export default class WidgetPluginFactory implements IPluginFactory<ReactElement<IWidgetProps>> {
+export default class WidgetPluginFactory implements IPluginFactory<React.ReactElement<IWidgetProps>> {
 
 
-    instances: { [id: string]: ReactElement<IWidgetProps>} = {};
+    instances: { [id: string]: React.ReactElement<IWidgetProps>} = {};
     disposed = false;
 
     /**
@@ -77,17 +73,6 @@ export default class WidgetPluginFactory implements IPluginFactory<ReactElement<
             return this.instances[id];
         }
 
-        // TODO: check if module.Widget is a react component
-        const widgetPlugin = this.store.getState().widgetPlugins[this.type];
-        const rendering = widgetPlugin.typeInfo.rendering || "react";
-
-        let widgetComponent = this.widget;
-        if (rendering.toLowerCase() === "dom") {
-            // TODO: any batter way to avoid the any cast?
-            widgetComponent = <any>DomWidgetContainer;
-        }
-
-
         const widget = connect(() => {
                 // This method will be used as mapStateToProps, leading to a constant "getData()" function per instance
                 // Therefor the update is only called when actual state changes
@@ -103,7 +88,7 @@ export default class WidgetPluginFactory implements IPluginFactory<ReactElement<
                     }
                 };
             }
-        )(<any>widgetComponent); // TODO: get rid of the any?
+        )(<any>this.widget); // TODO: get rid of the any?
 
         this.instances[id] = React.createElement(widget, <any>{_widgetClass: this.widget});
         // Should we create here or always outside?

@@ -14,7 +14,6 @@ import {IWidgetPluginsState, IWidgetPluginState} from "../widgets/widgetPlugins"
 import * as DatasourcePlugins from "../datasource/datasourcePlugins";
 import {IDatasourcePluginsState, IDatasourcePluginState} from "../datasource/datasourcePlugins";
 import {Dispatch, State} from "../appState";
-import FormEvent = __React.FormEvent;
 import {ITypeInfo} from "./pluginTypes";
 
 interface PluginsModalProps {
@@ -42,19 +41,19 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
         }
     }
 
-    pluginSearchValueChange(e: FormEvent) {
+    pluginSearchValueChange(e: React.FormEvent<any>) {
         const pluginUrlInput: any = this.refs['pluginUrl'] // HTMLInputElement
         this.setState({pluginUrl: pluginUrlInput.value});
     }
 
-    onBlurPluginSearchInput(e: FormEvent) {
+    onBlurPluginSearchInput(e: React.FormEvent<any>) {
         setTimeout(() => {
             this.setState({isSearchOpen: false});
         }, 300)
 
     }
 
-    onFocusPluginSearchInput(e: FormEvent) {
+    onFocusPluginSearchInput(e: React.FormEvent<any>) {
         this.setState({isSearchOpen: true});
     }
 
@@ -426,12 +425,12 @@ class PluginRegistrySettings extends React.Component<RegistrySettingsProps, Regi
         }
     }
 
-    onRegistryUrlChanged(e: FormEvent) {
+    onRegistryUrlChanged(e: React.FormEvent<any>) {
         const target: any = e.target;
         this.props.onRegistryUrlChanged(target.value)
     }
 
-    onApiKeyChanged(e: FormEvent) {
+    onApiKeyChanged(e: React.FormEvent<any>) {
         const target: any = e.target;
         this.props.onApiKeyChanged(target.value)
     }

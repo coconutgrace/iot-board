@@ -80,7 +80,7 @@ class ModalDialog extends React.Component<ModalDialogProps, any> {
         }
     }
 
-    onClick(e: React.MouseEvent, action: DialogAction) {
+    onClick(e: React.MouseEvent<any>, action: DialogAction) {
         if (action.onClick(e)) {
             // Closing is done externally (by redux)
             this.props.closeDialog();
