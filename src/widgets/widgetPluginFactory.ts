@@ -5,10 +5,9 @@
 import {connect} from "react-redux";
 import * as React from "react";
 import {DashboardStore} from "../store";
-import {ITypeInfo, IPlugin, IPluginFactory} from "../pluginApi/pluginTypes";
+import {ITypeInfo, IPlugin, IPluginFactory, IWidgetState} from "../pluginApi/pluginTypes";
 import {GetState, State} from "../appState";
 import {DomWidgetContainer} from "./domWidgetContainer";
-import {IWidgetState} from "./widgets";
 import * as Widgets from "./widgets";
 import {IDatasourcesState} from "../datasource/datasource";
 import ComponentSpec = __React.ComponentSpec;

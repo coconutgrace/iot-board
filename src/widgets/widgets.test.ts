@@ -7,6 +7,7 @@ import * as Store from "../store";
 import * as Widgets from "./widgets";
 import * as AppState from "../appState";
 import * as _ from "lodash";
+import {IWidgetState} from "../pluginApi/pluginTypes";
 
 describe('Widget', function () {
     describe('action', function () {
@@ -20,7 +21,7 @@ describe('Widget', function () {
             assert.equal(_.keysIn(state.widgets).length, 1);
 
             const myWidget: any = _.find(_.valuesIn(state.widgets),
-                ((widget: Widgets.IWidgetState) => widget.type === "my-widget-type"));
+                ((widget: IWidgetState) => widget.type === "my-widget-type"));
 
             assert.deepEqual(myWidget.settings, {foo: "bar"});
             assert.equal(myWidget.type, "my-widget-type");
@@ -41,7 +42,7 @@ describe('Widget', function () {
             assert.equal(_.keysIn(state.widgets).length, 1);
 
             const myWidget: any = _.find(_.valuesIn(state.widgets),
-                ((widget: Widgets.IWidgetState) => widget.type === "my-widget-type"));
+                ((widget: IWidgetState) => widget.type === "my-widget-type"));
 
             assert.deepEqual(myWidget.settings, {foo: "bar"});
             assert.equal(myWidget.type, "my-widget-type");
@@ -99,7 +100,7 @@ describe('Widget', function () {
             store.dispatch(Widgets.addWidget("my-widget-type", {foo: "bar"}, 1, 2, 3, 4));
             assert.equal(_.keysIn(store.getState().widgets).length, 1);
 
-            _.valuesIn(store.getState().widgets).forEach((widget: Widgets.IWidgetState) => {
+            _.valuesIn(store.getState().widgets).forEach((widget: IWidgetState) => {
                 store.dispatch(Widgets.deleteWidget(widget.id));
             });
             assert.equal(_.keysIn(store.getState().widgets).length, 0);

@@ -4,31 +4,11 @@
 
 import * as _ from "lodash";
 import {DashboardStore} from "../store";
-import {IPluginFactory, IPlugin} from "../pluginApi/pluginTypes";
 import * as Datasource from "./datasource";
-import {IDatasourceState, IDatasourcesState} from "./datasource";
+import {IDatasourcesState} from "./datasource";
 import {DatasourcePluginInstance} from "./datasourcePluginInstance";
+import {IPluginFactory, IDatasourcePlugin, IDatasourceState, IDatasourceConstructor} from "../pluginApi/pluginTypes";
 import Unsubscribe = Redux.Unsubscribe;
-
-
-export interface IDatasourceConstructor extends IDatasourcePlugin {
-    new(): IDatasourcePlugin
-}
-
-export interface IDatasourceProps {
-    state: IDatasourceState
-    setFetchInterval: (intervalInMs: number) => void
-    setFetchReplaceData: (replace: boolean) => void
-}
-
-export interface IDatasourcePlugin extends IPlugin {
-    props?: IDatasourceProps
-    datasourceWillReceiveProps?: (newProps: IDatasourceProps) => void
-    datasourceWillReceiveSettings?: (nextSettings: any) => void
-    dispose?: () => void
-    initialize?(props: IDatasourceProps): () => void
-    fetchData?<T>(resolve: (value?: T | Thenable<T>) => void, reject: (reason?: any) => void): void
-}
 
 
 /**

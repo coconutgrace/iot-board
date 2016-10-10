@@ -39,3 +39,54 @@ export interface ISetting {
     defaultValue?: any // The default value that is preset when a new Plugin is configured, currently must be a string
     required?: boolean // true when the setting is required
 }
+
+
+/*
+ * Datasource
+ */
+
+export interface IDatasourceState {
+    id: string
+    type: string
+    settings: any
+    data: any[]
+    isLoading: boolean
+    replaceData: boolean
+}
+
+export interface IDatasourceConstructor extends IDatasourcePlugin {
+    new(): IDatasourcePlugin
+}
+
+export interface IDatasourceProps {
+    state: IDatasourceState
+    setFetchInterval: (intervalInMs: number) => void
+    setFetchReplaceData: (replace: boolean) => void
+}
+
+export interface IDatasourcePlugin extends IPlugin {
+    props?: IDatasourceProps
+    datasourceWillReceiveProps?: (newProps: IDatasourceProps) => void
+    datasourceWillReceiveSettings?: (nextSettings: any) => void
+    dispose?: () => void
+    initialize?(props: IDatasourceProps): () => void
+    fetchData?<T>(resolve: (value?: T | Thenable<T>) => void, reject: (reason?: any) => void): void
+}
+
+/*
+ * Widget
+ */
+
+export interface IWidgetPosition {
+    row: number;
+    col: number;
+    width: number;
+    height: number;
+}
+
+export interface IWidgetState extends IWidgetPosition {
+    id: string;
+    type: string;
+    settings: any;
+    availableHeightPx: number;
+}

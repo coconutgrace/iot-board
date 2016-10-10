@@ -5,8 +5,8 @@
 
 import {assert} from "chai";
 import * as Store from "../store";
-import {IDatasourcePlugin} from "./datasourcePluginFactory";
 import DatasourcePluginRegistry from "./datasourcePluginRegistry";
+import {IDatasourcePlugin} from "../pluginApi/pluginTypes";
 
 describe("Datasource > DatasourcePluginRegistry", function () {
 

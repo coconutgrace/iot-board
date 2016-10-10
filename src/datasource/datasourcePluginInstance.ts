@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-import {IDatasourcePlugin, IDatasourceConstructor, IDatasourceProps} from "./datasourcePluginFactory";
 import {DashboardStore} from "../store";
 import {DatasourceScheduler} from "./datasourceScheduler";
 import * as Datasource from "./datasource";
+import {IDatasourceConstructor, IDatasourcePlugin, IDatasourceProps} from "../pluginApi/pluginTypes";
 
 /**
  * Represents a plugin instance, state should be saved in store!

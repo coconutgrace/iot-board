@@ -8,6 +8,7 @@ import * as _ from "lodash";
 import {genCrudReducer} from "../util/reducer.js";
 import * as Action from "../actionNames";
 import * as AppState from "../appState";
+import {IWidgetState, IWidgetPosition} from "../pluginApi/pluginTypes";
 
 export const HEADER_HEIGHT = 34;
 export const ROW_HEIGHT = 100;
@@ -16,19 +17,6 @@ export interface IWidgetsState {
     [key: string]: IWidgetState
 }
 
-export interface IWidgetPosition {
-    row: number;
-    col: number;
-    width: number;
-    height: number;
-}
-
-export interface IWidgetState extends IWidgetPosition {
-    id: string;
-    type: string;
-    settings: any;
-    availableHeightPx: number;
-}
 
 // Interface combining all widget actions, not all are needed for each action
 interface IWidgetAction extends Redux.Action {

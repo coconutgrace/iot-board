@@ -2,15 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import * as React from 'react';
-import {connect} from 'react-redux'
-import * as WidgetConfig from './widgetConfig'
-import * as WidgetPlugins from './widgetPlugins'
-import {deleteWidget, IWidgetState} from './widgets'
-import * as Widgets from './widgets'
-import {PropTypes as Prop}  from "react";
-import Dashboard from '../dashboard'
+import * as React from "react";
 import {IWidgetPluginState} from "./widgetPlugins";
+import {IWidgetState} from "../pluginApi/pluginTypes";
 
 interface WidgetIFrameProps {
     widget: IWidgetState

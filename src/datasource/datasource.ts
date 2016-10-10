@@ -10,6 +10,7 @@ import * as ModalIds from "../modal/modalDialogIds";
 import * as Modal from "../modal/modalDialog.js";
 import * as AppState from "../appState";
 import {IPersistenceAction} from "../persistence";
+import {IDatasourceState} from "../pluginApi/pluginTypes";
 
 const initialDatasources: IDatasourcesState = {
     "initial_random_source": {
@@ -41,14 +42,6 @@ export interface IDatasourcesState {
     [id: string]: IDatasourceState
 }
 
-export interface IDatasourceState {
-    id: string
-    type: string
-    settings: any
-    data: any[]
-    isLoading: boolean
-    replaceData: boolean
-}
 
 export function createDatasource(type: string, settings: any, id: string = Uuid.generate()): IDatasourceAction {
     return addDatasource(type, settings, true, id);
