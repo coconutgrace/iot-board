@@ -5,7 +5,7 @@
 import {connect} from "react-redux";
 import * as React from "react";
 import {DashboardStore} from "../store";
-import {IPluginFactory, ITypeInfo, IPlugin} from "../pluginApi/pluginRegistry";
+import {ITypeInfo, IPlugin, IPluginFactory} from "../pluginApi/pluginTypes";
 import {GetState, State} from "../appState";
 import {DomWidgetContainer} from "./domWidgetContainer";
 import {IWidgetState} from "./widgets";

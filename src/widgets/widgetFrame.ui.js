@@ -10,6 +10,7 @@ import {deleteWidget} from './widgets'
 import * as Widgets from './widgets'
 import {PropTypes as Prop}  from "react";
 import Dashboard from '../dashboard'
+import WidgetIFrame from './widgetIFrame.ui.tsx'
 
 /**
  * The Dragable Frame of a Widget.
@@ -17,6 +18,7 @@ import Dashboard from '../dashboard'
  */
 const WidgetFrame = (props) => {
     const widgetState = props.widget;
+    const widgetPlugin = props.widgetPlugin;
 
     // If the plugin is not in the registry, we assume it's currently loading
     const pluginLoaded = Dashboard.getInstance().widgetPluginRegistry.hasPlugin(widgetState.type)
@@ -61,7 +63,7 @@ const WidgetFrame = (props) => {
                 <div className="slds-size--1-of-1 slds-is-relative"
                      style={{height: widgetState.availableHeightPx, padding: 0, border: "red dashed 0px"}}>
                     {
-                        pluginLoaded ? widgetFactory.getInstance(widgetState.id)
+                        pluginLoaded ? <WidgetIFrame widget={widgetState} widgetPlugin={widgetPlugin}/> /*widgetFactory.getInstance(widgetState.id)*/
                             : <LoadingWidget widget={widgetState}/>
                     }
                 </div>

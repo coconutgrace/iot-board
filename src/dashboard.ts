@@ -7,7 +7,7 @@ import * as PluginCache from "./pluginApi/pluginCache";
 import scriptloader from "./util/scriptLoader";
 import * as URI from "urijs";
 import {IDatasourcePluginState} from "./datasource/datasourcePlugins";
-import {IPluginModule} from "./pluginApi/pluginRegistry";
+import {IPluginModule} from "./pluginApi/pluginTypes";
 import WidgetPluginRegistry from "./widgets/widgetPluginRegistry";
 
 /**

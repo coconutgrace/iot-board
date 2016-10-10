@@ -1,4 +1,5 @@
-import PluginRegistry, {IPluginModule} from "../pluginApi/pluginRegistry";
+import PluginRegistry from "../pluginApi/pluginRegistry";
+import {IPluginModule} from "../pluginApi/pluginTypes";
 import DataSourcePluginFactory, {IDatasourcePlugin} from "./datasourcePluginFactory";
 import {DashboardStore} from "../store";
 import * as Plugins from "../pluginApi/pluginLoader";

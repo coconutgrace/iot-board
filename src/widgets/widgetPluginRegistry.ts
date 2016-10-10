@@ -3,7 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-import PluginRegistry, {IPluginModule} from "../pluginApi/pluginRegistry";
+import PluginRegistry from "../pluginApi/pluginRegistry";
+import {IPluginModule} from "../pluginApi/pluginTypes";
 import {DashboardStore} from "../store";
 import {IWidgetPluginClass, default as WidgetPluginFactory} from "./widgetPluginFactory";
 /**

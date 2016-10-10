@@ -10,9 +10,11 @@ import {deleteWidget, IWidgetState} from './widgets'
 import * as Widgets from './widgets'
 import {PropTypes as Prop}  from "react";
 import Dashboard from '../dashboard'
+import {IWidgetPluginState} from "./widgetPlugins";
 
 interface WidgetIFrameProps {
     widget: IWidgetState
+    widgetPlugin: IWidgetPluginState
 }
 
 /**
@@ -21,13 +23,14 @@ interface WidgetIFrameProps {
  */
 class WidgetIFrame extends React.Component<WidgetIFrameProps, void> {
 
-    constructor(props) {
+    constructor(props: WidgetIFrameProps) {
         super(props)
     }
 
     render() {
-        return <iframe src="widget.html">
-
+        return <iframe id={this.props.widget.id} src={"widget.html#" + this.props.widgetPlugin.url} frameBorder="0" width="100%" height="100%" scrolling="no"
+                       sandbox="allow-forms allow-popups allow-scripts allow-same-origin allow-modals">
+            Browser does not support iFrames.
         </iframe>
     };
 }

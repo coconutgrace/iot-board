@@ -15,7 +15,7 @@ import * as DatasourcePlugins from "../datasource/datasourcePlugins";
 import {IDatasourcePluginsState, IDatasourcePluginState} from "../datasource/datasourcePlugins";
 import {Dispatch, State} from "../appState";
 import FormEvent = __React.FormEvent;
-import {ITypeInfo} from "./pluginRegistry";
+import {ITypeInfo} from "./pluginTypes";
 
 interface PluginsModalProps {
     datasourcePlugins: IDatasourcePluginsState

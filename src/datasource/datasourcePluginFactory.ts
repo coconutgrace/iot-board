@@ -4,7 +4,7 @@
 
 import * as _ from "lodash";
 import {DashboardStore} from "../store";
-import {IPluginFactory, IPlugin} from "../pluginApi/pluginRegistry";
+import {IPluginFactory, IPlugin} from "../pluginApi/pluginTypes";
 import * as Datasource from "./datasource";
 import {IDatasourceState, IDatasourcesState} from "./datasource";
 import {DatasourcePluginInstance} from "./datasourcePluginInstance";

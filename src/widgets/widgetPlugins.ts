@@ -6,7 +6,7 @@ import * as Action from "../actionNames";
 import {genCrudReducer} from "../util/reducer.js";
 import Dashboard from "../dashboard";
 import * as AppState from "../appState";
-import {ITypeInfo} from "../pluginApi/pluginRegistry";
+import {ITypeInfo} from "../pluginApi/pluginTypes";
 
 
 // TODO: Later load all plugins from external URL's ?

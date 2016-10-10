@@ -6,7 +6,7 @@ import * as Action from "../actionNames";
 import {genCrudReducer} from "../util/reducer.js";
 import * as AppState from "../appState";
 import Dashboard from "../dashboard";
-import {ITypeInfo} from "../pluginApi/pluginRegistry";
+import {ITypeInfo} from "../pluginApi/pluginTypes";
 
 
 // TODO: does it work to have the URL as ID?

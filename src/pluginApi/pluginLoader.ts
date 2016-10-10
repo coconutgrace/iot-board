@@ -7,7 +7,7 @@ import * as AppState from "../appState";
 import * as ModalDialog from "../modal/modalDialog.js"
 import * as DatasourcePlugins from "../datasource/datasourcePlugins"
 import * as WidgetPlugins from "../widgets/widgetPlugins"
-import {IPluginModule} from "./pluginRegistry";
+import {IPluginModule} from "./pluginTypes";
 import {IDatasourcePluginModule} from "../datasource/datasourcePluginRegistry";
 import {Dispatch} from "../appState";
 import {GetState} from "../appState";
