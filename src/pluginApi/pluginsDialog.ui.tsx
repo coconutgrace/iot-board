@@ -114,7 +114,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                                     />
                                 </div>
                             </div>
-                            <LookupMenu id="plugin-lookup-menu" searchString={this.state.pluginUrl}
+                            <LookupMenu id="plugin-lookup-menu" searchString={this.state.pluginUrl} pluginRegistryUrl={this.props.pluginRegistryUrl}
                                         onItemClicked={(item: ITypeInfo) => props.loadPlugin('plugin://' + item.type)}
                             />
                         </div>
@@ -311,6 +311,7 @@ const DatasourcePluginTile = connect(
 
 interface LookupMenuProps {
     id: string
+    pluginRegistryUrl: string
     searchString: string
     onItemClicked(item: ITypeInfo): void
 }
@@ -336,7 +337,7 @@ class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
             return;
         }
 
-        fetch("http://localhost:8081/api/plugins/?q=" + nextProps.searchString)
+        fetch(nextProps.pluginRegistryUrl + "/api/plugins/?q=" + nextProps.searchString)
             .then((result) => {
                 return result.json()
             })

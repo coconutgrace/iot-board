@@ -49,7 +49,11 @@ export function setConfigValue(key: string, value: any) {
 export function config(state: IConfigState = configJson, action: any): IConfigState {
     switch (action.type) {
         case Action.SET_CONFIG_VALUE: {
-            return _.assign({}, defaultConfig, state, {[action.key]: action.value}, configJson)
+            let value = action.value;
+            if (action.key === 'pluginRegistryUrl' && _.endsWith(value, '/')) {
+                value = value.replace(/\/+$/, "");
+            }
+            return _.assign({}, defaultConfig, state, {[action.key]: value}, configJson)
         }
         default:
             // Content of configJson overrides everything else!
