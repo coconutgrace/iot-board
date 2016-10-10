@@ -62,16 +62,6 @@ To just include the dashboard in your own project install it locally
 
     npm install --save-dev iot-dashboard
 
-### Run the Dashboard locally from source ###
-
-    npm install
-    npm run compile
-    npm start
-
-* Dashboard: [http://localhost:8081/](http://localhost:8081/)
-* Tests: [http://localhost:8081/tests.html](http://localhost:8081/tests.html)
-* Testcoverage: [http://localhost:8081/coverage/](http://localhost:8081/coverage/)
-
 ### Development ###
 
 To keep everything simple all important tasks are based on scripts in package.json. Use `npm run <script-name>` to run any of them.
