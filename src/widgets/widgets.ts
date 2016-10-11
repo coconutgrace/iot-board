@@ -215,7 +215,7 @@ export function widgets(state: IWidgetsState = initialWidgets, action: IWidgetAc
 
 function calcAvaliableHeight(heightUnits: number): number {
     // The 10 px extra seem to be based on a bug in the grid layout ...
-    return (heightUnits * (ROW_HEIGHT + 10)) - HEADER_HEIGHT;
+    return (heightUnits * (ROW_HEIGHT)) - HEADER_HEIGHT;
 }
 
 function widget(state: IWidgetState, action: IWidgetAction): IWidgetState {
@@ -245,13 +245,24 @@ function widget(state: IWidgetState, action: IWidgetAction): IWidgetState {
                 console.warn("No layout for widget. Skipping position update of widget with id: " + state.id);
                 return state;
             }
-            return _.assign({}, state, {
-                row: layout.y,
-                col: layout.x,
-                width: layout.w,
-                height: layout.h,
-                availableHeightPx: calcAvaliableHeight(layout.h)
-            });
+            const heightInPx = calcAvaliableHeight(layout.h);
+
+            // Only change state when something actually changed!
+            if (state.row !== layout.y ||
+                state.col !== layout.x ||
+                state.width !== layout.w ||
+                state.height !== layout.h ||
+                state.availableHeightPx !== heightInPx) {
+                return _.assign({}, state, {
+                    row: layout.y,
+                    col: layout.x,
+                    width: layout.w,
+                    height: layout.h,
+                    availableHeightPx: heightInPx
+                });
+            } else {
+                return state;
+            }
         default:
             return state;
     }

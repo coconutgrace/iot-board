@@ -1,4 +1,3 @@
-
 /**
  * After a plugin was registered, we create a PluginFactory to store and create instances of the loaded Plugin
  */
@@ -23,6 +22,7 @@ export interface IPluginModule {
 
 export interface ITypeInfo {
     type: string // The name of the type - must be unique
+    kind?: "datasource" | "widget" // The kind of a plugin, is it a datasource or a widget
     author?: string // The creator of the plugin
     version?: string // The version of the plugin, use semantic versioning (e.g. 1.4.2)
     name?: string // The user friendly name of the Plugin
@@ -40,6 +40,13 @@ export interface ISetting {
     required?: boolean // true when the setting is required
 }
 
+/**
+ * Message to send data between the Dashboard and the Widget iFrame
+ */
+export interface IPostMessage {
+    type: string
+    payload?: any
+}
 
 /*
  * Datasource
@@ -76,6 +83,17 @@ export interface IDatasourcePlugin extends IPlugin {
 /*
  * Widget
  */
+
+export interface GetDataFunction {
+    (dsId: string): any[]
+}
+
+export interface IWidgetProps {
+    state?: IWidgetState | any
+    data: {[dsId: string]: any[]}
+    getData?: GetDataFunction
+    updateSetting?: (settingId: string, value: any) => void
+}
 
 export interface IWidgetPosition {
     row: number;

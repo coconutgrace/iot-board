@@ -6,6 +6,8 @@
     const TYPE_INFO = {
         type: "chart",
         name: "Chart",
+        version: "0.0.1",
+        author: "Lobaro",
         description: "Renders a chart. Will be way more flexible in future.",
         settings: [
             {
@@ -172,9 +174,7 @@
 
         render() {
             this._renderChart();
-            return <div style={{padding: "10px"}}>
-                <div className="" id={'chart-' + this.props.state.id}></div>
-            </div>
+            return <div className="" id={'chart-' + this.props.state.id}></div>
         }
 
         componentWillUnmount() {

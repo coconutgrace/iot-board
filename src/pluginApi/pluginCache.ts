@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-import {IWidgetPlugin} from "../widgets/widgetPluginFactory";
-import {ITypeInfo, IDatasourcePlugin} from "./pluginTypes";
+import {ITypeInfo, IDatasourcePlugin, IWidgetProps} from "./pluginTypes";
+import * as React from 'react'
 /**
  * When a Plugin is loaded via the UI, an action is called to do so.
  * The action will load an external script, containing the plugin code, which calls one of the API methods here.
@@ -33,12 +33,14 @@ export function registerDatasourcePlugin(typeInfo: ITypeInfo, datasource: IDatas
         TYPE_INFO: typeInfo,
         Datasource: datasource
     });
+    pluginCache.TYPE_INFO.kind = "datasource"
 }
 
-export function registerWidgetPlugin(typeInfo: ITypeInfo, widget: IWidgetPlugin) {
+export function registerWidgetPlugin(typeInfo: ITypeInfo, widget: React.ComponentClass<IWidgetProps>) {
     console.assert(!hasPlugin(), "Plugin must be finished loading before another can be registered", pluginCache);
     pluginCache = ({
         TYPE_INFO: typeInfo,
         Widget: widget
     });
+    pluginCache.TYPE_INFO.kind = "widget"
 }

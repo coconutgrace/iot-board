@@ -26,14 +26,6 @@ import * as AppState from './appState'
 const loadPredefinedState = $.get('./dashboard.json');
 es6promise.polyfill()
 
-
-window.addEventListener('message',
-    function (e: MessageEvent) {
-        if (e.origin === "null") {
-            console.log('received from iFrame: ' + e.data);
-        }
-    });
-
 loadPredefinedState.then((data: any) => {
     console.log("Starting dashboard with predefined state");
     runWithState(data);

@@ -23,13 +23,6 @@ const WidgetFrame = (props) => {
     // If the plugin is not in the registry, we assume it's currently loading
     const pluginLoaded = Dashboard.getInstance().widgetPluginRegistry.hasPlugin(widgetState.type)
 
-
-    let widgetFactory;
-    if (pluginLoaded) {
-        widgetFactory = Dashboard.getInstance().widgetPluginRegistry.getPlugin(widgetState.type);
-    }
-
-
     return (
         <div className="lob-shadow--raised slds-card"
              style={{margin: 0, overflow: "hidden", backgroundColor: "#fff"}}
@@ -63,7 +56,7 @@ const WidgetFrame = (props) => {
                 <div className="slds-size--1-of-1 slds-is-relative"
                      style={{height: widgetState.availableHeightPx, padding: 0, border: "red dashed 0px"}}>
                     {
-                        pluginLoaded ? <WidgetIFrame widget={widgetState} widgetPlugin={widgetPlugin}/> /*widgetFactory.getInstance(widgetState.id)*/
+                        pluginLoaded ? <WidgetIFrame widgetState={widgetState} widgetPlugin={widgetPlugin}/>
                             : <LoadingWidget widget={widgetState}/>
                     }
                 </div>

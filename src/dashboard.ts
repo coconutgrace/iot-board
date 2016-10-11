@@ -108,6 +108,7 @@ export default class Dashboard {
             if (PluginCache.hasPlugin()) {
                 // TODO: use a reference to the pluginCache and only bind that instance to the window object while the script is loaded
                 // TODO: The scriploader can ensure that only one script is loaded at a time
+
                 const plugin = PluginCache.popLoadedPlugin();
                 return this.loadPluginScriptDependencies(plugin, url);
             }
@@ -136,6 +137,11 @@ export default class Dashboard {
     }
 
     private loadPluginScriptDependencies(plugin: any, url: string): Promise<IPluginModule> {
+        // Do not load dependencies of widgets anymore, they are loaded inside the iFrame
+        if (plugin.TYPE_INFO.kind === "widget") {
+            return Promise.resolve(plugin);
+        }
+
         const dependencies: string[] = plugin.TYPE_INFO.dependencies;
         if (_.isArray(dependencies) && dependencies.length !== 0) {
 
@@ -151,8 +157,6 @@ export default class Dashboard {
         else {
             return Promise.resolve(plugin);
         }
-
     }
-
 
 }

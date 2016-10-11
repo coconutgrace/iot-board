@@ -5,9 +5,10 @@
 import * as React from "react";
 import {IWidgetPluginState} from "./widgetPlugins";
 import {IWidgetState} from "../pluginApi/pluginTypes";
+import Dashboard from "../dashboard";
 
 interface WidgetIFrameProps {
-    widget: IWidgetState
+    widgetState: IWidgetState
     widgetPlugin: IWidgetPluginState
 }
 
@@ -21,13 +22,23 @@ class WidgetIFrame extends React.Component<WidgetIFrameProps, void> {
         super(props)
     }
 
+    componentDidMount() {
+        const element: HTMLIFrameElement = this.refs['frame'] as HTMLIFrameElement;
+
+        const widgetFactory = Dashboard.getInstance().widgetPluginRegistry.getPlugin(this.props.widgetState.type);
+        const widgetInstance = widgetFactory.getInstance(this.props.widgetState.id)
+        widgetInstance.iFrame = element;
+    }
+
+
     // allow-popups allow-same-origin allow-modals allow-forms
     // A sandbox that includes both the allow-same-origin and allow-scripts flags,
     // then the framed page can reach up into the parent, and remove the sandbox attribute entirely.
     // Only if the framed content comes from the same origin of course.
 
     render() {
-        return <iframe id={this.props.widget.id} src={"widget.html#" + this.props.widgetPlugin.url} frameBorder="0" width="100%" height="100%" scrolling="no"
+        return <iframe id={'frame-' + this.props.widgetState.id} ref="frame" src={"widget.html#" + this.props.widgetPlugin.url} frameBorder="0" width="100%" height="100%"
+                       scrolling="no"
                        sandbox="allow-scripts">
             Browser does not support iFrames.
         </iframe>
