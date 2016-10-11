@@ -29,7 +29,7 @@ describe('Widget', function () {
             assert.equal(myWidget.col, 0);
             assert.equal(myWidget.width, 3);
             assert.equal(myWidget.height, 3);
-            assert.equal(myWidget.availableHeightPx, 266);
+            assert.isTrue(myWidget.availableHeightPx > 0);
         });
 
         it("add Widget", function () {
@@ -50,7 +50,7 @@ describe('Widget', function () {
             assert.equal(myWidget.col, 2);
             assert.equal(myWidget.width, 3);
             assert.equal(myWidget.height, 4);
-            assert.equal(myWidget.availableHeightPx, 366);
+            assert.isTrue(myWidget.availableHeightPx > 0);
 
             assert.deepEqual(
                 {
@@ -61,7 +61,7 @@ describe('Widget', function () {
                     col: 2,
                     width: 3,
                     height: 4,
-                    availableHeightPx: 366
+                    availableHeightPx: 395
                 }
                 , myWidget
             );

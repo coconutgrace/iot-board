@@ -56,6 +56,9 @@ export class WidgetPluginInstance {
         }).map(s => {
             return widgetState.settings[s.id]
         }).forEach(dsId => {
+            if (state.datasources[dsId] === undefined) {
+                return;
+            }
             const data = state.datasources[dsId].data;
             if (data !== this.oldDatasourceData[dsId]) {
                 this.oldDatasourceData[dsId] = data;

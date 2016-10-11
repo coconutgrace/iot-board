@@ -59,7 +59,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
 
     render() {
         const props = this.props;
-        const devMode = true;
+        const devMode = props.devMode;
         const showMenu = props.devMode && (!props.isReadOnly || this.state.hover);
 
         return <div className="slds-grid slds-wrap" onKeyUp={(event) => this.onReadOnlyModeKeyPress(event)}>

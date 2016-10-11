@@ -10,7 +10,7 @@ import * as Action from "../actionNames";
 import * as AppState from "../appState";
 import {IWidgetState, IWidgetPosition} from "../pluginApi/pluginTypes";
 
-export const HEADER_HEIGHT = 34;
+export const HEADER_HEIGHT = 35;
 export const ROW_HEIGHT = 100;
 
 export interface IWidgetsState {
@@ -215,7 +215,7 @@ export function widgets(state: IWidgetsState = initialWidgets, action: IWidgetAc
 
 function calcAvaliableHeight(heightUnits: number): number {
     // The 10 px extra seem to be based on a bug in the grid layout ...
-    return (heightUnits * (ROW_HEIGHT)) - HEADER_HEIGHT;
+    return (heightUnits * (ROW_HEIGHT + 10)) - HEADER_HEIGHT - 10;
 }
 
 function widget(state: IWidgetState, action: IWidgetAction): IWidgetState {

@@ -13,8 +13,6 @@ let widgetUrl = location.hash.replace(/#/, "");
 const appElement = document.getElementById('widget');
 
 let pluginInstance = new FramePluginInstance(widgetUrl, appElement);
-console.log("URL: " + widgetUrl)
-
 
 const pluginApi = {
     registerDatasourcePlugin: () => {
