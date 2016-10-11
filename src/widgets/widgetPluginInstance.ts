@@ -7,6 +7,7 @@ import Unsubscribe = Redux.Unsubscribe;
 export class WidgetPluginInstance {
     private _iFrame: HTMLIFrameElement;
     private unsubscribeStore: Unsubscribe;
+    private frameInitialized: boolean = false;
     private disposed = false;
     private oldWidgetState: any = null;
     private oldDatasourceData: {[id: string]: any} = {}
@@ -25,6 +26,11 @@ export class WidgetPluginInstance {
         }
 
         this.unsubscribeStore = store.subscribe(() => {
+            if (!this.frameInitialized) {
+                // We get invalid caches when we send state to the iFrame before it is ready
+                return;
+            }
+
             const state = store.getState()
             const widgetState = state.widgets[id];
             if (widgetState !== this.oldWidgetState) {
@@ -32,19 +38,7 @@ export class WidgetPluginInstance {
                 this.sendPluginState()
             }
 
-            // Update datasource data in iFrame
-            const widgetPluginState = state.widgetPlugins[widgetState.type];
-            widgetPluginState.typeInfo.settings.filter(s => {
-                return s.type === "datasource"
-            }).map(s => {
-                return widgetState.settings[s.id]
-            }).forEach(dsId => {
-                const data = state.datasources[dsId].data;
-                if (data !== this.oldDatasourceData[dsId]) {
-                    this.oldDatasourceData[dsId] = data;
-                    this.sendDatasourceData(dsId);
-                }
-            });
+            this.updateDatasourceDataInFrame()
         })
     }
 
@@ -53,10 +47,33 @@ export class WidgetPluginInstance {
         this.sendMessage({type: "init"})
     }
 
+    updateDatasourceDataInFrame() {
+        const state = this.store.getState();
+        const widgetState = state.widgets[this.id];
+        const widgetPluginState = state.widgetPlugins[widgetState.type];
+        widgetPluginState.typeInfo.settings.filter(s => {
+            return s.type === "datasource"
+        }).map(s => {
+            return widgetState.settings[s.id]
+        }).forEach(dsId => {
+            const data = state.datasources[dsId].data;
+            if (data !== this.oldDatasourceData[dsId]) {
+                this.oldDatasourceData[dsId] = data;
+                this.sendDatasourceData(dsId);
+            }
+        });
+    }
+
     handleMessage(msg: IPostMessage) {
         switch (msg.type) {
             case 'init': {
+                this.frameInitialized = true;
                 this.sendPluginState()
+                this.updateDatasourceDataInFrame()
+                break;
+            }
+            case 'updateSetting': {
+                this.updateSetting(msg.payload.id, msg.payload.value)
                 break;
             }
             default:
@@ -89,9 +106,9 @@ export class WidgetPluginInstance {
     }
 
 
-    updateSetting(widgetId: string, settingId: string, value: any) {
-        console.log("update", settingId, "to", value, 'of', widgetId)
-        this.store.dispatch(Widgets.updatedSingleSetting(widgetId, settingId, value));
+    updateSetting(settingId: string, value: any) {
+        console.log("update", settingId, "to", value, 'of', this.id)
+        this.store.dispatch(Widgets.updatedSingleSetting(this.id, settingId, value));
     }
 
     dispose() {

@@ -63,16 +63,18 @@ export class Layout extends Component<LayoutProps, LayoutState> {
         const showMenu = props.devMode && (!props.isReadOnly || this.state.hover);
 
         return <div className="slds-grid slds-wrap" onKeyUp={(event) => this.onReadOnlyModeKeyPress(event)}>
-            <div>
+            {devMode ? <div>
                 <WidgetConfigDialog/>
                 <ImportExportDialog/>
                 <DatasourceConfigDialog/>
                 <PluginsDialog/>
             </div>
-            <div className={showMenu ? "menu-trigger" : "menu-trigger"}
-                 onMouseOver={()=> { this.setState({hover:true})}}
-                 onMouseEnter={()=> {this.setState({hover:true})}}
+                : null}
+            {devMode ? <div className={showMenu ? "menu-trigger" : "menu-trigger"}
+                            onMouseOver={()=> { this.setState({hover:true})}}
+                            onMouseEnter={()=> {this.setState({hover:true})}}
             />
+                : null}
 
             {devMode ?
                 <div className={"slds-size--1-of-1 slds-context-bar" + (showMenu ? " topnav--visible" : " topnav--hidden")}

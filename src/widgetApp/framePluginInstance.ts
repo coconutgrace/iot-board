@@ -39,21 +39,27 @@ export class FramePluginInstance {
     }
 
     handleMessage(msg: IPostMessage) {
-        switch (msg.type) {
-            case "widgetState": {
-                this.widgetState = msg.payload;
-                this.render()
-                break;
+        try {
+            switch (msg.type) {
+                case "widgetState": {
+                    this.widgetState = msg.payload;
+                    this.render()
+                    break;
+                }
+                case "data": {
+                    this.data[msg.payload.id] = msg.payload.data;
+                    this.render()
+                    break;
+                }
+                default:
+                    console.log("frame got unknown message", msg)
+                    break;
             }
-            case "data": {
-                this.data[msg.payload.id] = msg.payload.data;
-                this.render()
-                break;
-            }
-            default:
-                break;
+        } catch (e) {
+            console.error("Failed to handle message", e)
         }
     }
+
 
     render() {
         if (this.widgetState === undefined) {
@@ -73,6 +79,13 @@ export class FramePluginInstance {
             state: this.widgetState,
             data: this.data,
             updateSetting: (settingId: string, value: any): void => {
+                this.sendMessage({
+                    type: "updateSetting",
+                    payload: {
+                        id: settingId,
+                        value: value
+                    }
+                })
                 // TODO: Implement
                 return;
             }
