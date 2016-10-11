@@ -3,5 +3,5 @@ declare module "react-dom-server" {
 
     function renderToString(element: ReactElement<any>): string;
     function renderToStaticMarkup(element: ReactElement<any>): string;
-    var version: string;
+    const version: string;
 }

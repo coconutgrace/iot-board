@@ -42,7 +42,8 @@
     "quotemark": false,
     "semicolon": false,
     "comment-format": true,
-    "no-console": false
+    "no-console": false,
+    "no-unused-variable": false
   },
   "rulesDirectory": [
   ]
