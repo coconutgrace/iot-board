@@ -36,11 +36,11 @@ export function startLoadingPluginFromUrl(url: string) {
 
         const registryBaseUrl = state.config.pluginRegistryUrl
         if (_.startsWith(url, "plugin://")) {
-            url = url.replace("plugin://", registryBaseUrl + "/plugins/")
+            url = url.replace("plugin://", registryBaseUrl + "/api/plugin-files/")
         }
         // No absolute or relative URL
         if (!_.startsWith(url, "/") && !_.startsWith(url, ".") && !_.startsWith(url, "http:") && !_.startsWith(url, "https:")) {
-            url = registryBaseUrl + "/plugins/" + url
+            url = registryBaseUrl + "/api/plugin-files/" + url
         }
 
 
