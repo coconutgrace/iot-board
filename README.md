@@ -1,7 +1,7 @@
 [![build status](https://gitlab.com/lobaro/iot-dashboard/badges/master/build.svg)](https://gitlab.com/lobaro/iot-dashboard/commits/master) [![Dependencies](https://david-dm.org/niondir/iot-dashboard.svg)](https://david-dm.org/niondir/iot-dashboard) [![Dev-Dependencies](https://david-dm.org/niondir/iot-dashboard/dev-status.svg)](https://david-dm.org/niondir/iot-dashboard#info=devDependencies)
 
 
-**Help, Questions, Feedback:**  [![Gitter](https://badges.gitter.im/Niondir/iot-dashboard.svg)](https://gitter.im/Niondir/iot-dashboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
+**Help, Questions, Feedback:**  [![Gitter](https://badges.gitter.im/iot-dashboard/Lobby.svg)](https://gitter.im/iot-dashboard/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
 
 # IoT-Dashboard
 Free Dashboard for your Data - everything is a thing
