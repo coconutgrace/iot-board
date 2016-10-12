@@ -1,0 +1,29 @@
+
++ New Feature
+! Bugfix
+
+v0.2.0 (12.10.2016)
+=======
+
+Added some features for easier usage and integration with backend systems. 
+
++ Display widgets in sandboxed iFrames
++ Documented dashboard.json in docs
++ Added a remove Plugin Repository where Plugins can be published
+! Show error message when loading a plugin fails
+! Cursor jumps to end of line while typing in config dialogs
++ Created project "iot-dashboard-starter" to run the dashboard on a simple webserver
++ Allow to display username and logout button in titlebar while in dev mode 
+! Datasource was fetched too often after editing props
++ Title bars and navigation are now in a white design (was black before)
+! Disallow resizing of Widgets when dev mode is disabled
+! Import calls undefined method
++ Dashboard is available at NPM
++ Datasource support update modes: "append" and "replace"
+
+Plus some minor bugfixes that might not be listed. Check git log for details.
+
+v0.1.0
+=======
+
+This was the first version available via npm. 
