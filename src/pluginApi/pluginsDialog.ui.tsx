@@ -342,7 +342,7 @@ class LookupMenu extends React.Component<LookupMenuProps, LookupMenuState> {
             })
             .then((json: any) => {
                 this.setState({
-                    searchResult: json.plugins
+                    searchResult: json.plugins || []
                 })
             })
     }
