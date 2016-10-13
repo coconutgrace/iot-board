@@ -11,21 +11,33 @@ export class WidgetPluginInstance {
     private disposed = false;
     private oldWidgetState: any = null;
     private oldDatasourceData: {[id: string]: any} = {}
+    private messageListener: any;
 
     constructor(private id: string, private store: DashboardStore) {
         if (typeof window !== 'undefined') {
-            window.addEventListener('message',
-                (e: MessageEvent) => {
-                    if (!this._iFrame && e.origin === "null") {
-                        console.log("Discarding message because iFrame not set yet", e.data)
-                    }
-                    if (this._iFrame !== undefined && e.origin === "null" && e.source === this._iFrame.contentWindow) {
-                        this.handleMessage(e.data)
-                    }
-                });
+
+            this.messageListener = (e: MessageEvent) => {
+                if (this.disposed) {
+                    // TODO: better unit test than runtime checking
+                    console.error("Message listener called but WidgetPluginInstance is already disposed")
+                    return;
+                }
+                if (!this._iFrame && e.origin === "null") {
+                    console.log("Discarding message because iFrame not set yet", e.data)
+                }
+                if (this._iFrame !== undefined && e.origin === "null" && e.source === this._iFrame.contentWindow) {
+                    this.handleMessage(e.data)
+                }
+            };
+            window.addEventListener('message', this.messageListener);
         }
 
         this.unsubscribeStore = store.subscribe(() => {
+            if (this.disposed) {
+                // TODO: better unit test than runtime checking
+                console.error("Store change observed but WidgetPluginInstance is already disposed")
+                return;
+            }
             if (!this.frameInitialized) {
                 // We get invalid caches when we send state to the iFrame before it is ready
                 return;
@@ -33,6 +45,12 @@ export class WidgetPluginInstance {
 
             const state = store.getState()
             const widgetState = state.widgets[id];
+            if (widgetState === undefined) {
+                // This happens for example during import. Where the state is cleared but this class not yet disposed.
+                // So we just silently return.
+                return;
+            }
+
             if (widgetState !== this.oldWidgetState) {
                 this.oldWidgetState = widgetState;
                 this.sendPluginState()
@@ -50,6 +68,7 @@ export class WidgetPluginInstance {
     updateDatasourceDataInFrame() {
         const state = this.store.getState();
         const widgetState = state.widgets[this.id];
+
         const widgetPluginState = state.widgetPlugins[widgetState.type];
         widgetPluginState.typeInfo.settings.filter(s => {
             return s.type === "datasource"
@@ -85,8 +104,14 @@ export class WidgetPluginInstance {
     }
 
     sendMessage(msg: any) {
+        if (!this._iFrame.contentWindow) {
+            // This happens during import. We ignore it silently and rely on later disposal to free memory.
+            // TODO: Find a way to dispose this instance before this happens.
+            return;
+        }
         this._iFrame.contentWindow.postMessage(msg, '*')
     }
+
 
     sendPluginState() {
         const state = this.store.getState()
@@ -118,6 +143,10 @@ export class WidgetPluginInstance {
         if (!this.disposed && _.isFunction(this.unsubscribeStore)) {
             this.unsubscribeStore();
         }
+        if (!this.disposed && _.isFunction(this.messageListener)) {
+            window.removeEventListener("message", this.messageListener)
+        }
+
         this.disposed = true;
     }
 }
