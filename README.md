@@ -14,8 +14,10 @@ Can be used as free alternative to [geckoboard](https://www.geckoboard.com), [ki
 And of course for all other IoT, M2M, Industry 4.0, BigData, whatever dashboards you have to pay for out there.
 
 ---
-
-[Documentation](https://gitlab.com/lobaro/iot-dashboard/wikis/home)
+## Documentation ##
+* [IoT-Dashboard Documentation](https://gitlab.com/lobaro/iot-dashboard/wikis/home)
+* [Plugin Development: Getting Started](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevGettingStarted.md)
+* [Plugin API](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevelopment.md)
 
 ## Demo ##
 
