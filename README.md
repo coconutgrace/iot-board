@@ -91,6 +91,10 @@ To keep everything simple all important tasks are based on scripts in package.js
 The watch task compiles the Plugin sources and keeps test files up to date. See `gulpfile.js` -> `watch` task for details.
 
     npm run watch
+    
+6) **Done!**
+    
+To get started with plugin developement follow the [Plugin Developmenet: Getting Started](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevGettingStarted.md) guide. Start with step two.
 
 #### Useful Tasks
 
