@@ -42,27 +42,7 @@ If you find something that comes close to the above requirements, please let me 
 
 Prerequisite: Download & install [NodeJs](https://nodejs.org)
 
-### Install from npm ###
-
-The fastest way to get the dashboard running on your machine.
-
-Install the Dashboard starter
-
-    npm install -g iot-dashboard-starter
-
-Start the dashboard with
-
-    iot-dashboard
-
-Open your browser at [http://localhost:8081](http://localhost:8081)
-
----
-
-To just include the dashboard in your own project install it locally
-
-    npm install --save-dev iot-dashboard
-
-### Development ###
+### Plugin Development Setup ###
 
 To keep everything simple all important tasks are based on scripts in package.json. Use `npm run <script-name>` to run any of them.
 
@@ -95,6 +75,26 @@ The watch task compiles the Plugin sources and keeps test files up to date. See 
 6) **Done!**
     
 To get started with plugin developement follow the [Plugin Developmenet: Getting Started](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevGettingStarted.md) guide. Start with step two.
+
+### Install and run the Dashboard locally ###
+
+The fastest way to get the dashboard running on your machine.
+
+Install the Dashboard starter
+
+    npm install -g iot-dashboard-starter
+
+Start the dashboard with
+
+    iot-dashboard
+
+Open your browser at [http://localhost:8081](http://localhost:8081)
+
+---
+
+To include the dashboard in your own project install it as dependency with
+
+    npm install --save-dev iot-dashboard
 
 #### Useful Tasks
 
