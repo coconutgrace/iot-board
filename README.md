@@ -66,20 +66,30 @@ To just include the dashboard in your own project install it locally
 
 To keep everything simple all important tasks are based on scripts in package.json. Use `npm run <script-name>` to run any of them.
 
-For preparation run
+1. Clone this reposity 
+
+    git clone https://gitlab.com/lobaro/iot-dashboard.git
+    cd iot-dashboard
+
+2. Install all dependencies for building, testing and development
 
     npm install
 
-Run the Webpack Server with live-reload and hot module replacement
+3. Run the Webpack Dev Server with live-reload and hot module replacement
 
     npm run dev
 
-Open your browser at: [http://localhost:8080](http://localhost:8080) and for developing tests: [http://localhost:8080/webpack-dev-server/tests.html](http://localhost:8080/webpack-dev-server/tests.html)
+[Webpack](https://webpack.github.io/) is the used build tool to transpile and bundle all sources. The Dev Server is part of Webpack and allows to run the application with live-reload.
 
-Run a second watch task to keep some other files up to date (optional)
-See `gulpfile.js` -> `watch` task for details.
+4. Open your browser at: [http://localhost:8080](http://localhost:8080) and for developing tests: [http://localhost:8080/webpack-dev-server/tests.html](http://localhost:8080/webpack-dev-server/tests.html)
+
+5. Run a second task in another terminal to compile i.a. plugins automatically on file-change
+
+The watch task compiles the Plugin sources and keeps test files up to date. See `gulpfile.js` -> `watch` task for details.
 
     npm run watch
+
+#### Useful Tasks
 
 To make sure all you changes will survive the CI build
 
