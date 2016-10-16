@@ -55,7 +55,7 @@ If you find something that comes close to the above requirements, please let me 
 
 Prerequisite: Download & install [NodeJs](https://nodejs.org)
 
-### Plugin Development Setup ###
+### Plugin Development Toolchain Setup ###
 
 To keep everything simple all important tasks are based on scripts in package.json. Use `npm run <script-name>` to run any of them.
 
