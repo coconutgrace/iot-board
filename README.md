@@ -4,14 +4,17 @@
 **Help, Questions, Feedback:**  [![Gitter](https://badges.gitter.im/iot-dashboard/Lobby.svg)](https://gitter.im/iot-dashboard/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
 
 # IoT-Dashboard
-Free Dashboard for your Data - everything is a thing
+Free open-source website to display & control (IoT) data - everything is a thing. 
 
-A generic dashboard application based on JavaScript, HTML and CSS that runs in modern browsers.
-Allows to arrange and configure widgets to display data from any datasource.
-A Plugin API that allows easy widget and datasource development to keep the dashboard as extensible as possible.
+A generic dashboard application based on JavaScript, HTML and CSS that runs in modern browsers without any server in the background. 
+Allows to arrange and configure widgets to display data from any datasource - not limited to Internet of Things.
+
+A plugin API that allows easy widget and datasource development to keep the dashboard as extensible as possible.
 
 Can be used as free alternative to [geckoboard](https://www.geckoboard.com), [kibana](https://www.elastic.co/products/kibana), [grafana](http://grafana.org/) or [freeboard](https://freeboard.io/).
 And of course for all other IoT, M2M, Industry 4.0, BigData, whatever dashboards you have to pay for out there.
+
+This project is backed by [Lobaro corporation](http://www.lobaro.com) - Full-stack IoT services including customized hardware, backend-integration and visualizations.
 
 ---
 ## Documentation ##
@@ -19,12 +22,20 @@ And of course for all other IoT, M2M, Industry 4.0, BigData, whatever dashboards
 * [Plugin Development: Getting Started](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevGettingStarted.md)
 * [Plugin API](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevelopment.md)
 
-## Demo ##
+## Live Demo ##
 
-Online:
+Standalone:
 
 * [Live Demo Stable](http://demo.iot-dashboard.org/) of the `master` branch.
 * [Live Demo Dev](http://demo.iot-dashboard.org/branch/dev/) of the `dev` branch.
+
+Online service:
+
+
+The iot-dashboard code does not include any server-side backend logic for account mangement, plugin registry and state persistence. If you need these features,
+e.g. if you want to share your dashboard easily with others over the web, you can use the hosted version of the dashboard (currently in beta):
+
+* [Lobaro Dashboard Hosting](https://dashboard.lobaro.com/)
 
 ## Motivation ##
 Why just another Dashboard?
@@ -110,7 +121,9 @@ To just run the tests (not enough to survive the CI build!)
 
 Find the coverage report in `dist/coverage` or while the server is running at [http://localhost:8080/coverage/](http://localhost:8080/coverage/)
 
-## License ##
+## Copyright & License ##
+Copyright © 2016 Lobaro (http://www.lobaro.com)
+
 The code is available under [Mozilla Public License 2.0](https://www.mozilla.org/en-US/MPL/) (MPL 2.0)
 For more information you might want to read the [FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
 
@@ -119,4 +132,4 @@ Contributors have to add a [License Header](https://www.mozilla.org/en-US/MPL/he
 This means you can use and modify the code for private propose (personal or inside your organisation)
 Outside of your Organisation you must make modified MPLed code available to your users and comply with all other requirements of the MPL 2.0.
 
-If you need some of the code available under another license, do not hesitate to **contact me**.
+If you need some of the code available under another license, do not hesitate to [contact](http://www.lobaro.com/contact/) Lobaro.
