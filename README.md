@@ -14,7 +14,7 @@ A plugin API that allows easy widget and datasource development to keep the dash
 Can be used as free alternative to [geckoboard](https://www.geckoboard.com), [kibana](https://www.elastic.co/products/kibana), [grafana](http://grafana.org/) or [freeboard](https://freeboard.io/).
 And of course for all other IoT, M2M, Industry 4.0, BigData, whatever dashboards you have to pay for out there.
 
-This project is backed by [Lobaro corporation](http://www.lobaro.com) - Full-stack IoT services including customized hardware, backend-integration and visualizations.
+This project is backed by [Lobaro.com](http://www.lobaro.com) - We offer full-stack IoT services including customized hardware, backend-integration and visualizations.
 
 ---
 ## Documentation ##
@@ -30,7 +30,6 @@ Standalone:
 * [Live Demo Dev](http://demo.iot-dashboard.org/branch/dev/) of the `dev` branch.
 
 Online service:
-
 
 The iot-dashboard code does not include any server-side backend logic for account mangement, plugin registry and state persistence. If you need these features,
 e.g. if you want to share your dashboard easily with others over the web, you can use the hosted version of the dashboard (currently in beta):
@@ -51,11 +50,11 @@ I was looking for a Dashboard with the following properties:
 
 If you find something that comes close to the above requirements, please let me know!
 
-## Setup ##
+## Setup / Install ##
 
 Prerequisite: Download & install [NodeJs](https://nodejs.org)
 
-### Plugin Development Toolchain Setup ###
+### Setup Plugin Development Toolchain ###
 
 To keep everything simple all important tasks are based on scripts in package.json. Use `npm run <script-name>` to run any of them.
 
@@ -64,7 +63,7 @@ To keep everything simple all important tasks are based on scripts in package.js
     git clone https://gitlab.com/lobaro/iot-dashboard.git
     cd iot-dashboard
 
-2) Install all dependencies for building, testing and development
+2) Install all dependencies for building, testing and development - can take some time
 
     npm install
 
@@ -72,7 +71,7 @@ To keep everything simple all important tasks are based on scripts in package.js
 
     npm run dev
 
- [Webpack](https://webpack.github.io/) is the used build tool to transpile and bundle all sources. The Dev Server is part of Webpack and allows to run the application with live-reload.
+ [Webpack](https://webpack.github.io/) is the used build tool to transpile and bundle all sources. The development WebServer is part of Webpack and allows to run the application with live-reload locally.
 
 4) Open your browser at: 
 
@@ -81,23 +80,33 @@ To keep everything simple all important tasks are based on scripts in package.js
 
 5) Run a second task in another terminal to compile i.a. plugins automatically on file-change
 
-The watch task compiles the Plugin sources and keeps test files up to date. See `gulpfile.js` -> `watch` task for details.
-
     npm run watch
-    
+
+The watch task compiles the Plugin sources and keeps test files up to date. 
+
+Particular it monitors & transpiles the plugins in `/plugins/**/*.js` (source dev folder) to `/dist/plugins/**/*.js` (plugin load folder) when the sourcefile changes.
+
+See `gulpfile.js` -> `watch` task for more details.
+
 6) **Done!**
-    
-To get started with plugin developement follow the [Plugin Developmenet: Getting Started](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevGettingStarted.md) guide. Start with step two.
 
-### Install and run the Dashboard locally ###
+You have succesfully installed the dashboard development toolchain. 
 
-The fastest way to get the dashboard running on your machine.
+To get started with plugin developement follow the [Plugin Developmenet: Getting Started](https://gitlab.com/lobaro/iot-dashboard/wikis/pluginDevGettingStarted.md) guide 
+starting with step two.
 
-Install the Dashboard starter
+To continue with plugin development later only the above steps 3 to 6 have to be performed again.
+
+
+### OR Install and run the Dashboard locally  ###
+
+The fastest way to get the dashboard running on your machine (**without development tools!**).
+
+1) Install the Dashboard starter server
 
     npm install -g iot-dashboard-starter
 
-Start the dashboard with
+2) Start the dashboard with
 
     iot-dashboard
 
