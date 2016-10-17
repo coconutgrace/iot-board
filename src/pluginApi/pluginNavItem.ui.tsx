@@ -16,7 +16,7 @@ interface PluginsTopNavItemProps {
 const PluginsTopNavItem = (props: PluginsTopNavItemProps) => {
     return <li className="slds-context-bar__item">
         <a href="javascript:void(0);"  onClick={() => props.showPluginsDialog()} className="slds-context-bar__label-action" title="Plugins">
-            <span className="slds-truncate">Plugins</span>
+            <span className="slds-truncate">Plugin Manager</span>
         </a>
     </li>
 };

@@ -91,9 +91,9 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                     <div className="slds-context-bar__secondary" role="navigation">
                         <ul className="slds-grid">
                             <DashboardMenuEntry/>
+                            <PluginNavItem/>
                             <WidgetsNavItem/>
                             <DatasourceNavItem/>
-                            <PluginNavItem/>
                             <LayoutsNavItem/>
                             <div className="slds-context-bar__vertical-divider"/>
                             <li className="slds-context-bar__item">

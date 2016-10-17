@@ -76,7 +76,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
         const pluginUrlInput: any = this.refs['pluginUrl'] // HTMLInputElement
 
         return <ModalDialog id="plugins-dialog"
-                            title="Plugins"
+                            title="Plugin Manager"
                             actions={actions}
         >
             <div className="slds-grid">
