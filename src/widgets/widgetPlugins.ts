@@ -52,8 +52,13 @@ export interface IWidgetPluginAction extends AppState.Action {
 
 export function unloadPlugin(type: string): AppState.ThunkAction {
     return function (dispatch) {
-        const widgetPlugin = Dashboard.getInstance().widgetPluginRegistry.getPlugin(type);
-        widgetPlugin.dispose();
+        // When the plugin is still loading, or never loaded successfully we can not find it
+        if (Dashboard.getInstance().widgetPluginRegistry.hasPlugin(type)) {
+            const widgetPlugin = Dashboard.getInstance().widgetPluginRegistry.getPlugin(type);
+            widgetPlugin.dispose();
+        }
+
+        // TODO: Should we remove the url from plugin loader and cancel loading when the plugin is still loading?
         dispatch(deletePlugin(type));
     }
 }

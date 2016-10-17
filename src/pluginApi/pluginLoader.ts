@@ -26,6 +26,9 @@ export interface IPluginLoaderAction extends AppState.Action {
     url: string
 }
 
+function isUrl(url: string) {
+    return _.startsWith(url, "/") || !_.startsWith(url, ".") || !_.startsWith(url, "http:") || !_.startsWith(url, "https:");
+}
 
 /**
  *  Load plugin from URL or registry when starting with plugin://
@@ -39,7 +42,7 @@ export function startLoadingPluginFromUrl(url: string) {
             url = url.replace("plugin://", registryBaseUrl + "/api/plugin-files/")
         }
         // No absolute or relative URL
-        if (!_.startsWith(url, "/") && !_.startsWith(url, ".") && !_.startsWith(url, "http:") && !_.startsWith(url, "https:")) {
+        if (!isUrl(url)) {
             url = registryBaseUrl + "/api/plugin-files/" + url
         }
 

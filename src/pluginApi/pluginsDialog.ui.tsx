@@ -43,7 +43,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
 
     pluginSearchValueChange(e: React.FormEvent<any>) {
         const url = this.pluginUrlValue();
-        if (url === '' || _.startsWith(url, ".") || _.startsWith(url, "/")) {
+        if (this.isUrl(url)) {
             this.setState({isSearchOpen: false});
         } else {
             this.setState({isSearchOpen: true});
@@ -59,9 +59,13 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
 
     }
 
+    isUrl(url: string) {
+        return url === '' || _.startsWith(url, ".") || _.startsWith(url, "/") || _.startsWith(url, "http:") || _.startsWith(url, "https:")
+    }
+
     onFocusPluginSearchInput(e: React.FormEvent<any>) {
         const url = this.pluginUrlValue();
-        if (url === '' || _.startsWith(url, "./") || _.startsWith(url, "/")) {
+        if (this.isUrl(url)) {
             this.setState({isSearchOpen: false});
         } else {
             this.setState({isSearchOpen: true});
@@ -224,6 +228,7 @@ class PluginTile extends React.Component<PluginTileProps, any> {
 
         return <div className="slds-tile slds-item slds-size--1-of-5 slds-m-around--x-small" style={{marginTop: "0.5rem"}}>
             <div className="slds-grid slds-grid--align-spread slds-has-flexi-truncate slds-m-bottom--x-small">
+
                 <h3 className="slds-text-heading--medium">{pluginState.typeInfo.name}</h3>
                 <div className={"slds-shrink-none slds-dropdown-trigger slds-dropdown-trigger--click" + (this.state.actionMenuOpen ? " slds-is-open" : "")}>
                     <button className="slds-button slds-button--icon-border-filled slds-button--icon-x-small" aria-haspopup="true"
@@ -234,7 +239,7 @@ class PluginTile extends React.Component<PluginTileProps, any> {
                         </svg>
                         <span className="slds-assistive-text">Actions</span>
                     </button>
-                    <div className="slds-dropdown slds-dropdown--left slds-dropdown--actions">
+                    <div className="slds-dropdown slds-dropdown--left slds-dropdown--actions" style={{zIndex:9003}}>
                         <ul className="dropdown__list" role="menu">
                             <li className="slds-dropdown__item" role="presentation">
                                 <a href="javascript:void(0);" role="menuitem" tabIndex={0} onClick={() => props.publishPlugin(pluginState.id)}>
@@ -256,7 +261,18 @@ class PluginTile extends React.Component<PluginTileProps, any> {
                     </div>
                 </div>
             </div>
-            <div className="slds-tile__detail">
+            <div className="slds-tile__detail slds-is-relative">
+                { pluginState.isLoading ?
+                    <div className="slds-spinner_container">
+                        <div className="slds-spinner slds-spinner--small" role="alert">
+                            <span className="slds-assistive-text">Loading</span>
+                            <div className="slds-spinner__dot-a"></div>
+                            <div className="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                    : null
+                }
+
                 <dl className="slds-dl--horizontal">
                     <dt className="slds-dl--horizontal__label">
                         <p className="slds-truncate" title="Type">Type:</p>

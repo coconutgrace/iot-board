@@ -69,8 +69,13 @@ export interface IDatasourcePluginAction extends AppState.Action {
 
 export function unloadPlugin(type: string) {
     return function (dispatch: AppState.Dispatch) {
-        const dsFactory = Dashboard.getInstance().datasourcePluginRegistry.getPlugin(type);
-        dsFactory.dispose();
+        // When the plugin is still loading, or never loaded successfully we can not find it
+        if (Dashboard.getInstance().widgetPluginRegistry.hasPlugin(type)) {
+            const dsFactory = Dashboard.getInstance().datasourcePluginRegistry.getPlugin(type);
+            dsFactory.dispose();
+        }
+
+        // TODO: Should we remove the url from plugin loader and cancel loading when the plugin is still loading?
         dispatch(deletePlugin(type));
     }
 }

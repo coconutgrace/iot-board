@@ -185,7 +185,9 @@ class DatasourceConfigModal extends React.Component {
                         >
                             <option key="none" value="">Select Type...</option>
                             {_.valuesIn(props.datasourcePlugins).map(dsPlugin => {
-                                return <option key={dsPlugin.id} value={dsPlugin.id}>{dsPlugin.typeInfo.name}</option>
+                                return (
+                                    !dsPlugin.isLoading ? <option key={dsPlugin.id} value={dsPlugin.id}>{dsPlugin.typeInfo.name}</option>
+                                        : null)
                             })}
                         </select>
                     </div>
