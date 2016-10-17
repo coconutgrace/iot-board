@@ -42,8 +42,14 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
     }
 
     pluginSearchValueChange(e: React.FormEvent<any>) {
-        const pluginUrlInput: any = this.refs['pluginUrl'] // HTMLInputElement
-        this.setState({pluginUrl: pluginUrlInput.value});
+        const url = this.pluginUrlValue();
+        if (url === '' || _.startsWith(url, ".") || _.startsWith(url, "/")) {
+            this.setState({isSearchOpen: false});
+        } else {
+            this.setState({isSearchOpen: true});
+        }
+
+        this.setState({pluginUrl: this.pluginUrlValue()});
     }
 
     onBlurPluginSearchInput(e: React.FormEvent<any>) {
@@ -54,7 +60,23 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
     }
 
     onFocusPluginSearchInput(e: React.FormEvent<any>) {
-        this.setState({isSearchOpen: true});
+        const url = this.pluginUrlValue();
+        if (url === '' || _.startsWith(url, "./") || _.startsWith(url, "/")) {
+            this.setState({isSearchOpen: false});
+        } else {
+            this.setState({isSearchOpen: true});
+        }
+    }
+
+    pluginUrlValue(): string {
+        const pluginUrlInput = this.refs['pluginUrl'] as HTMLInputElement;
+        return _.trim(pluginUrlInput.value);
+    }
+
+    clearUrl() {
+        const pluginUrlInput = this.refs['pluginUrl'] as HTMLInputElement;
+        pluginUrlInput.value = ""
+        this.setState({pluginUrl: ""});
     }
 
     render() {
@@ -92,7 +114,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                     <form className="slds-form--inline slds-grid"
                           onSubmit={(e) => {
                               props.loadPlugin(pluginUrlInput.value);
-                              pluginUrlInput.value = ""
+                              this.clearUrl()
                               e.preventDefault()
                           }}
                     >
@@ -103,7 +125,7 @@ class PluginsModal extends React.Component<PluginsModalProps, PluginsModalState>
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#search"></use>
                                     </svg>
                                     <input className="slds-lookup__search-input slds-input" type="search" placeholder="URL or Id from Plugin Registry"
-                                           id="plugin-lookup-menu" ref="pluginUrl" autoComplete="off"
+                                           id="plugin-lookup-menu" ref="pluginUrl" autoComplete={(this.state.isSearchOpen ? " off" : "on")}
                                            defaultValue=""
                                            onChange={(e) => this.pluginSearchValueChange(e)}
                                            onBlur={(e) => this.onBlurPluginSearchInput(e)}

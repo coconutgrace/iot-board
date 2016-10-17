@@ -153,10 +153,16 @@ gulp.task('compile:js', [], function () {
 });
 
 gulp.task('compile:plugins', [], function () {
+    b = babel()
+    b.on('error', (e) => {
+        console.log(e);
+        b.end()
+    })
+
     return gulp.src('plugins/**/*.js')
-        .pipe(babel())
-        .on('error', (e) => {console.log(e)})
-        .pipe(gulp.dest('./dist/plugins'));
+        .pipe(b)
+        .pipe(gulp.dest('./dist/plugins'))
+
 });
 
 gulp.task('compile:design-system', [], function () {
