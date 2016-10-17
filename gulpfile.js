@@ -155,6 +155,7 @@ gulp.task('compile:js', [], function () {
 gulp.task('compile:plugins', [], function () {
     return gulp.src('plugins/**/*.js')
         .pipe(babel())
+        .on('error', (e) => {console.log(e)})
         .pipe(gulp.dest('./dist/plugins'));
 });
 
