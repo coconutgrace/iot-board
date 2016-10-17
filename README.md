@@ -27,12 +27,11 @@ This project is backed by [Lobaro.com](http://www.lobaro.com) - We offer full-st
 Standalone:
 
 * [Live Demo Stable](http://demo.iot-dashboard.org/) of the `master` branch.
-* [Live Demo Dev](http://demo.iot-dashboard.org/branch/dev/) of the `dev` branch.
 
 Online service:
 
 The iot-dashboard code does not include any server-side backend logic for account mangement, plugin registry and state persistence. If you need these features,
-e.g. if you want to share your dashboard easily with others over the web, you can use the hosted version of the dashboard (currently in beta):
+e.g. if you want to share your dashboard easily with others over the web, you can use the hosted version of the dashboard:
 
 * [Lobaro Dashboard Hosting](https://dashboard.lobaro.com/)
 
