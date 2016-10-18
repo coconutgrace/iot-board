@@ -122,7 +122,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                         <ul className="slds-grid slds-grid--vertical-align-center">
 
                             {props.config.auth && props.config.auth.username ?
-                                <div className="slds-m-right--small">Tobias</div>
+                                <div className="slds-m-right--small">{props.config.auth.username}</div>
                                 : null
                             }
                             {props.config.auth && props.config.auth.logoutUrl ?
