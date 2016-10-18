@@ -7,6 +7,9 @@
     const TYPE_INFO = {
         type: "counter-widget",
         name: "Counter",
+        version: "0.0.1",
+        author: "Lobaro",
+        kind: "widget",
         description: "Displays a button to increase a simple int value",
         settings: [
             {

@@ -7,6 +7,9 @@
     const TYPE_INFO = {
         type: "demo-color",
         name: "Color",
+        version: "0.0.1",
+        author: "Lobaro",
+        kind: "widget",
         description: "Display color values",
         dependencies: [
             "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"

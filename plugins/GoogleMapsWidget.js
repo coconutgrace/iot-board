@@ -3,7 +3,9 @@
     const TYPE_INFO = {
         type: "google-maps",
         name: "Google Maps",
-        rendering: "react",
+        version: "0.0.1",
+        author: "Lobaro",
+        kind: "widget",
         description: "Render Google Maps with some Location Data",
         dependencies: [
             /* TODO Load at runtime based on API KEY, might need dashboard wide configuration */

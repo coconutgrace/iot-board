@@ -5,7 +5,10 @@
 (function (window) {
     const TYPE_INFO = {
         type: "time",
-        name: "Time"
+        name: "Time",
+        version: "0.0.1",
+        author: "Lobaro",
+        kind: "datasource"
     };
 
 
