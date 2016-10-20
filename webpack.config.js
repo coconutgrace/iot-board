@@ -49,10 +49,6 @@ module.exports = function () {
                 path.resolve('./dist')
             ],
             alias: {
-                d3: path.resolve('./vendor/d3/d3' + dotJs),
-                c3: path.resolve('./vendor/c3/c3' + dotJs),
-                c3css: path.resolve('./vendor/c3/c3' + dotCss),
-                sandie: path.resolve('./vendor/sandie.js'), // TODO: Remove?
                 'urijs': path.resolve('./node_modules/urijs/src/URI' + dotJs),
                 'react': path.resolve('./node_modules/react/dist/react' + dotJs),
                 'react-dom': path.resolve('./node_modules/react-dom/dist/react-dom' + dotJs),

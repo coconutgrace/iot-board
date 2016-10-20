@@ -4,11 +4,9 @@
 
 import "semantic-ui-css/semantic.css";
 import "semantic-ui-css/semantic";
-import "c3css";
 import "expose?$!expose?jQuery!jquery";
 import "expose?React!react";
 import "expose?_!lodash";
-import "expose?c3!c3";
 import "./pluginApi/freeboardPluginApi";
 import "./pluginApi/pluginApi";
 import "./app.css";

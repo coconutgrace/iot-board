@@ -3,7 +3,6 @@
 /sandbox/
 /src/
 /typings/
-/vendor/
 
 /.babelrc
 /.editorconfig

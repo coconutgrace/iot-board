@@ -1,8 +1,6 @@
 import "expose?$!expose?jQuery!jquery";
 import "expose?React!react";
 import "expose?_!lodash";
-import "expose?c3!c3";
-import "c3css";
 import "file?name=[name].[ext]!./widget.html";
 import * as React from "react";
 import {ITypeInfo, IWidgetProps} from "../pluginApi/pluginTypes";
