@@ -110,7 +110,7 @@ export function pluginLoaderReducer(state: IPluginLoaderState = initialState, ac
     return newState;
 }
 
-export function publishPlugin(id: string) {
+export function publishPlugin(id: string, usePlugin: boolean) {
     return function (dispatch: AppState.Dispatch, getState: AppState.GetState) {
         const state = getState()
         const dsPlugin = state.datasourcePlugins[id];
@@ -151,12 +151,16 @@ export function publishPlugin(id: string) {
             }
             return response.json();
         }).then(function (json: any) {
-            if (isDatasource) {
-                dispatch(DatasourcePlugins.publishedDatasourcePlugin(id, registryBaseUrl + json.url, json.typeInfo))
+            dispatch(ModalDialog.addInfo("Published plugin: " + id + " at " + registryBaseUrl + json.url))
+            if (usePlugin) {
+                if (isDatasource) {
+                    dispatch(DatasourcePlugins.usePublishedDatasourcePlugin(id, registryBaseUrl + json.url, json.typeInfo))
+                }
+                else {
+                    dispatch(WidgetPlugins.usePublishedWidgetPlugin(id, registryBaseUrl + json.url, json.typeInfo))
+                }
             }
-            else {
-                dispatch(WidgetPlugins.publishedWidgetPlugin(id, registryBaseUrl + json.url, json.typeInfo))
-            }
+
         }).catch(function (err) {
             dispatch(ModalDialog.addError(err.message))
         });

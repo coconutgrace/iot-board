@@ -196,6 +196,7 @@ class PluginTileProps {
     pluginState: IDatasourcePluginState & IWidgetPluginState
     removePlugin: (type: string) => any
     publishPlugin: (type: string) => void
+    publishAndUsePlugin: (type: string) => void
 }
 
 class PluginTile extends React.Component<PluginTileProps, any> {
@@ -247,6 +248,14 @@ class PluginTile extends React.Component<PluginTileProps, any> {
                                         <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#upload"/>
                                     </svg>
                                     <span className="slds-truncate">Publish</span>
+                                </a>
+                            </li>
+                            <li className="slds-dropdown__item" role="presentation">
+                                <a href="javascript:void(0);" role="menuitem" tabIndex={0} onClick={() => props.publishAndUsePlugin(pluginState.id)}>
+                                    <svg aria-hidden="true" className="slds-icon slds-icon--x-small slds-icon-text-default slds-m-right--x-small slds-shrink-none">
+                                        <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#upload"/>
+                                    </svg>
+                                    <span className="slds-truncate">Publish and use</span>
                                 </a>
                             </li>
                             <li className="slds-dropdown__item" role="presentation">
@@ -326,7 +335,8 @@ const WidgetPluginTile = connect(
     (dispatch: Dispatch) => {
         return {
             removePlugin: (type: string) => dispatch(WidgetsPlugins.unloadPlugin(type)),
-            publishPlugin: (type: string) => dispatch(Plugins.publishPlugin(type))
+            publishPlugin: (type: string) => dispatch(Plugins.publishPlugin(type, false)),
+            publishAndUsePlugin: (type: string) => dispatch(Plugins.publishPlugin(type, true))
         }
     }
 )(PluginTile);
@@ -340,7 +350,8 @@ const DatasourcePluginTile = connect(
     (dispatch: Dispatch) => {
         return {
             removePlugin: (type: string) => dispatch(DatasourcePlugins.unloadPlugin(type)),
-            publishPlugin: (type: string) => dispatch(Plugins.publishPlugin(type))
+            publishPlugin: (type: string) => dispatch(Plugins.publishPlugin(type, false)),
+            publishAndUsePlugin: (type: string) => dispatch(Plugins.publishPlugin(type, true))
         }
     }
 )(PluginTile);

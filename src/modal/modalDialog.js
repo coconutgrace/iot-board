@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import * as Action from '../actionNames'
 import ModalDialog from './modalDialog.ui.js'
@@ -15,7 +15,7 @@ function showModalSideeffect(id) {
     const $modal = $('.ui.modal.' + id);
 
     if (!$modal.length) {
-       throw new Error("Can not find Modal with id", id, $modal);
+        throw new Error("Can not find Modal with id", id, $modal);
     }
 
     $modal.modal('show');
@@ -72,15 +72,24 @@ export function closeModal() {
 
 export function addError(message) {
     return {
-        type: Action.MODAL_ADD_ERROR,
+        type: Action.MODAL_ADD_USER_MESSAGE,
+        kind: "error",
         message: message
     }
 }
 
-export function deleteError(message) {
+export function addInfo(message) {
     return {
-        type: Action.MODAL_DELETE_ERROR,
+        type: Action.MODAL_ADD_USER_MESSAGE,
+        kind: "info",
         message: message
+    }
+}
+
+export function deleteUserMessage(userMessage) {
+    return {
+        type: Action.MODAL_DELETED_USER_MESSAGE,
+        message: userMessage
     }
 }
 
@@ -100,15 +109,15 @@ export function modalDialog(state = initialState, action) {
                 isVisible: false,
                 errors: []
             });
-        case Action.MODAL_ADD_ERROR: {
+        case Action.MODAL_ADD_USER_MESSAGE: {
             const stateErrors = state.errors || []
-            const errors = [...stateErrors, action.message]
+            const errors = [...stateErrors, {text: action.message, kind: action.kind}]
             return Object.assign({}, state, {
                 errors: errors
             });
         }
-        case Action.MODAL_DELETE_ERROR: {
-            const errors = _.filter([...state.errors], (e) => e != action.message)
+        case Action.MODAL_DELETED_USER_MESSAGE: {
+            const errors = _.filter([...state.errors], (e) => e.text != action.message.text)
             return Object.assign({}, state, {
                 errors: errors
             });

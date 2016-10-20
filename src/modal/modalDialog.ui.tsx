@@ -11,7 +11,12 @@ export interface IModalDialogState {
     dialogId: string
     data: any
     isVisible: boolean
-    errors: string[]
+    errors: UserMessage[]
+}
+
+interface UserMessage {
+    text: string
+    kind: "info" | "error"
 }
 
 interface DialogAction {
@@ -113,7 +118,7 @@ class ModalDialog extends React.Component<ModalDialogProps, any> {
             <div className="content" style={{overflowY: 'scroll', height: height - 300, minHeight:"500px"}}>
                 {this.props.dialogState.errors ?
                     this.props.dialogState.errors.map((message, i) => {
-                        return <ModalErrorComponent key={i} errorMessage={message}/>
+                        return <ModalUserMessageComponent key={i} userMessage={message}/>
                     })
                     : null}
                 {props.children}
@@ -139,18 +144,26 @@ export default connect(
 )(ModalDialog)
 
 interface ModalErrorProps {
-    errorMessage: string
-    close: (message: string) => void
+    userMessage: UserMessage
+    close: (message: UserMessage) => void
 }
 
-class ModalError extends React.Component<ModalErrorProps, any> {
+class ModalUserMessage extends React.Component<ModalErrorProps, any> {
     close() {
-        this.props.close(this.props.errorMessage)
+        this.props.close(this.props.userMessage)
     }
 
     render() {
+        let theme = "error"
+        if (this.props.userMessage.kind === "info") {
+            theme = "success"
+        }
+        if (this.props.userMessage.kind === "error") {
+            theme = "error"
+        }
+
         return <div className="slds-notify_container slds-is-relative slds-m-bottom--x-small">
-            <div className="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+            <div className={"slds-notify slds-notify--alert slds-theme--alert-texture slds-theme--" + theme} role="alert">
                 <button className="slds-button slds-notify__close slds-button--icon-inverse"
                         onClick={() => this.close()}
                 >
@@ -159,24 +172,25 @@ class ModalError extends React.Component<ModalErrorProps, any> {
                     </svg>
                     <span className="slds-assistive-text">Close</span>
                 </button>
-                <span className="slds-assistive-text">Error</span>
-                <h2>{this.props.errorMessage}</h2>
+                <span className="slds-assistive-text">{this.props.userMessage.kind}</span>
+                <h2>{this.props.userMessage.text}</h2>
             </div>
         </div>
     }
 }
 
-const ModalErrorComponent = connect(
+
+const ModalUserMessageComponent = connect(
     (state: AppState.State, ownProps: any) => {
         return {
-            errorMessage: ownProps.errorMessage
+            userMessage: ownProps.userMessage
         }
     },
     (dispatch: AppState.Dispatch) => {
         return {
-            close: (message: string) => {
-                dispatch(Modal.deleteError(message))
+            close: (message: UserMessage) => {
+                dispatch(Modal.deleteUserMessage(message))
             }
         }
     }
-)(ModalError)
+)(ModalUserMessage)

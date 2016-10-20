@@ -80,9 +80,9 @@ export function unloadPlugin(type: string) {
     }
 }
 
-export function publishedDatasourcePlugin(type: string, url: string, typeInfo: ITypeInfo) {
+export function usePublishedDatasourcePlugin(type: string, url: string, typeInfo: ITypeInfo) {
     return {
-        type: Action.PUBLISHED_DATASOURCE_PLUGIN,
+        type: Action.USE_PUBLISHED_DATASOURCE_PLUGIN,
         id: type,
         url: url,
         typeInfo: typeInfo
@@ -101,7 +101,7 @@ export function datasourcePlugins(state: IDatasourcePluginsState = initialState,
 
     state = pluginsCrudReducer(state, action);
     switch (action.type) {
-        case Action.PUBLISHED_DATASOURCE_PLUGIN: {
+        case Action.USE_PUBLISHED_DATASOURCE_PLUGIN: {
             if (state[action.id]) {
                 return _.assign({}, state, {
                     [action.id]: datasourcePlugin(state[action.id], action)
@@ -125,7 +125,7 @@ export function datasourcePlugins(state: IDatasourcePluginsState = initialState,
 
 function datasourcePlugin(state: IDatasourcePluginState, action: IDatasourcePluginAction): IDatasourcePluginState {
     switch (action.type) {
-        case Action.PUBLISHED_DATASOURCE_PLUGIN: {
+        case Action.USE_PUBLISHED_DATASOURCE_PLUGIN: {
             return _.assign({}, state, {
                 url: action.url,
                 typeInfo: action.typeInfo

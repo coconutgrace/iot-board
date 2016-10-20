@@ -70,9 +70,9 @@ function deletePlugin(type: string): IWidgetPluginAction {
     }
 }
 
-export function publishedWidgetPlugin(type: string, url: string, typeInfo: ITypeInfo) {
+export function usePublishedWidgetPlugin(type: string, url: string, typeInfo: ITypeInfo) {
     return {
-        type: Action.PUBLISHED_WIDGET_PLUGIN,
+        type: Action.USE_PUBLISHED_WIDGET_PLUGIN,
         id: type,
         url: url,
         typeInfo: typeInfo
@@ -84,7 +84,7 @@ export function widgetPlugins(state: IWidgetPluginsState = initialState, action:
 
     state = pluginsCrudReducer(state, action);
     switch (action.type) {
-        case Action.PUBLISHED_WIDGET_PLUGIN: {
+        case Action.USE_PUBLISHED_WIDGET_PLUGIN: {
             if (state[action.id]) {
                 return _.assign({}, state, {
                     [action.id]: widgetPlugin(state[action.id], action)
@@ -109,7 +109,7 @@ export function widgetPlugins(state: IWidgetPluginsState = initialState, action:
 
 function widgetPlugin(state: IWidgetPluginState, action: IWidgetPluginAction): IWidgetPluginState {
     switch (action.type) {
-        case Action.PUBLISHED_WIDGET_PLUGIN: {
+        case Action.USE_PUBLISHED_WIDGET_PLUGIN: {
             return _.assign({}, state, {
                 url: action.url,
                 typeInfo: action.typeInfo
