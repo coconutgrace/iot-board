@@ -4,17 +4,17 @@ import "expose?_!lodash";
 import "file?name=[name].[ext]!./widget.html";
 import * as React from "react";
 import {ITypeInfo, IWidgetProps} from "../pluginApi/pluginTypes";
-import {FramePluginInstance} from "./framePluginInstance";
+import {FrameWidgetInstance} from "./frameWidgetInstance";
 
 
 let widgetUrl = location.hash.replace(/#/, "");
 const appElement = document.getElementById('widget');
 
-let pluginInstance = new FramePluginInstance(widgetUrl, appElement);
+let pluginInstance = new FrameWidgetInstance(widgetUrl, appElement);
 
 const pluginApi = {
     registerDatasourcePlugin: () => {
-        console.error("Can not register datasource in Widget context")
+        console.error("Can not register datasource in widget context")
     },
     registerWidgetPlugin: (typeInfo: ITypeInfo, widget: React.ComponentClass<IWidgetProps>) => {
         pluginInstance.typeInfo = typeInfo;

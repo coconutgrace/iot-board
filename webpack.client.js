@@ -6,6 +6,7 @@ var PROD = (process.env.NODE_ENV === 'production');
 webpackConfig.entry = {
     app: ["./src/app.ts"],
     widget: ["./src/widgetApp/widgetApp.ts"],
+    datasource: ["./src/datasourceApp/datasourceApp.ts"],
     "browser-tests": ['mocha!./src/browser-tests.ts'],
     vendor: [
         "react", "react-dom", "react-grid-layout", "react-grid-layout/css/styles.css",

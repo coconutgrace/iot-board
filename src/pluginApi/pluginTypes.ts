@@ -61,7 +61,7 @@ export interface IDatasourceState {
     replaceData: boolean
 }
 
-export interface IDatasourceConstructor extends IDatasourcePlugin {
+export interface IDatasourceClass extends IDatasourcePlugin {
     new(): IDatasourcePlugin
 }
 

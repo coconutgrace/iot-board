@@ -7,18 +7,18 @@ import {IWidgetPluginState} from "./widgetPlugins";
 import {IWidgetState} from "../pluginApi/pluginTypes";
 import Dashboard from "../dashboard";
 
-interface WidgetIFrameProps {
+interface IWidgetIFrameProps {
     widgetState: IWidgetState
-    widgetPlugin: IWidgetPluginState
+    widgetPluginState: IWidgetPluginState
 }
 
 /**
  * The Dragable Frame of a Widget.
  * Contains generic UI controls, shared by all Widgets
  */
-class WidgetIFrame extends React.Component<WidgetIFrameProps, void> {
+export default class WidgetIFrame extends React.Component<IWidgetIFrameProps, void> {
 
-    constructor(props: WidgetIFrameProps) {
+    constructor(props: IWidgetIFrameProps) {
         super(props)
     }
 
@@ -37,11 +37,10 @@ class WidgetIFrame extends React.Component<WidgetIFrameProps, void> {
     // Only if the framed content comes from the same origin of course.
 
     render() {
-        return <iframe id={'frame-' + this.props.widgetState.id} ref="frame" src={"widget.html#" + this.props.widgetPlugin.url} frameBorder="0" width="100%" height="100%"
+        return <iframe id={'frame-' + this.props.widgetState.id} ref="frame" src={"widget.html#" + this.props.widgetPluginState.url} frameBorder="0" width="100%" height="100%"
                        scrolling="no"
                        sandbox="allow-scripts">
             Browser does not support iFrames.
         </iframe>
     };
 }
-export default WidgetIFrame;

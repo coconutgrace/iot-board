@@ -6,7 +6,7 @@
 import {DashboardStore} from "../store";
 import {DatasourceScheduler} from "./datasourceScheduler";
 import * as Datasource from "./datasource";
-import {IDatasourceConstructor, IDatasourcePlugin, IDatasourceProps} from "../pluginApi/pluginTypes";
+import {IDatasourceClass, IDatasourcePlugin, IDatasourceProps} from "../pluginApi/pluginTypes";
 
 /**
  * Represents a plugin instance, state should be saved in store!
@@ -14,9 +14,10 @@ import {IDatasourceConstructor, IDatasourcePlugin, IDatasourceProps} from "../pl
 export class DatasourcePluginInstance {
     private scheduler: DatasourceScheduler;
     private dsInstance: IDatasourcePlugin;
+    iFrame: HTMLIFrameElement;
 
 
-    constructor(public id: string, private dsConstructor: IDatasourceConstructor, private store: DashboardStore) {
+    constructor(public id: string, private dsConstructor: IDatasourceClass, private store: DashboardStore) {
         this.scheduler = new DatasourceScheduler(this, this.store);
         this.initializePluginInstance()
     }

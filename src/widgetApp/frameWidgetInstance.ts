@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom";
 import * as URI from "urijs";
 import ScriptLoader from "../util/scriptLoader";
 
-export class FramePluginInstance {
+export class FrameWidgetInstance {
     widgetState: IWidgetState;
     data: {[dsId: string]: any[]} = {};
     typeInfo: ITypeInfo;

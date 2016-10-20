@@ -133,9 +133,7 @@ export class WidgetPluginInstance {
         })
     }
 
-
     updateSetting(settingId: string, value: any) {
-        console.log("update", settingId, "to", value, 'of', this.id)
         this.store.dispatch(Widgets.updatedSingleSetting(this.id, settingId, value));
     }
 

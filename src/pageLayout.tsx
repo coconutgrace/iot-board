@@ -20,6 +20,7 @@ import PluginsDialog from "./pluginApi/pluginsDialog.ui";
 import * as Persistence from "./persistence";
 import {IConfigState} from "./config";
 import {State} from "./appState";
+import DatasourceFrames from "./datasource/datasourceFrames.ui";
 
 interface LayoutProps {
     setReadOnly(readOnly: boolean): void
@@ -149,7 +150,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
             <div className="slds-size--1-of-1">
                 <WidgetGrid/>
             </div>
-
+            <DatasourceFrames/>
         </div>
     }
 

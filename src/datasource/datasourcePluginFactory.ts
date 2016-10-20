@@ -7,7 +7,7 @@ import {DashboardStore} from "../store";
 import * as Datasource from "./datasource";
 import {IDatasourcesState} from "./datasource";
 import {DatasourcePluginInstance} from "./datasourcePluginInstance";
-import {IPluginFactory, IDatasourcePlugin, IDatasourceState, IDatasourceConstructor} from "../pluginApi/pluginTypes";
+import {IPluginFactory, IDatasourcePlugin, IDatasourceState, IDatasourceClass} from "../pluginApi/pluginTypes";
 import Unsubscribe = Redux.Unsubscribe;
 
 
@@ -107,6 +107,6 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
         }
 
 
-        return new DatasourcePluginInstance(id, <IDatasourceConstructor>this._datasource, this._store);
+        return new DatasourcePluginInstance(id, <IDatasourceClass>this._datasource, this._store);
     }
 }

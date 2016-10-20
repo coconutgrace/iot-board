@@ -56,7 +56,7 @@ const WidgetFrame = (props) => {
                 <div className="slds-size--1-of-1 slds-is-relative"
                      style={{height: widgetState.availableHeightPx, padding: 0, border: "red dashed 0px"}}>
                     {
-                        pluginLoaded ? <WidgetIFrame widgetState={widgetState} widgetPlugin={widgetPlugin}/>
+                        pluginLoaded ? <WidgetIFrame widgetState={widgetState} widgetPluginState={widgetPlugin}/>
                             : <LoadingWidget widget={widgetState}/>
                     }
                 </div>
