@@ -16,6 +16,10 @@ const defaultConfig: IConfigState = {
         username: null,
         logoutUrl: null
     },
+    title: {
+        text: "IoT-Dashboard",
+        url: "http://iot-dashboard.org"
+    },
     pluginRegistryApiKey: "",
     pluginRegistryUrl: "https://dashboard.lobaro.com"
 };
@@ -31,11 +35,17 @@ export interface IConfigState {
     auth: IAuthConfig
     pluginRegistryApiKey: string
     pluginRegistryUrl: string
+    title: ITitleConfig
 }
 
 export interface IAuthConfig {
     username: string
     logoutUrl: string
+}
+
+export interface ITitleConfig {
+    text: string
+    url: string
 }
 
 export function setConfigValue(key: string, value: any) {

@@ -84,7 +84,7 @@ export class Layout extends Component<LayoutProps, LayoutState> {
                     <div className="slds-context-bar__primary slds-context-bar__item--divider-right">
                         <div className="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger--click slds-no-hover">
                             <span className="slds-context-bar__label-action slds-context-bar__app-name">
-                                <span className="slds-truncate"><a href="http://iot-dashboard.org"> IoT-Dashboard</a></span>
+                                <span className="slds-truncate"><a href={this.props.config.title.url}>{this.props.config.title.text}</a></span>
                             </span>
                         </div>
                     </div>
