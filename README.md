@@ -53,6 +53,8 @@ If you find something that comes close to the above requirements, please let me 
 
 Prerequisite: Download & install [NodeJs](https://nodejs.org)
 
+NodeJS is used for building the dashboard. You can host it on any http server later.
+
 ### Setup Plugin Development Toolchain ###
 
 To keep everything simple all important tasks are based on scripts in package.json. Use `npm run <script-name>` to run any of them.
