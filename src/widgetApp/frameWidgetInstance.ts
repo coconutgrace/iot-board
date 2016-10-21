@@ -1,14 +1,16 @@
-import {IWidgetState, ITypeInfo, IPostMessage, IWidgetProps} from "../pluginApi/pluginTypes";
+import {IWidgetState, ITypeInfo, IPostMessage, IWidgetProps, MESSAGE_STATE, MESSAGE_DATA, MESSAGE_UPDATE_SETTING, MESSAGE_INIT} from "../pluginApi/pluginTypes";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as URI from "urijs";
 import ScriptLoader from "../util/scriptLoader";
 
 export class FrameWidgetInstance {
-    widgetState: IWidgetState;
-    data: {[dsId: string]: any[]} = {};
-    typeInfo: ITypeInfo;
-    widgetComponent: React.ComponentClass<IWidgetProps>;
+    private typeInfo: ITypeInfo;
+    private widgetComponent: React.ComponentClass<IWidgetProps>;
+
+    private widgetState: IWidgetState;
+    private data: {[dsId: string]: any[]} = {};
+
 
     constructor(url: string, private appElement: Element) {
 
@@ -25,7 +27,7 @@ export class FrameWidgetInstance {
                 return this.loadPluginScriptDependencies(this.typeInfo, url)
             })
             .then(() => {
-                this.sendMessage({type: "init"});
+                this.sendMessage({type: MESSAGE_INIT});
             })
             .catch((e: Error) => {
                 console.error("Failed to load widget plugin from URL", url, e)
@@ -34,19 +36,33 @@ export class FrameWidgetInstance {
 
     }
 
-    sendMessage(msg: IPostMessage) {
+    initialSetTypeInfo(typeInfo: ITypeInfo) {
+        if (this.typeInfo !== undefined) {
+            throw new Error("Can not change typeInfo after it was set");
+        }
+        this.typeInfo = typeInfo;
+    }
+
+    initialSetWidgetComponent(widgetComponent: React.ComponentClass<IWidgetProps>) {
+        if (this.widgetComponent !== undefined) {
+            throw new Error("Can not change widgetComponent after it was set");
+        }
+        this.widgetComponent = widgetComponent;
+    }
+
+    private sendMessage(msg: IPostMessage) {
         window.parent.postMessage(msg, '*');
     }
 
-    handleMessage(msg: IPostMessage) {
+    private handleMessage(msg: IPostMessage) {
         try {
             switch (msg.type) {
-                case "widgetState": {
+                case MESSAGE_STATE: {
                     this.widgetState = msg.payload;
                     this.render()
                     break;
                 }
-                case "data": {
+                case MESSAGE_DATA: {
                     this.data[msg.payload.id] = msg.payload.data;
                     this.render()
                     break;
@@ -61,7 +77,7 @@ export class FrameWidgetInstance {
     }
 
 
-    render() {
+    private render() {
         if (this.widgetState === undefined) {
             // Do not render when we have no state
             return;
@@ -80,7 +96,7 @@ export class FrameWidgetInstance {
             data: this.data,
             updateSetting: (settingId: string, value: any): void => {
                 this.sendMessage({
-                    type: "updateSetting",
+                    type: MESSAGE_UPDATE_SETTING,
                     payload: {
                         id: settingId,
                         value: value

@@ -1,6 +1,6 @@
 import {DashboardStore} from "../store";
 import * as Widgets from "./widgets";
-import {IPostMessage} from "../pluginApi/pluginTypes"
+import {IPostMessage, IWidgetState, MESSAGE_DATA, MESSAGE_STATE} from "../pluginApi/pluginTypes"
 import Unsubscribe = Redux.Unsubscribe;
 
 
@@ -9,7 +9,7 @@ export class WidgetPluginInstance {
     private unsubscribeStore: Unsubscribe;
     private frameInitialized: boolean = false;
     private disposed = false;
-    private oldWidgetState: any = null;
+    private oldWidgetState: IWidgetState = null;
     private oldDatasourceData: {[id: string]: any} = {}
     private messageListener: any;
 
@@ -103,7 +103,7 @@ export class WidgetPluginInstance {
         }
     }
 
-    sendMessage(msg: any) {
+    sendMessage(msg: IPostMessage) {
         if (!this._iFrame.contentWindow) {
             // This happens during import. We ignore it silently and rely on later disposal to free memory.
             // TODO: Find a way to dispose this instance before this happens.
@@ -117,7 +117,7 @@ export class WidgetPluginInstance {
         const state = this.store.getState()
         const widgetState = state.widgets[this.id]
         this.sendMessage({
-            type: "widgetState",
+            type: MESSAGE_STATE,
             payload: widgetState
         })
     }
@@ -125,7 +125,7 @@ export class WidgetPluginInstance {
     sendDatasourceData(dsId: string) {
         const state = this.store.getState()
         this.sendMessage({
-            type: "data",
+            type: MESSAGE_DATA,
             payload: {
                 id: dsId,
                 data: state.datasources[dsId].data

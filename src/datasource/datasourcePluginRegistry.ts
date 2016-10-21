@@ -24,12 +24,6 @@ export default class DatasourcePluginRegistry extends PluginRegistry<IDatasource
         return this._disposed
     }
 
-    registerDatasourcePlugin(plugin: IDatasourcePluginModule, url: string) {
-        super.register(plugin);
-        this.store.dispatch(Plugins.datasourcePluginFinishedLoading((<IDatasourcePluginModule>plugin), url));
-    }
-
-
     createPluginFromModule(module: IDatasourcePluginModule) {
         console.assert(_.isObject(module.TYPE_INFO), "Missing TYPE_INFO on datasource module. Every module must export TYPE_INFO");
         return new DataSourcePluginFactory(module.TYPE_INFO.type, module.Datasource, this.store);

@@ -4,7 +4,6 @@
 
 
 import {assert} from "chai";
-import * as Store from "../store";
 import * as Sinon from "sinon";
 import {DatasourceScheduler} from "./datasourceScheduler";
 
@@ -12,8 +11,8 @@ describe("Datasource > DatasourceScheduler", function () {
 
     it("doFetchData is called", () => {
         const clock = Sinon.useFakeTimers();
-        const store = Store.createEmpty(Store.testStoreOptions());
-        const datasourceScheduler = new DatasourceScheduler(null, store);
+        //const store = Store.createEmpty(Store.testStoreOptions());
+        const datasourceScheduler = new DatasourceScheduler(null);
         const doFetchDataStub = Sinon.stub(datasourceScheduler, "doFetchData");
 
 

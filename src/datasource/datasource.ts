@@ -23,8 +23,7 @@ const initialDatasources: IDatasourcesState = {
             maxValues: 20
         },
         data: [],
-        isLoading: true,
-        replaceData: false
+        isLoading: true
     }
 };
 
@@ -131,21 +130,6 @@ export function clearData(id: string): IDatasourceAction {
     }
 }
 
-export function updatedMaxValues(id: string, maxValues: number): IDatasourceAction {
-    return {
-        type: ActionNames.UPDATED_MAX_VALUES,
-        id,
-        maxValues
-    }
-}
-export function updatedFetchReplaceData(id: string, replaceData: boolean): IDatasourceAction {
-    return {
-        type: ActionNames.UPDATED_FETCH_REPLACE_DATA,
-        id,
-        replaceData
-    }
-}
-
 const datasourceCrudReducer = genCrudReducer([ActionNames.ADD_DATASOURCE, ActionNames.DELETE_DATASOURCE], datasource);
 export function datasources(state: IDatasourcesState = initialDatasources, action: IDatasourceAction): IDatasourcesState {
     state = datasourceCrudReducer(state, action);
@@ -160,18 +144,6 @@ export function datasources(state: IDatasourcesState = initialDatasources, actio
             });
 
             return newState;
-        }
-        case ActionNames.UPDATED_MAX_VALUES: {
-            const newState = _.assign({}, state);
-            return _.assign({}, state, {
-                [action.id]: datasource(newState[action.id], action)
-            });
-        }
-        case ActionNames.UPDATED_FETCH_REPLACE_DATA: {
-            const newState = _.assign({}, state);
-            return _.assign({}, state, {
-                [action.id]: datasource(newState[action.id], action)
-            });
         }
         case ActionNames.CLEAR_DATASOURCE_DATA: {
             const newState = _.assign({}, state);
@@ -192,38 +164,15 @@ function datasource(state: IDatasourceState, action: IDatasourceAction): IDataso
                 type: action.dsType,
                 settings: action.settings,
                 data: [],
-                isLoading: true,
-                replaceData: false
+                isLoading: true
             };
-        case ActionNames.SET_DATASOURCE_DATA:
-            return _.assign({}, state, {
-                data: action.data || []
-            });
         case ActionNames.CLEAR_DATASOURCE_DATA:
             return _.assign({}, state, {
                 data: []
             });
-        case ActionNames.UPDATED_MAX_VALUES:
-            let maxValues = action.maxValues;
-            if (maxValues < 1) {
-                maxValues = 1;
-            }
-            return _.assign({}, state, {
-                settings: _.assign({}, state.settings, {maxValues: maxValues})
-            });
         case ActionNames.FETCHED_DATASOURCE_DATA:
-            let newData: any[];
-            if (state.replaceData) {
-                newData = action.data;
-            }
-            else {
-                newData = _.clone(state.data).concat(action.data);
-            }
-            if (state.settings.maxValues) {
-                newData = _.takeRight(newData, state.settings.maxValues);
-            }
             return _.assign({}, state, {
-                data: newData
+                data: action.data
             });
         case ActionNames.UPDATE_DATASOURCE:
             return _.assign({}, state, {
@@ -232,11 +181,6 @@ function datasource(state: IDatasourceState, action: IDatasourceAction): IDataso
         case ActionNames.DATASOURCE_FINISHED_LOADING: {
             let newState = _.assign({}, state);
             newState.isLoading = false;
-            return newState;
-        }
-        case ActionNames.UPDATED_FETCH_REPLACE_DATA: {
-            let newState = _.clone(state);
-            newState.replaceData = action.replaceData;
             return newState;
         }
         default:

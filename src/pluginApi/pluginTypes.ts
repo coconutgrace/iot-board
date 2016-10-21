@@ -48,6 +48,13 @@ export interface IPostMessage {
     payload?: any
 }
 
+// The message types
+export const MESSAGE_INIT = "init"; // iframe -> app :: iFrame is ready
+export const MESSAGE_INITIAL_STATE = "initialState"; // app -> iFrame :: send initial state to iFrame
+export const MESSAGE_STATE = "state"; // app -> iFrame :: send state to iFrame
+export const MESSAGE_DATA = "data"; // app <-> iFrame :: transfer datasource data from datasource or to widget
+export const MESSAGE_UPDATE_SETTING = "updateSetting"; // iFrame -> app :: The plugin wants to update a setting
+
 /*
  * Datasource
  */
@@ -58,7 +65,6 @@ export interface IDatasourceState {
     settings: any
     data: any[]
     isLoading: boolean
-    replaceData: boolean
 }
 
 export interface IDatasourceClass extends IDatasourcePlugin {

@@ -17,8 +17,8 @@ const pluginApi = {
         console.error("Can not register datasource in widget context")
     },
     registerWidgetPlugin: (typeInfo: ITypeInfo, widget: React.ComponentClass<IWidgetProps>) => {
-        pluginInstance.typeInfo = typeInfo;
-        pluginInstance.widgetComponent = widget;
+        pluginInstance.initialSetTypeInfo(typeInfo);
+        pluginInstance.initialSetWidgetComponent(widget);
     }
 };
 

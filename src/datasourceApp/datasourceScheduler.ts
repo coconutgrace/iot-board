@@ -2,9 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import {DashboardStore} from "../store";
-import {DatasourcePluginInstance} from "./datasourcePluginInstance";
-import * as Datasource from "./datasource";
+import {FrameDatasourceInstance} from "./frameDatasourceInstance";
 
 export class DatasourceScheduler {
 
@@ -15,7 +13,7 @@ export class DatasourceScheduler {
     private running = false;
 
 
-    constructor(private dsInstance: DatasourcePluginInstance, private store: DashboardStore) {
+    constructor(private dsInstance: FrameDatasourceInstance) {
     }
 
     set fetchInterval(ms: number) {
@@ -70,22 +68,8 @@ export class DatasourceScheduler {
     }
 
     private doFetchData() {
-        const dsState = this.store.getState().datasources[this.dsInstance.id];
-
-        if (!dsState) {
-            console.log("Disposing Scheduler because datasource instance does not anymore.");
-            this.dispose();
-            return;
-        }
-
-        if (dsState.isLoading) {
-            console.log("Skipping fetchData because plugin is still loading");
-            this.scheduleFetch(this._fetchInterval);
-            return;
-        }
-
         if (this.fetchPromise) {
-            console.warn("Do not fetch data because a fetch is currently running on Datasource", dsState);
+            console.warn("Do not fetch data because a fetch is currently running on Datasource", this.dsInstance.id);
             return;
         }
 
@@ -104,17 +88,16 @@ export class DatasourceScheduler {
         fetchPromise.then((result) => {
             this.fetchPromise = null;
             if (!this.disposed) {
-                //console.log("fetData plugin finished", dsState, result);
                 if (result !== undefined) {
-                    this.store.dispatch(Datasource.fetchedDatasourceData(dsState.id, result));
+                    this.dsInstance.fetchedDatasourceData(result)
                 }
 
                 this.scheduleFetch(this._fetchInterval);
             } else {
-                console.error("fetchData of disposed plugin finished - result discarded", dsState, result);
+                console.error("fetchData of disposed plugin finished - result discarded", this.dsInstance.id, result);
             }
         }).catch((error) => {
-            console.warn("Failed to fetch data for Datasource " + dsState.type, dsState);
+            console.warn("Failed to fetch data for Datasource of type " + this.dsInstance.type + " with id " + this.dsInstance.id);
             console.error(error);
             this.fetchPromise = null;
             this.scheduleFetch(this._fetchInterval);

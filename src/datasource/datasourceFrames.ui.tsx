@@ -16,13 +16,15 @@ interface IDatasourceFramesProps {
 class DatasourceFrames extends React.Component<IDatasourceFramesProps, any> {
 
     render() {
-        console.log("render datasources: ", _.valuesIn(this.props.datasources))
         return <div style={{width:1, height: 1, position: "fixed", left: 0, top: 0}}>
             {
                 _.valuesIn(this.props.datasources).map((dsState: IDatasourceState) => {
-                    console.log("xxxxxx render datasource: ", dsState)
+                    const pluginLoaded = Dashboard.getInstance().datasourcePluginRegistry.hasPlugin(dsState.type)
                     const datasourcePluginState = this.props.datasourcePlugins[dsState.type]
-                    return <DatasourceIFrame key={dsState.id} datasourcePluginState={datasourcePluginState} datasourceState={dsState}/>
+                    console.log("xxxxxx render datasource: ", pluginLoaded, dsState)
+                    return pluginLoaded
+                        ? <DatasourceIFrame key={dsState.id} datasourcePluginState={datasourcePluginState} datasourceState={dsState}/>
+                        : <div key={dsState.id}>Datasource Loading ...</div>
                 })
             }
         </div>

@@ -4,85 +4,72 @@
 
 
 import {DashboardStore} from "../store";
-import {DatasourceScheduler} from "./datasourceScheduler";
+import {DatasourceScheduler} from "../datasourceApp/datasourceScheduler";
 import * as Datasource from "./datasource";
-import {IDatasourceClass, IDatasourcePlugin, IDatasourceProps} from "../pluginApi/pluginTypes";
+import {
+    IDatasourceClass, IDatasourcePlugin, IDatasourceProps, IPostMessage, IDatasourceState, MESSAGE_STATE, MESSAGE_INIT, MESSAGE_UPDATE_SETTING,
+    MESSAGE_INITIAL_STATE, MESSAGE_DATA
+} from "../pluginApi/pluginTypes";
+import Unsubscribe = Redux.Unsubscribe;
 
 /**
  * Represents a plugin instance, state should be saved in store!
  */
 export class DatasourcePluginInstance {
-    private scheduler: DatasourceScheduler;
-    private dsInstance: IDatasourcePlugin;
+
     iFrame: HTMLIFrameElement;
+    private oldDsState: IDatasourceState = null;
+    private frameInitialized: boolean = false;
+    private messageListener: any;
+    private unsubscribeStore: Unsubscribe;
+    private disposed = false;
 
 
-    constructor(public id: string, private dsConstructor: IDatasourceClass, private store: DashboardStore) {
-        this.scheduler = new DatasourceScheduler(this, this.store);
-        this.initializePluginInstance()
-    }
+    constructor(public id: string, private store: DashboardStore) {
+        if (typeof window !== 'undefined') {
 
-    initializePluginInstance() {
-        const dsState = this.state;
-        const props = {
-            state: dsState,
-            setFetchInterval: (ms: number) => this.setFetchInterval(ms),
-            setFetchReplaceData: (replace: boolean) => this.setFetchReplaceData(replace)
-        };
-
-        console.log("dsConstructor", this.dsConstructor);
-        const pluginInstance = new this.dsConstructor();
-        this.dsInstance = pluginInstance;
-
-        pluginInstance.props = props;
-
-        // Bind API functions to instance
-        if (_.isFunction(pluginInstance.datasourceWillReceiveProps)) {
-            pluginInstance.datasourceWillReceiveProps = pluginInstance.datasourceWillReceiveProps.bind(pluginInstance);
+            this.messageListener = (e: MessageEvent) => {
+                if (this.disposed) {
+                    // TODO: better unit test than runtime checking
+                    console.error("Message listener called but WidgetPluginInstance is already disposed")
+                    return;
+                }
+                if (!this.iFrame && e.origin === "null") {
+                    console.log("Discarding message because iFrame not set yet", e.data)
+                }
+                if (this.iFrame !== undefined && e.origin === "null" && e.source === this.iFrame.contentWindow) {
+                    this.handleMessage(e.data)
+                }
+            };
+            window.addEventListener('message', this.messageListener);
         }
-        if (_.isFunction(pluginInstance.datasourceWillReceiveSettings)) {
-            pluginInstance.datasourceWillReceiveSettings = pluginInstance.datasourceWillReceiveSettings.bind(pluginInstance);
-        }
-        if (_.isFunction(pluginInstance.dispose)) {
-            pluginInstance.dispose = pluginInstance.dispose.bind(pluginInstance);
-        }
-        if (_.isFunction(pluginInstance.fetchData)) {
-            pluginInstance.fetchData = pluginInstance.fetchData.bind(pluginInstance);
-        }
-        if (_.isFunction(pluginInstance.initialize)) {
-            pluginInstance.initialize = pluginInstance.initialize.bind(pluginInstance);
-        }
-    }
 
-    get props() {
-        return this.dsInstance.props;
-    }
-
-    setFetchInterval(intervalMs: number) {
-        this.scheduler.fetchInterval = intervalMs;
-    }
-
-    setFetchReplaceData(replace: boolean) {
-        this.store.dispatch(Datasource.updatedFetchReplaceData(this.id, replace));
-    }
-
-    /**
-     * The the number of values stored in the datasource
-     * @param maxValues
-     */
-    setMaxValues(maxValues: number) {
-        this.store.dispatch(Datasource.updatedMaxValues(this.id, maxValues));
-    }
-
-    set props(newProps: any) {
-        const oldProps = this.dsInstance.props;
-        if (oldProps !== newProps) {
-            this.datasourceWillReceiveProps(newProps);
-            this.dsInstance.props = newProps;
-            if (newProps.state.settings !== oldProps.state.settings) {
-                this.scheduler.forceUpdate();
+        this.unsubscribeStore = store.subscribe(() => {
+            if (this.disposed) {
+                // TODO: better unit test than runtime checking
+                console.error("Store change observed but WidgetPluginInstance is already disposed")
+                return;
             }
-        }
+            if (!this.frameInitialized) {
+                // We get invalid caches when we send state to the iFrame before it is ready
+                return;
+            }
+
+            const state = store.getState()
+            const dsState = state.datasources[id];
+            if (dsState === undefined) {
+                // This happens for example during import. Where the state is cleared but this class not yet disposed.
+                // So we just silently return.
+                return;
+            }
+
+            if (dsState !== this.oldDsState) {
+                console.log("old state: ", this.oldDsState)
+                this.oldDsState = dsState;
+                console.log("old state: ", this.oldDsState)
+                this.sendDatasourceState()
+            }
+        })
     }
 
     get state() {
@@ -96,39 +83,62 @@ export class DatasourcePluginInstance {
         return dsState;
     }
 
-    get pluginState() {
-        return this.store.getState().datasourcePlugins[this.state.type];
-    }
-
-    initialize() {
-        if (_.isFunction(this.dsInstance.initialize)) {
-            this.dsInstance.initialize(this.props);
-        }
-        this.scheduler.start();
-    }
-
-    datasourceWillReceiveProps(newProps: IDatasourceProps) {
-        if (newProps.state.settings !== this.props.state.settings) {
-            if (_.isFunction(this.dsInstance.datasourceWillReceiveSettings)) {
-                this.dsInstance.datasourceWillReceiveSettings(newProps.state.settings);
+    handleMessage(msg: IPostMessage) {
+        switch (msg.type) {
+            case MESSAGE_INIT: {
+                this.frameInitialized = true;
+                this.sendInitialDatasourceState()
+                this.store.dispatch(Datasource.finishedLoading(this.id))
+                console.log("Datasource initialized")
+                break;
             }
-        }
-
-        if (_.isFunction(this.dsInstance.datasourceWillReceiveProps)) {
-            this.dsInstance.datasourceWillReceiveProps(newProps);
+            case MESSAGE_DATA: {
+                console.log("Received data from datasource")
+                this.store.dispatch(Datasource.fetchedDatasourceData(this.state.id, msg.payload))
+                break;
+            }
+            default:
+                break;
         }
     }
 
-    fetchData(resolve: (value?: any | PromiseLike<any>) => void, reject: (reason?: any) => void) {
-        if (!this.dsInstance.fetchData) {
-            console.warn("fetchData(resolve, reject) is not implemented in Datasource ", this.dsInstance);
-            reject(new Error("fetchData(resolve, reject) is not implemented in Datasource " + this.pluginState.id))
+    sendMessage(msg: IPostMessage) {
+        if (!this.iFrame.contentWindow) {
+            // This happens during import. We ignore it silently and rely on later disposal to free memory.
+            // TODO: Find a way to dispose this instance before this happens.
+            return;
         }
-        this.dsInstance.fetchData(resolve, reject);
-
+        this.iFrame.contentWindow.postMessage(msg, '*')
     }
+
 
     dispose() {
-        this.scheduler.dispose();
+        if (!this.disposed && _.isFunction(this.unsubscribeStore)) {
+            this.unsubscribeStore();
+        }
+        if (!this.disposed && _.isFunction(this.messageListener)) {
+            window.removeEventListener("message", this.messageListener)
+        }
+
+        this.disposed = true;
+    }
+
+    private sendDatasourceState() {
+        console.log("Send state to datasource")
+        const state = this.store.getState()
+        const dsState = state.datasources[this.id]
+        this.sendMessage({
+            type: MESSAGE_STATE,
+            payload: dsState
+        })
+    }
+
+    private sendInitialDatasourceState() {
+        const state = this.store.getState()
+        const dsState = state.datasources[this.id]
+        this.sendMessage({
+            type: MESSAGE_INITIAL_STATE,
+            payload: dsState
+        })
     }
 }

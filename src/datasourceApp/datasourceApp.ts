@@ -11,8 +11,8 @@ let pluginInstance = new FrameDatasourceInstance(datasourceUrl);
 
 const pluginApi = {
     registerDatasourcePlugin: (typeInfo: ITypeInfo, datasourceClass: IDatasourceClass) => {
-        pluginInstance.typeInfo = typeInfo;
-        pluginInstance.datasourceClass = datasourceClass;
+        pluginInstance.initialSetTypeInfo(typeInfo);
+        pluginInstance.initialSetDatasourceClass(datasourceClass);
     },
     registerWidgetPlugin: () => {
         console.error("Can not register widget in datasource context")

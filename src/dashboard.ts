@@ -117,8 +117,8 @@ export default class Dashboard {
             }
         }).then((plugin: IPluginModule) => {
             if ((<IDatasourcePluginModule>plugin).Datasource) {
-                this._datasourcePluginRegistry.registerDatasourcePlugin((<IDatasourcePluginModule>plugin), url);
-                // datasourcePluginFinishedLoading is called in registerDatasourcePlugin!
+                this._datasourcePluginRegistry.register(<IDatasourcePluginModule>plugin);
+                this._store.dispatch(Plugins.datasourcePluginFinishedLoading((<IDatasourcePluginModule>plugin), url));
             }
             else if ((<any>plugin).Widget) {
                 this._widgetPluginRegistry.register(plugin);

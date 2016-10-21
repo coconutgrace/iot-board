@@ -1,19 +1,33 @@
-import {IWidgetState, ITypeInfo, IPostMessage, IWidgetProps, IDatasourceClass, IDatasourceState, IDatasourcePlugin} from "../pluginApi/pluginTypes";
+import {
+    ITypeInfo,
+    IPostMessage,
+    IDatasourceClass,
+    IDatasourceState,
+    IDatasourcePlugin,
+    IDatasourceProps,
+    MESSAGE_STATE,
+    MESSAGE_INIT,
+    MESSAGE_DATA,
+    MESSAGE_INITIAL_STATE
+} from "../pluginApi/pluginTypes";
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import * as URI from "urijs";
 import ScriptLoader from "../util/scriptLoader";
+import {DatasourceScheduler} from "./datasourceScheduler";
 
 export class FrameDatasourceInstance {
-    typeInfo: ITypeInfo;
-    datasourceClass: IDatasourceClass
-    datasourceInstance: IDatasourcePlugin
+    private typeInfo: ITypeInfo;
+    private datasourceClass: IDatasourceClass
 
-    datasourceState: IDatasourceState;
-    data: any[] = [];
+    private dsInstance: IDatasourcePlugin
+    private dsState: IDatasourceState;
+    private data: any[] = [];
+    private scheduler: DatasourceScheduler;
+
+    private fetchReplaceData: boolean = false
 
     constructor(url: string) {
-
+        this.scheduler = new DatasourceScheduler(this);
         window.addEventListener('message',
             (e: MessageEvent) => {
                 this.handleMessage(e.data as IPostMessage)
@@ -27,27 +41,138 @@ export class FrameDatasourceInstance {
                 return this.loadPluginScriptDependencies(this.typeInfo, url)
             })
             .then(() => {
-                this.datasourceInstance = new this.datasourceClass()
-                this.sendMessage({type: "init"});
+                this.sendMessage({type: MESSAGE_INIT});
             })
             .catch((e: Error) => {
                 console.error("Failed to load datasource plugin from URL", url, e)
             })
     }
 
-    sendMessage(msg: IPostMessage) {
+    get id(): string {
+        return this.dsState.id;
+    }
+
+    get type(): string {
+        return this.dsState.type;
+    }
+
+    initialSetTypeInfo(typeInfo: ITypeInfo) {
+        if (this.typeInfo !== undefined) {
+            throw new Error("Can not change typeInfo after it was set");
+        }
+        this.typeInfo = typeInfo;
+    }
+
+    initialSetDatasourceClass(datasourceClass: IDatasourceClass) {
+        if (this.datasourceClass !== undefined) {
+            throw new Error("Can not change datasourceClass after it was set");
+        }
+        this.datasourceClass = datasourceClass;
+    }
+
+    initializePluginInstance() {
+        const props = {
+            state: this.dsState,
+            setFetchInterval: (ms: number) => this.setFetchInterval(ms),
+            setFetchReplaceData: (replace: boolean) => this.setFetchReplaceData(replace)
+        };
+
+        const pluginInstance = new this.datasourceClass();
+        this.dsInstance = pluginInstance;
+
+        pluginInstance.props = props;
+
+        // Bind API functions to instance
+        if (_.isFunction(pluginInstance.datasourceWillReceiveProps)) {
+            pluginInstance.datasourceWillReceiveProps = pluginInstance.datasourceWillReceiveProps.bind(pluginInstance);
+        }
+        if (_.isFunction(pluginInstance.datasourceWillReceiveSettings)) {
+            pluginInstance.datasourceWillReceiveSettings = pluginInstance.datasourceWillReceiveSettings.bind(pluginInstance);
+        }
+        if (_.isFunction(pluginInstance.dispose)) {
+            pluginInstance.dispose = pluginInstance.dispose.bind(pluginInstance);
+        }
+        if (_.isFunction(pluginInstance.fetchData)) {
+            pluginInstance.fetchData = pluginInstance.fetchData.bind(pluginInstance);
+        }
+        if (_.isFunction(pluginInstance.initialize)) {
+            pluginInstance.initialize = pluginInstance.initialize.bind(pluginInstance);
+            this.dsInstance.initialize(props);
+        }
+
+        this.scheduler.start();
+    }
+
+    // Called by scheduler when data should be fetched.
+    // Execution by underlying datasource instance
+    fetchData(resolve: (value?: any | PromiseLike<any>) => void, reject: (reason?: any) => void) {
+        if (!this.dsInstance.fetchData) {
+            console.warn("fetchData(resolve, reject) is not implemented in Datasource ", this.dsInstance);
+            reject(new Error("fetchData(resolve, reject) is not implemented in Datasource " + this.dsState.id))
+        }
+        this.dsInstance.fetchData(resolve, reject);
+    }
+
+    fetchedDatasourceData(data: any) {
+        if (!_.isArray(data)) {
+            data = [data];
+        }
+
+        let maxValues = Math.max(1, this.dsState.settings.maxValues)
+        data = _.takeRight(data, maxValues);
+
+
+        if (this.fetchReplaceData) {
+            this.data = data;
+            this.sendDataToApp()
+        } else if (data.length > 0) {
+            this.data = this.data.concat(data)
+            this.sendDataToApp()
+        }
+    }
+
+    private sendDataToApp() {
+        this.sendMessage({
+            type: MESSAGE_DATA,
+            payload: this.data
+        })
+    }
+
+    private setFetchInterval(intervalMs: number) {
+        this.scheduler.fetchInterval = intervalMs;
+    }
+
+    private setFetchReplaceData(replace: boolean) {
+        this.fetchReplaceData = replace;
+    }
+
+    private updateInstanceWithState(newState: IDatasourceState) {
+        const oldProps = this.dsInstance.props;
+        const newProps = _.assign({}, oldProps, {state: newState})
+
+        this.datasourceWillReceiveProps(newProps);
+        this.dsInstance.props = newProps;
+        if (newProps.state.settings !== oldProps.state.settings) { // TODO: Always true? Need deep equals?
+            this.scheduler.forceUpdate();
+        }
+
+    }
+
+    private sendMessage(msg: IPostMessage) {
         window.parent.postMessage(msg, '*');
     }
 
-    handleMessage(msg: IPostMessage) {
+    private handleMessage(msg: IPostMessage) {
         try {
             switch (msg.type) {
-                case "datasourceState": {
-                    this.datasourceState = msg.payload;
+                case MESSAGE_INITIAL_STATE: {
+                    this.dsState = msg.payload;
+                    this.initializePluginInstance()
                     break;
                 }
-                case "fetchData": {
-                    // TODO: Implement data fetching API here
+                case MESSAGE_STATE: {
+                    this.dsState = msg.payload;
+                    this.updateInstanceWithState(this.dsState)
                     break;
                 }
                 default:
@@ -56,6 +181,18 @@ export class FrameDatasourceInstance {
             }
         } catch (e) {
             console.error("Failed to handle message", e)
+        }
+    }
+
+    private datasourceWillReceiveProps(newProps: IDatasourceProps) {
+        if (newProps.state.settings !== this.dsState.settings) { // TODO: Does this optimization helps with iFrames?
+            if (_.isFunction(this.dsInstance.datasourceWillReceiveSettings)) {
+                this.dsInstance.datasourceWillReceiveSettings(newProps.state.settings);
+            }
+        }
+
+        if (_.isFunction(this.dsInstance.datasourceWillReceiveProps)) {
+            this.dsInstance.datasourceWillReceiveProps(newProps);
         }
     }
 

@@ -143,8 +143,7 @@ describe('Datasource > DatasourcePlugins', function () {
                 type: "ds-with-instance-in-state",
                 settings: {},
                 data: [{ernie: "bert"}],
-                isLoading: false,
-                replaceData: false
+                isLoading: false
             }
         };
 

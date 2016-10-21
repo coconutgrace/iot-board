@@ -22,7 +22,7 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
     private oldDatasourcesState: IDatasourcesState;
 
     constructor(private _type: string, private _datasource: IDatasourcePlugin, private _store: DashboardStore) {
-        this._unsubscribe = _store.subscribe(() => this.handleStateChange());
+        //this._unsubscribe = _store.subscribe(() => this.handleStateChange());
     }
 
     get type() {
@@ -38,7 +38,8 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
             throw new Error("Try to get datasource of destroyed type. " + JSON.stringify({id, type: this.type}));
         }
         if (!this._pluginInstances[id]) {
-            throw new Error("No running instance of datasource. " + JSON.stringify({id, type: this.type}));
+            //throw new Error("No running instance of datasource. " + JSON.stringify({id, type: this.type}));
+            return this.createInstance(id)
         }
         return this._pluginInstances[id];
     }
@@ -65,6 +66,7 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
         if (this.oldDatasourcesState === state.datasources) {
             return;
         }
+        this.oldDatasourcesState = state.datasources;
 
         // Create Datasource instances for missing data sources in store
         _.valuesIn<IDatasourceState>(state.datasources)
@@ -72,27 +74,11 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
             .forEach((dsState) => {
                 if (this._pluginInstances[dsState.id] === undefined) {
                     this._pluginInstances[dsState.id] = this.createInstance(dsState.id);
-                    this._pluginInstances[dsState.id].initialize();
                     this._store.dispatch(Datasource.finishedLoading(dsState.id))
                 }
             });
 
-        // For all running datasources we notify them about setting changes
-        // TODO: make it more explicit for settings and state, only update on real changes
-        _.valuesIn<IDatasourceState>(state.datasources).forEach(dsState => this.updateDatasource(dsState))
-        this.oldDatasourcesState = state.datasources;
-    }
 
-    private updateDatasource(dsState: IDatasourceState) {
-        const plugin = this._pluginInstances[dsState.id];
-        if (!plugin) {
-            // This is normal to happen when the app starts,
-            // since the state already contains the id's before plugin instances are loaded
-            //console.warn("Can not find Datasource instance with id " + dsState.id + ". Skipping Update!");
-            return;
-        }
-
-        plugin.props = _.assign({}, plugin.props, {state: dsState});
     }
 
     private createInstance(id: string): DatasourcePluginInstance {
@@ -107,6 +93,6 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
         }
 
 
-        return new DatasourcePluginInstance(id, <IDatasourceClass>this._datasource, this._store);
+        return new DatasourcePluginInstance(id, this._store);
     }
 }
