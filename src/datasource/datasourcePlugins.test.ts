@@ -158,17 +158,11 @@ describe('Datasource > DatasourcePlugins', function () {
 
         assert.deepEqual(state.pluginLoader.loadingUrls, ["some/url"], "The URL is in store to be loaded");
 
-        let count = 0;
         store.subscribe(() => {
-            count++;
-
-            // Wait till 2 dispatches are done ...
-            if (count === 2) {
-                const datasourcePluginFactory = dashboard.datasourcePluginRegistry.getPlugin("ds-with-instance-in-state");
-                const datasourcePluginInstance = datasourcePluginFactory.getInstance("ds-instance-in-state-id");
-                assert.isOk(datasourcePluginInstance, "The plugin instance is available");
-                done()
-            }
+            const datasourcePluginFactory = dashboard.datasourcePluginRegistry.getPlugin("ds-with-instance-in-state");
+            const datasourcePluginInstance = datasourcePluginFactory.getInstance("ds-instance-in-state-id");
+            assert.isOk(datasourcePluginInstance, "The plugin instance is available");
+            done()
         });
     });
 

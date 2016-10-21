@@ -31,7 +31,7 @@ describe("Datasource > DatasourcePluginFactory", function () {
             (<any>dsPlugin).createInstance("plugin-instance");
             assert.fail("createInstance must throw an error");
         } catch (e) {
-            assert.equal('Can not get state of non existing datasource with id plugin-instance', e.message)
+            assert.equal('Can not create instance of non existing datasource with id plugin-instance', e.message)
         }
 
     });

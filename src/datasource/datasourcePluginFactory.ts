@@ -17,7 +17,6 @@ import Unsubscribe = Redux.Unsubscribe;
 export default class DataSourcePluginFactory implements IPluginFactory<DatasourcePluginInstance> {
 
     private _pluginInstances: {[id: string]: DatasourcePluginInstance} = {};
-    private _unsubscribe: Unsubscribe;
     private _disposed: boolean = false;
     private oldDatasourcesState: IDatasourcesState;
 
@@ -56,7 +55,6 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
             }
         });
         this._pluginInstances = {};
-        this._unsubscribe();
     }
 
     handleStateChange() {
@@ -91,6 +89,12 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
                 }));
         }
 
+        const state = this._store.getState();
+        const dsState = state.datasources[id];
+
+        if (!dsState) {
+            throw new Error("Can not create instance of non existing datasource with id " + id);
+        }
 
         return new DatasourcePluginInstance(id, this._store);
     }
