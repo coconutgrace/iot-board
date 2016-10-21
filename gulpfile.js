@@ -20,7 +20,7 @@ gutil.log("NODE_ENV = '" + process.env.NODE_ENV + "'");
 /**
  * Setup everything for a smooth development
  */
-gulp.task("dev", sequence(['inject', 'compile:plugins'], 'compile:design-system', 'webpack:dev-server'));
+gulp.task("dev", sequence(['inject', 'compile:plugins', 'compile:config'], 'compile:design-system', 'webpack:dev-server'));
 
 /**
  * Keeps files up to date that are not covered by Webpack
