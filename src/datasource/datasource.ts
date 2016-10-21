@@ -22,14 +22,12 @@ const initialDatasources: IDatasourcesState = {
             max: 20,
             maxValues: 20
         },
-        data: [],
         isLoading: true
     }
 };
 
 export interface IDatasourceAction extends AppState.Action, IPersistenceAction {
     id?: string
-    data?: any[]
     settings?: any
     dsType?: string
     maxValues?: number
@@ -113,22 +111,8 @@ export function deleteDatasource(id: string): IDatasourceAction {
     }
 }
 
-export function fetchedDatasourceData(id: string, data: any[]): IDatasourceAction {
-    return {
-        type: ActionNames.FETCHED_DATASOURCE_DATA,
-        id,
-        data,
-        doNotLog: true,
-        doNotPersist: true
-    }
-}
 
-export function clearData(id: string): IDatasourceAction {
-    return {
-        type: ActionNames.CLEAR_DATASOURCE_DATA,
-        id
-    }
-}
+
 
 const datasourceCrudReducer = genCrudReducer([ActionNames.ADD_DATASOURCE, ActionNames.DELETE_DATASOURCE], datasource);
 export function datasources(state: IDatasourcesState = initialDatasources, action: IDatasourceAction): IDatasourcesState {
@@ -145,12 +129,6 @@ export function datasources(state: IDatasourcesState = initialDatasources, actio
 
             return newState;
         }
-        case ActionNames.CLEAR_DATASOURCE_DATA: {
-            const newState = _.assign({}, state);
-            return _.assign({}, state, {
-                [action.id]: datasource(newState[action.id], action)
-            });
-        }
         default:
             return state;
     }
@@ -163,17 +141,8 @@ function datasource(state: IDatasourceState, action: IDatasourceAction): IDataso
                 id: action.id,
                 type: action.dsType,
                 settings: action.settings,
-                data: [],
                 isLoading: true
             };
-        case ActionNames.CLEAR_DATASOURCE_DATA:
-            return _.assign({}, state, {
-                data: []
-            });
-        case ActionNames.FETCHED_DATASOURCE_DATA:
-            return _.assign({}, state, {
-                data: action.data
-            });
         case ActionNames.UPDATE_DATASOURCE:
             return _.assign({}, state, {
                 settings: action.settings

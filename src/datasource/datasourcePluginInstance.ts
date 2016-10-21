@@ -4,12 +4,9 @@
 
 
 import {DashboardStore} from "../store";
-import {DatasourceScheduler} from "../datasourceApp/datasourceScheduler";
 import * as Datasource from "./datasource";
-import {
-    IDatasourceClass, IDatasourcePlugin, IDatasourceProps, IPostMessage, IDatasourceState, MESSAGE_STATE, MESSAGE_INIT, MESSAGE_UPDATE_SETTING,
-    MESSAGE_INITIAL_STATE, MESSAGE_DATA
-} from "../pluginApi/pluginTypes";
+import * as DatasourceData from "./datasourceData";
+import {IPostMessage, IDatasourceState, MESSAGE_STATE, MESSAGE_INIT, MESSAGE_INITIAL_STATE, MESSAGE_DATA} from "../pluginApi/pluginTypes";
 import Unsubscribe = Redux.Unsubscribe;
 
 /**
@@ -93,8 +90,7 @@ export class DatasourcePluginInstance {
                 break;
             }
             case MESSAGE_DATA: {
-                console.log("Received data from datasource")
-                this.store.dispatch(Datasource.fetchedDatasourceData(this.state.id, msg.payload))
+                this.store.dispatch(DatasourceData.fetchedDatasourceData(this.state.id, msg.payload))
                 break;
             }
             default:

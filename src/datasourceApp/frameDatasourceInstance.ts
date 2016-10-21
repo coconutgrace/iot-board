@@ -118,17 +118,15 @@ export class FrameDatasourceInstance {
             data = [data];
         }
 
+        if (!this.fetchReplaceData) {
+            data = this.data.concat(data)
+        }
+
         let maxValues = Math.max(1, this.dsState.settings.maxValues)
         data = _.takeRight(data, maxValues);
 
-
-        if (this.fetchReplaceData) {
-            this.data = data;
-            this.sendDataToApp()
-        } else if (data.length > 0) {
-            this.data = this.data.concat(data)
-            this.sendDataToApp()
-        }
+        this.data = data;
+        this.sendDataToApp()
     }
 
     private sendDataToApp() {
@@ -152,7 +150,7 @@ export class FrameDatasourceInstance {
 
         this.datasourceWillReceiveProps(newProps);
         this.dsInstance.props = newProps;
-        if (newProps.state.settings !== oldProps.state.settings) { // TODO: Always true? Need deep equals?
+        if (!_.isEqual(newProps.state.settings, oldProps.state.settings)) {
             this.scheduler.forceUpdate();
         }
 

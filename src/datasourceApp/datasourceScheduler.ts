@@ -35,7 +35,6 @@ export class DatasourceScheduler {
     }
 
     forceUpdate() {
-        console.log("Force Update!");
         this.scheduleFetch(0);
     }
 

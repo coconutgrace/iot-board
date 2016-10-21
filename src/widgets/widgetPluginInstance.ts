@@ -1,6 +1,6 @@
 import {DashboardStore} from "../store";
 import * as Widgets from "./widgets";
-import {IPostMessage, IWidgetState, MESSAGE_DATA, MESSAGE_STATE} from "../pluginApi/pluginTypes"
+import {IPostMessage, IWidgetState, MESSAGE_DATA, MESSAGE_STATE, MESSAGE_INIT} from "../pluginApi/pluginTypes"
 import Unsubscribe = Redux.Unsubscribe;
 
 
@@ -62,7 +62,7 @@ export class WidgetPluginInstance {
 
     set iFrame(element: HTMLIFrameElement) {
         this._iFrame = element;
-        this.sendMessage({type: "init"})
+        this.sendMessage({type: MESSAGE_INIT})
     }
 
     updateDatasourceDataInFrame() {
@@ -78,7 +78,7 @@ export class WidgetPluginInstance {
             if (state.datasources[dsId] === undefined) {
                 return;
             }
-            const data = state.datasources[dsId].data;
+            const data = state.datasourceData[dsId];
             if (data !== this.oldDatasourceData[dsId]) {
                 this.oldDatasourceData[dsId] = data;
                 this.sendDatasourceData(dsId);
@@ -128,7 +128,7 @@ export class WidgetPluginInstance {
             type: MESSAGE_DATA,
             payload: {
                 id: dsId,
-                data: state.datasources[dsId].data
+                data: state.datasourceData[dsId]
             }
         })
     }

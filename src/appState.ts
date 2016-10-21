@@ -4,6 +4,7 @@
 
 import * as Redux from 'redux'
 import * as Datasource from './datasource/datasource'
+import * as DatasourceData from './datasource/datasourceData'
 import * as Widgets from './widgets/widgets'
 import * as DatasourcePlugins from './datasource/datasourcePlugins'
 import * as Config from './config'
@@ -24,6 +25,7 @@ export interface State {
     config: Config.IConfigState
     widgets: Widgets.IWidgetsState
     datasources: Datasource.IDatasourcesState
+    datasourceData: DatasourceData.IDatasourceDataState
     datasourcePlugins: DatasourcePlugins.IDatasourcePluginsState
     widgetPlugins: IWidgetPluginsState
     pluginLoader: Plugins.IPluginLoaderState
@@ -32,12 +34,9 @@ export interface State {
     modalDialog: IModalDialogState
 }
 
-
-
 // TODO: move to dashboard/global when converted to ts
 export interface IGlobalState {
     isReadOnly: boolean
 }
-
 
 export default State;

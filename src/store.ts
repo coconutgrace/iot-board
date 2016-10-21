@@ -9,6 +9,7 @@ import * as Widgets from "./widgets/widgets";
 import * as WidgetConfig from "./widgets/widgetConfig.js";
 import * as Layouts from "./layouts/layouts.js";
 import * as Datasource from "./datasource/datasource";
+import * as DatasourceData from "./datasource/datasourceData";
 import * as Global from "./dashboard/global.js";
 import * as Import from "./dashboard/import";
 import * as Modal from "./modal/modalDialog.js";
@@ -30,17 +31,18 @@ export interface DashboardStore extends Redux.Store<AppState.State> {
 // TODO: name all reducers ***Reducer
 const appReducer: AppState.Reducer = Redux.combineReducers<AppState.State>({
     config: Config.config,
-    widgets: Widgets.widgets,
-    widgetConfig: WidgetConfig.widgetConfigDialog,  // TODO: Still used or replaced by modalDialog
-    layouts: Layouts.layouts,
     currentLayout: Layouts.currentLayout,
+    datasourceData: DatasourceData.datasourceData,
+    datasourcePlugins: DatasourcePlugins.datasourcePlugins,
     datasources: Datasource.datasources,
     form: formReducer,
+    global: Global.global,
+    layouts: Layouts.layouts,
     modalDialog: Modal.modalDialog,
     pluginLoader: Plugins.pluginLoaderReducer,
+    widgetConfig: WidgetConfig.widgetConfigDialog,  // TODO: Still used or replaced by modalDialog
     widgetPlugins: WidgetPlugins.widgetPlugins,
-    datasourcePlugins: DatasourcePlugins.datasourcePlugins,
-    global: Global.global
+    widgets: Widgets.widgets
 });
 
 const reducer: AppState.Reducer = (state: AppState.State, action: Redux.Action) => {
@@ -73,6 +75,7 @@ export function emptyState() {
         config: null,
         widgets: {},
         datasources: {},
+        datasourceData: {},
         datasourcePlugins: {},
         widgetPlugins: {},
         pluginLoader: {

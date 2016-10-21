@@ -63,7 +63,6 @@ export interface IDatasourceState {
     id: string
     type: string
     settings: any
-    data: any[]
     isLoading: boolean
 }
 

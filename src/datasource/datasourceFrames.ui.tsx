@@ -21,7 +21,6 @@ class DatasourceFrames extends React.Component<IDatasourceFramesProps, any> {
                 _.valuesIn(this.props.datasources).map((dsState: IDatasourceState) => {
                     const pluginLoaded = Dashboard.getInstance().datasourcePluginRegistry.hasPlugin(dsState.type)
                     const datasourcePluginState = this.props.datasourcePlugins[dsState.type]
-                    console.log("xxxxxx render datasource: ", pluginLoaded, dsState)
                     return pluginLoaded
                         ? <DatasourceIFrame key={dsState.id} datasourcePluginState={datasourcePluginState} datasourceState={dsState}/>
                         : <div key={dsState.id}>Datasource Loading ...</div>

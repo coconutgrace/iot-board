@@ -38,7 +38,6 @@ export default class DataSourcePluginFactory implements IPluginFactory<Datasourc
             throw new Error("Try to get datasource of destroyed type. " + JSON.stringify({id, type: this.type}));
         }
         if (!this._pluginInstances[id]) {
-            //throw new Error("No running instance of datasource. " + JSON.stringify({id, type: this.type}));
             return this.createInstance(id)
         }
         return this._pluginInstances[id];

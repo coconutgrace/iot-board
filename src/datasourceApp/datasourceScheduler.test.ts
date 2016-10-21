@@ -11,7 +11,6 @@ describe("Datasource > DatasourceScheduler", function () {
 
     it("doFetchData is called", () => {
         const clock = Sinon.useFakeTimers();
-        //const store = Store.createEmpty(Store.testStoreOptions());
         const datasourceScheduler = new DatasourceScheduler(null);
         const doFetchDataStub = Sinon.stub(datasourceScheduler, "doFetchData");
 

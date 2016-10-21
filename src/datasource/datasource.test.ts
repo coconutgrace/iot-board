@@ -4,6 +4,7 @@
 
 import {assert} from "chai";
 import * as Datasource from "./datasource";
+import * as DatasourceData from "./datasourceData";
 import * as Store from "../store";
 import {DashboardStore} from "../store";
 import * as Plugins from "../pluginApi/pluginLoader";
@@ -29,11 +30,10 @@ describe("Datasource > Datasource", function () {
             store = Store.createEmpty(Store.testStoreOptions());
 
             store.dispatch(Datasource.addDatasource("my-ds-type", {}, false, "my-ds-id"));
-            store.dispatch(Datasource.fetchedDatasourceData("my-ds-id", [{tim: "struppy"}]));
-            store.dispatch(Datasource.fetchedDatasourceData("my-ds-id", [{ernie: "bert"}]));
+            store.dispatch(DatasourceData.fetchedDatasourceData("my-ds-id", [{tim: "struppy"}]));
+            store.dispatch(DatasourceData.fetchedDatasourceData("my-ds-id", [{ernie: "bert"}]));
 
-
-            assert.deepEqual(store.getState().datasources["my-ds-id"].data, [{ernie: "bert"}], "Only the last value is present");
+            assert.deepEqual(store.getState().datasourceData["my-ds-id"], [{ernie: "bert"}], "Only the last value is present");
         });
 
     });
