@@ -204,8 +204,24 @@ var jeditor = require("gulp-json-editor");
 var git = require('git-rev-sync');
 var packageJson = require('./package.json');
 
+function string_src(filename, string) {
+    var src = require('stream').Readable({ objectMode: true })
+    src._read = function () {
+        this.push(new gutil.File({
+            cwd: "",
+            base: "",
+            path: filename,
+            contents: new Buffer(string)
+        }))
+        this.push(null)
+    }
+    return src
+}
+const fs = require('fs');
+
 gulp.task('compile:config', function () {
-    return gulp.src("./src/config.json")
+    fs.writeFileSync('./src/buildInfo.json', '{}');
+    return gulp.src('./src/buildInfo.json')
         .pipe(jeditor(function (json) {
             json.version = packageJson.version;
             json.revision = git.long();

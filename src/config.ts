@@ -4,7 +4,11 @@
 import * as _ from 'lodash'
 import * as Action from './actionNames'
 
-const configJson = <IConfigState>require('./config.json');
+const buildInfo = <IConfigState>require('./buildInfo.json');
+
+/**
+ * Override config values at runtime in dashboard.json, see: https://gitlab.com/lobaro/iot-dashboard/wikis/home#configuration
+ */
 const defaultConfig: IConfigState = {
     version: "",
     revision: "",
@@ -56,18 +60,18 @@ export function setConfigValue(key: string, value: any) {
     }
 }
 
-export function config(state: IConfigState = configJson, action: any): IConfigState {
+export function config(state: IConfigState = buildInfo, action: any): IConfigState {
     switch (action.type) {
         case Action.SET_CONFIG_VALUE: {
             let value = action.value;
             if (action.key === 'pluginRegistryUrl' && _.endsWith(value, '/')) {
                 value = value.replace(/\/+$/, "");
             }
-            return _.assign({}, defaultConfig, state, {[action.key]: value}, configJson)
+            return _.assign({}, defaultConfig, state, {[action.key]: value}, buildInfo)
         }
         default:
             // Content of configJson overrides everything else!
-            return _.assign({}, defaultConfig, state, configJson);
+            return _.assign({}, defaultConfig, state, buildInfo);
     }
 }
 
