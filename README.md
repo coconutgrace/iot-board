@@ -4,12 +4,12 @@
 **Help, Questions, Feedback:**  [![Gitter](https://badges.gitter.im/iot-dashboard/Lobby.svg)](https://gitter.im/iot-dashboard/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
 
 # IoT-Dashboard
-Free open-source website to display & control (IoT) data - everything is a thing. 
+**Free** open-source website to display & control (IoT) data - everything is a thing. 
 
-A generic dashboard application based on JavaScript, HTML and CSS that runs in modern browsers without any server in the background. 
-Allows to arrange and configure widgets to display data from any datasource - not limited to Internet of Things.
+A generic dashboard application based on **JavaScript, HTML and CSS** that runs in modern browsers. A server is only used to serve the dashboard files.
+Simply arrange and configure widgets to display **data from any data source** - not limited to Internet of Things.
 
-A plugin API that allows easy widget and datasource development to keep the dashboard as extensible as possible.
+A **plugin API** that allows easy widget and data source development to keep the dashboard as extensible as possible. All plugins are loaded **securely** in sandboxed iFrames.
 
 Can be used as free alternative to [geckoboard](https://www.geckoboard.com), [kibana](https://www.elastic.co/products/kibana), [grafana](http://grafana.org/) or [freeboard](https://freeboard.io/).
 And of course for all other IoT, M2M, Industry 4.0, BigData, whatever dashboards you have to pay for out there.
@@ -41,11 +41,12 @@ Why just another Dashboard?
 I was looking for a Dashboard with the following properties:
 
 - OpenSource, royalty free, with code that I can understand and extend for full customization
-- Easy to setup, maintain and extend - even for unusual datasources and widgets
+- Easy to setup, maintain and extend - even for unusual data sources and widgets
 - A Reasonable set of default widgets, to be used out of the box
-- Simple API and development setup to write custom widgets and datasources, as a solid base for community driven development and extensions
+- Simple API and development setup to write custom widgets and data sources, as a solid base for community driven development and extensions
 - Running locally/offline without the need of any server, keeping the server optional until I really need one
 - Having a community that extends the Dashboard for their own needs
+- Developed with security in mind
 
 If you find something that comes close to the above requirements, please let me know!
 
