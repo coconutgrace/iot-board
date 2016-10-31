@@ -55,7 +55,6 @@ export class FrameWidgetInstance {
     }
 
     private handleMessage(msg: IPostMessage) {
-        try {
             switch (msg.type) {
                 case MESSAGE_STATE: {
                     this.widgetState = msg.payload;
@@ -71,9 +70,6 @@ export class FrameWidgetInstance {
                     console.log("frame got unknown message", msg)
                     break;
             }
-        } catch (e) {
-            console.error("Failed to handle message", e)
-        }
     }
 
 

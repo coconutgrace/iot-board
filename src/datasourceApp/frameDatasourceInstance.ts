@@ -161,7 +161,6 @@ export class FrameDatasourceInstance {
     }
 
     private handleMessage(msg: IPostMessage) {
-        try {
             switch (msg.type) {
                 case MESSAGE_INITIAL_STATE: {
                     this.dsState = msg.payload;
@@ -177,9 +176,6 @@ export class FrameDatasourceInstance {
                     console.log("frame got unknown message", msg)
                     break;
             }
-        } catch (e) {
-            console.error("Failed to handle message", e)
-        }
     }
 
     private datasourceWillReceiveProps(newProps: IDatasourceProps) {
