@@ -138,7 +138,7 @@ const DatasourceInput = (props) => {
     const datasources = props.datasources;
     const setting = props.setting;
 
-    return <Field name={setting.id} component="select"  className="ui fluid dropdown">
+    return <Field name={setting.id} component="select" className="ui fluid dropdown">
         <option>{"Select " + setting.name + " ..."}</option>
         {_.toPairs(datasources).map(([id, ds]) => {
             return <option key={id} value={id}>{ds.settings.name + " (" + ds.type + ")"}</option>

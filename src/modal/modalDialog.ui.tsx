@@ -115,14 +115,16 @@ class ModalDialog extends React.Component<ModalDialogProps, any> {
             <div className="header">
                 {props.title}
             </div>
-            <div className="content" style={{overflowY: 'scroll', height: height - 300, minHeight:"500px"}}>
-                {this.props.dialogState.errors ?
-                    this.props.dialogState.errors.map((message, i) => {
-                        return <ModalUserMessageComponent key={i} userMessage={message}/>
-                    })
-                    : null}
-                {props.children}
-            </div>
+            {this.props.dialogState.isVisible ?
+                <div className="content" style={{overflowY: 'scroll', height: height - 300, minHeight:"500px"}}>
+                    {this.props.dialogState.errors ?
+                        this.props.dialogState.errors.map((message, i) => {
+                            return <ModalUserMessageComponent key={i} userMessage={message}/>
+                        })
+                        : null}
+                    {props.children}
+                </div>
+                : null }
             <div className="actions">
                 {actions}
             </div>
