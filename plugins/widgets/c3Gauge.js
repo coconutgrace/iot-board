@@ -6,7 +6,7 @@
     const TYPE_INFO = {
         type: "c3-gauge",
         name: "C3 Gauge",
-        version: "0.0.1",
+        version: "0.0.2",
         author: "Lobaro",
         kind: "widget",
         description: "Renders a Gauge using the C3 library. The gauge always shows a property from the last datasource value.",
@@ -49,6 +49,13 @@
                 name: "Units",
                 description: "Set units of the gauge.",
                 defaultValue: " %"
+            },
+            {
+                id: 'useRatio',
+                type: "boolean",
+                name: "Show Percentage",
+                description: "Do not show the value but the percentage based on min and max.",
+                defaultValue: false
             },
             {
                 id: 'showLabel',
@@ -98,6 +105,10 @@
             }
         }
 
+        componentDidUpdate() {
+            this._renderChart();
+        }
+
         getData() {
             const props = this.props;
             const settings = props.state.settings;
@@ -106,10 +117,14 @@
                 data = data[data.length - 1]
             }
 
-            return widgetHelper.propertyByString(data, settings['dataPath']) || 0;
+            return widgetHelper.propertyByString(data, settings['dataPath']);
         }
 
         _createChart(props) {
+            const data = this.getData();
+            if (data == undefined) {
+                return;
+            }
             const config = props.state.settings;
 
             this.chart = c3.generate({
@@ -119,7 +134,7 @@
                 },
                 data: {
                     columns: [
-                        ['data', this.getData()]
+                        ['data', data]
                     ],
                     type: 'gauge'
                 },
@@ -130,6 +145,9 @@
                     label: {
                         show: config['showLabel'],
                         format: function (value, ratio) {
+                            if (config['useRatio']) {
+                                return (ratio * 100).toFixed(1) + "%"
+                            }
                             return value;
                         }
                     },
@@ -152,10 +170,14 @@
             if (!this.chart) {
                 return;
             }
+            const data = this.getData();
+            if (data == undefined) {
+                return;
+            }
 
             this.chart.load({
                 columns: [
-                    ['data', this.getData()]
+                    ['data', data]
                 ]
             });
 
@@ -163,17 +185,12 @@
         }
 
         render() {
-            this._renderChart();
+            if (this.getData() == undefined) {
+                return <div>No data for path: {this.props.state.settings['dataPath']}</div>
+            }
             return <div id={'chart-' + this.props.state.id}></div>
         }
 
-        componentWillUnmount() {
-            console.log("Unmounted Chart Widget");
-        }
-
-        dispose() {
-            console.log("Disposed Chart Widget");
-        }
     }
 
     window.iotDashboardApi.registerWidgetPlugin(TYPE_INFO, Widget);
