@@ -112,10 +112,9 @@ class WidgetButton extends React.Component {
     render() {
         const iconType = this.props.iconType || "utility"
         const data = this.props.widgetState;
-        return <button className={"slds-button slds-button--icon no-drag" + (this.props.visible !== false ? "" : " slds-hide")}>
-            <svg aria-hidden="true" className="slds-button__icon slds-button__icon--small"
-                 onClick={() => this.props.onClick(data)}
-            >
+        return <button className={"slds-button slds-button--icon no-drag" + (this.props.visible !== false ? "" : " slds-hide")}
+                       onClick={() => this.props.onClick(data)}>
+            <svg aria-hidden="true" className="slds-button__icon slds-button__icon--small">
                 <use xlinkHref={"assets/icons/" + iconType + "-sprite/svg/symbols.svg#" + this.props.icon}></use>
             </svg>
             <span className="slds-assistive-text">{this.props.description}</span>

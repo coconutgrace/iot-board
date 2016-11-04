@@ -176,16 +176,6 @@
         }
     }
 
-// TODO: Move to core, for simple reuse
-    const Prop = React.PropTypes
-    Widget.propTypes = {
-        getData: Prop.func.isRequired,
-        state: Prop.shape({
-            height: Prop.number.isRequired,
-            id: Prop.string.isRequired
-        }).isRequired
-    };
-
     window.iotDashboardApi.registerWidgetPlugin(TYPE_INFO, Widget);
 
 })();
