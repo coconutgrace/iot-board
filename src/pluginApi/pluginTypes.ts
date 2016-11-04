@@ -74,6 +74,7 @@ export interface IDatasourceProps {
     state: IDatasourceState
     setFetchInterval: (intervalInMs: number) => void
     setFetchReplaceData: (replace: boolean) => void
+    pushData: (data: any) => void
 }
 
 export interface IDatasourcePlugin extends IPlugin {

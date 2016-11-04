@@ -74,7 +74,8 @@ export class FrameDatasourceInstance {
         const props = {
             state: this.dsState,
             setFetchInterval: (ms: number) => this.setFetchInterval(ms),
-            setFetchReplaceData: (replace: boolean) => this.setFetchReplaceData(replace)
+            setFetchReplaceData: (replace: boolean) => this.setFetchReplaceData(replace),
+            pushData: (data: any[]) => this.fetchedDatasourceData(data)
         };
 
         const pluginInstance = new this.datasourceClass();
