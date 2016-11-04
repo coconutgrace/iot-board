@@ -18,8 +18,8 @@ const DatasourceTopNavItem = (props) => {
         <a href="javascript:void(0);" className="slds-context-bar__label-action" title="Datasources">
             <span className="slds-truncate">Datasources</span>
         </a>
-        <div className="slds-context-bar__icon-action slds-p-left--none" tabindex="0">
-            <button className="slds-button slds-button--icon slds-context-bar__button" tabindex="-1">
+        <div className="slds-context-bar__icon-action slds-p-left--none" tabIndex="0">
+            <button className="slds-button slds-button--icon slds-context-bar__button" tabIndex="-1">
                 <svg aria-hidden="true" className="slds-button__icon">
                     <use xlinkHref="assets/icons/utility-sprite/svg/symbols.svg#chevrondown"></use>
                 </svg>

@@ -41,7 +41,7 @@ export const DropdownItem = (props) => {
                e.preventDefault();
                props.onClick(e);
            }}
-           tabindex="-1">
+           tabIndex="-1">
             <span className="slds-truncate">{icon} {props.text}</span>{iconRight}
         </a>
     </li>

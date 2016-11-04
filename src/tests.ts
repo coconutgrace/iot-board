@@ -12,6 +12,7 @@ import './pluginApi/pluginLoader.test.ts'
 import './pluginApi/uri.test.js'
 import './serverRenderer.test.ts'
 import './util/collection.test.js'
+import './widgetApp/widgetHelper.test.ts'
 import './widgets/widgetPlugins.test.ts'
 import './widgets/widgets.test.ts'
 /* endinject */

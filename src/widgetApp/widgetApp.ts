@@ -1,6 +1,7 @@
 import "expose?$!expose?jQuery!jquery";
 import "expose?React!react";
 import "expose?_!lodash";
+import helper from "./widgetHelper";
 import "file?name=[name].[ext]!./widget.html";
 import * as React from "react";
 import {ITypeInfo, IWidgetProps} from "../pluginApi/pluginTypes";
@@ -25,4 +26,6 @@ const pluginApi = {
 // TO be robust during tests in node and server side rendering
 if (window) {
     (<any>window).iotDashboardApi = pluginApi;
+    (<any>window).widgetHelper = helper;
 }
+
