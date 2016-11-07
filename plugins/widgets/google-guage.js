@@ -21,6 +21,13 @@
                 description: "Datasource to get the weather data"
             },
             {
+                id: 'dataPath',
+                type: "string",
+                name: "Data Path",
+                description: "The path to get the data from the last data source value, e.g. nested.array[4] - do not use quoted between []",
+                defaultValue: ''
+            },
+            {
                 id: 'min',
                 name: 'Minimum value showing in scale',
                 type: 'number',
@@ -94,7 +101,7 @@
 
                 data1 = google.visualization.arrayToDataTable([
                     ['Label', 'Value'],
-                    [settingValues.Title, 80],
+                    [settingValues.Title, 0],
                 ]);
                 
                 this.setState({
@@ -135,12 +142,12 @@
             const allData = props.getData(settingValues['datasource-setting']);
 
             // Since we just want to show the last fetched value from the datasource we take the last element
-            const data = allData[allData.length - 1];
+            let data;
+            if (allData.length > 0) {
+                data = allData[allData.length - 1]
+            }
             //const units = data.units || {};
-
-            //***For debug***
-            //console.log("----- state data: ",this.state.chart);
-
+           
             // When there is no data, we let the user know by rendering a static text
             if (allData.length === 0) {
                 // We can use 'jsx' syntax here. Babel will compile the <div> to:
@@ -148,7 +155,7 @@
                 return <div id="chart_div">No Data</div>
             }
             if (this.initialized) {
-                this.state.data1.setValue(0, 1, data.x);
+                this.state.data1.setValue(0, 1, window.widgetHelper.propertyByString(data, settingValues['dataPath']));
                 this.state.chart.draw(this.state.data1, this.state.options1);
             }
                       
